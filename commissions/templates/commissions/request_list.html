@@ -1,0 +1,15 @@
+{% extends 'commissions/base_commissions.html' %}
+{% load static %}
+
+{% block title %} Commission Items {% endblock %}
+
+{% block content %}
+    <ul>
+        {% for commission in object_list %}
+        <li>
+            {{ commission.title }}
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
