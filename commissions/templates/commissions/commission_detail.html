@@ -1,0 +1,16 @@
+{% extends 'commissions/base_commissions.html' %}
+{% load static %}
+
+{% block title %} {{ commission.title }} {% endblock %}
+
+{% block content %}
+    <h2> {{ commission.title }} </h2>
+    <p> {{ commission.description }} </p>
+    <ul>
+        <li> {{ commission.commission_type.name }} </li>
+        <li> {{ commission.people_required }} </li>
+        <li> {{ commission.created_on }} </li>
+        <li> {{ commission.updated_on }} </li>
+    </ul>
+{% endblock %}
+

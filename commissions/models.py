@@ -29,7 +29,7 @@ class Commission(models.Model):
         return '{} from {}'.format(self.title, self.commission_type)
     
     def get_absolute_url(self):
-        return reverse('requests')
+        return reverse('commissions:request-detail', args=[str(self.pk)])
     
     class Meta:
         ordering = ['created_on']
