@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -26,4 +27,17 @@
     <p>&copy; Common Grounds 2026</p>
     {% block footer %}{% endblock %}
 </footer>
+=======
+<html lang="en">
+    <head>
+        <title>Commongrounds {% block title %}{% endblock %}</title>
+        <style></style>
+        {% block style %}{% endblock %}
+    </head>
+    <body>
+        <h1>Commongrounds</h1>
+        {% block body %}{% endblock %}
+        {% block scripts %}{% endblock %}
+    </body>
+>>>>>>> e6f84f9 (Initialized a local events app. Created models and templates to showcase list of events through the urls.)
 </html>
