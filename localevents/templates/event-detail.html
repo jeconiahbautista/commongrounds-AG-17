@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h3>{{ event.title }}</h3>
+<h5>{{ event.category }}</h5>
+
+<p>{{ event.description }}</p>    
+<p>{{ event.location }}</p> 
+<p>{{ event.start_time }}</p>   
+<p>{{ event.end_time }}</p> 
+<p>{{ event.created_on }}</p>   
+<p>{{ event.updated_on }}</p>   
+
+{% endblock %}
