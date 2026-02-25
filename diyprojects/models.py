@@ -6,6 +6,8 @@ class ProjectCategory(models.Model):
 
     class Meta:
         ordering = ['name',]
+        verbose_name = 'Project Category'
+        verbose_name_plural = 'Project Categories'
 
 class Project(models.Model):
     title = models.CharField(max_length=255)
