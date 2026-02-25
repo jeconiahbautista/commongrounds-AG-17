@@ -8,13 +8,5 @@ def diyprojects_list(request):
 
 def diyprojects_detail(request, pk):
     project = Project.objects.get(pk=pk)
-    ctx = {
-        'title': project.title,
-        'category': project.category,
-        'description': project.description,
-        'materials': project.materials,
-        'steps': project.steps,
-        'created_on': project.created_on,
-        'updated_on': project.updated_on,
-    }
+    ctx = {'project': project}
     return render(request, 'diy-projects_detail.html', ctx)
