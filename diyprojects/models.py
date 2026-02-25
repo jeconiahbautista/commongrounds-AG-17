@@ -5,12 +5,6 @@ class ProjectCategory(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=False, blank=False)
 
-    def __str__(self):
-        return self.name
-    
-    def get_absolute_url(self):
-        return reverse('diyprojects:diyprojects_detail', args=[str(self.id)])
-
     class Meta:
         ordering = ['name',]
         verbose_name = 'Project Category'
@@ -29,6 +23,12 @@ class Project(models.Model):
     steps = models.TextField(null=False, blank=False)
     created_on = models.DateTimeField(null=False)
     updated_on = models.DateTimeField(null=False)
+
+    def __str__(self):
+        return self.title
+    
+    def get_absolute_url(self):
+        return reverse('diyprojects:diyprojects_detail', args=[str(self.id)])
 
     class Meta:
         ordering = ['created_on',]
