@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def diyprojects_list(request):
+    return render(request, 'diy-projects_list.html')
