@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <h3>{{ project.title }}</h3>
+    <h1>{{ project.title }}</h1>
     <p>Category: {{ project.category.name }}</p>
     <p>{{ project.description }}</p>
     <p>{{ project.materials }}</p>
-    <p>{{ project.steps }}</p>
+    <p>Steps:{{ project.steps }}</p>
     <p>Created: {{ project.created_on }}</p>
     <p>Updated: {{ project.updated_on }}</p>
     <p><a href="/diyprojects/projects">Go back to Projects</a></p>
