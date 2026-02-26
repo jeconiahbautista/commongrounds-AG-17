@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block body %}
-    <h1>{{ product.name }} </h1>
-    <ul>
-        <p>Price: {{ product.price }}</p>
-        <p>{{ product.product_type.name }} Product: {{ product.product_type.description }}</p>
-        <p>Description: {{ product.description }}</p>
-
-        <p><a href="{% url 'merchstore:product_list' %}">Return to Merchandise List</a></p>
-    </ul>
+<div class="container">
+    <h1> {{ product.name }} </h1>
+    <div class="box"><strong>Price:</strong> Php {{ product.price }}</div>
+    <div class="box"><strong>{{ product.product_type.name }} Product:</strong> {{ product.product_type.description }}</div>
+    <div class="box"><strong>Description:</strong> {{ product.description }}</div>
+    <div class="box"><a href="{% url 'merchstore:product_list' %}">Return to Product List</div>
+</div>
 {% endblock %}
