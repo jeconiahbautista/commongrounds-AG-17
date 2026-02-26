@@ -13,7 +13,7 @@ class Genre(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
-    category = models.ForeignKey(
+    genre = models.ForeignKey(
         Genre,
         on_delete=models.SET_NULL,
         related_name = "genres",
@@ -28,7 +28,7 @@ class Book(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('bookclub:request-detail', args=[str(self.pk)])
+        return reverse('bookclub:book-detail', args=[str(self.pk)])
     
     class Meta:
         ordering = ['created_on',]

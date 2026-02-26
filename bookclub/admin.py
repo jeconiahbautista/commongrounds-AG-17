@@ -1,17 +1,17 @@
-# from django.contrib import admin
-# from .models import Genre, Book
+from django.contrib import admin
+from .models import Genre, Book
 
-# class GenreInLine(admin.TabularInLine):
-#     model = Genre
+class BookInLine(admin.TabularInline):
+    model = Book
 
-# class BookAdmin(admin.ModelAdmin):
-#     model = Book
-#     inlines = []
+class GenreAdmin(admin.ModelAdmin):
+    inlines = Genre
+    inlines = []
 
-# class GenreAdmin(admin.ModelAdmin):
-#     model = Genre
+class BookAdmin(admin.ModelAdmin):
+    model = Book
 
-# admin.site.register(Book, BookAdmin)
-# admin.site.register(Genre, GenreAdmin)
+admin.site.register(Genre, GenreAdmin)
+admin.site.register(Book, BookAdmin)
 
-# # Register your models here.
+# Register your models here.
