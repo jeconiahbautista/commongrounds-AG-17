@@ -5,9 +5,6 @@ from django.views.generic.detail import DetailView
 
 from .models import Commission
 
-def index(request):
-    return HttpResponse('Hello! This is the Commissions Requests Apps.')
-
 
 class CommissionListView(ListView):
     model = Commission
