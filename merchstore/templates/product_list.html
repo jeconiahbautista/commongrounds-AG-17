@@ -8,12 +8,10 @@
                 <div class="card">
                     <ul>
                         <li>
-                            <a href="{{ product.get_absolute_url }}">
-                                {{ product.name }}
-                            </a>
+                            <h2>{{ product.name }}</h2>
                             <p><strong>({{ product.product_type.name }})</strong></p>
                             <p>Php {{ product.price }} </p>
-                            <a href="{{ product.get_absolute_url }}"> View Details </a>
+                            <a href="{{ product.get_absolute_url }}">View Details</a>
                         </li>
                     </ul>
                 </div>
