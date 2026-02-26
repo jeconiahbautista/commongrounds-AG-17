@@ -9,7 +9,7 @@
                     <ul>
                         <li>
                             <h2> {{ commission.title }}</h2>
-                            <p><strong>Category:</strong> {{ commission.type }}</p>
+                            <p><strong>Type:</strong> {{ commission.type }}</p>
                             <p>{{ commission.description|truncatechars:30 }} </p>
                             <a href='{{ commission.get_absolute_url }}'> View Details </a>
                         </li>
