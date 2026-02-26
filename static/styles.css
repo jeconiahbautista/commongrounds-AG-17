@@ -44,3 +44,14 @@ ul {
     flex-direction: column;
     border-radius: 10px;
 }
+
+.container {
+    margin: 20px;
+}
+
+.box {
+    background-color: rgb(235, 235, 235);
+    padding: 15px;
+    margin: 15px;
+    border-radius: 15px;
+}
