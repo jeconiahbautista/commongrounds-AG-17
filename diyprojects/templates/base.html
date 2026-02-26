@@ -1,14 +1,21 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
     <title> DIY Projects {% block title %}{% endblock %} </title>
     <style></style>
     {% block style %}{% endblock %}
 </head>
 <body>
+    <h1> DIY Projects </h1>
     {% block body %}{% endblock %}
     {% block scripts %}{% endblock %}
 </body>
+<footer>
+    <p>&copy; DIY Projects 2026</p>
+    {% block footer %}{% endblock %}
+</footer>
 </html>
