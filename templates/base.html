@@ -1,12 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Commongrounds {% block title %}{% endblock %}</title>
-        <style></style>
-        {% block style %}{% endblock %}
-    </head>
-    <body>
-        <h1>Commongrounds</h1>
-        {% block body %}{% endblock %}
-        {% block scripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <title> Common Grounds </title>
+    <style></style>
+    {% block style %}{% endblock %}
+</head>
+<body>
+    {% block body %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</body>
+<footer>
+    <p>&copy; Common Grounds 2026</p>
+    {% block footer %}{% endblock %}
+</footer>
 </html>
