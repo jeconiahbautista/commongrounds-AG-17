@@ -2,13 +2,14 @@
 {% load static %}
 
 {% block body %}
-    <h2> {{ commission.title }} </h2>
-    <p> {{ commission.description }} </p>
-    <ul>
-        <li> {{ commission.commission_type.name }} </li>
-        <li> {{ commission.people_required }} </li>
-        <li> {{ commission.created_on }} </li>
-        <li> {{ commission.updated_on }} </li>
-    </ul>
+<div class="container">
+    <h1> {{ commission.title }} </h1>
+    <div class="box"><strong>Type:</strong> {{ commission.type.name }}</div>
+    <div class="box"><strong>Description:</strong> {{ commission.description }}</div>
+    <div class="box"><strong>People Required:</strong> {{ commission.people_required }}</div>
+    <div class="box"><strong>Created:</strong> {{ commission.created_on }}</div>
+    <div class="box"><strong>Updated:</strong>:</strong> {{ commission.updated_on }}</div>
+    <div class="box"><a href="/commissions/requests">Go back to commissions</a></div>
+</div>
 {% endblock %}
 

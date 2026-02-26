@@ -14,7 +14,7 @@ class CommissionType(models.Model):
         verbose_name_plural = 'commission types'
 
 class Commission(models.Model):
-    commission_type = models.ForeignKey(
+    type = models.ForeignKey(
         CommissionType,
         on_delete=models.CASCADE,
         related_name="commissions"
