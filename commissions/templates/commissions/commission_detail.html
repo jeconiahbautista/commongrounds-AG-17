@@ -1,9 +1,7 @@
-{% extends 'commissions/base_commissions.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %} {{ commission.title }} {% endblock %}
-
-{% block content %}
+{% block body %}
     <h2> {{ commission.title }} </h2>
     <p> {{ commission.description }} </p>
     <ul>
