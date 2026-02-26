@@ -24,8 +24,8 @@ class Project(models.Model):
     description = models.TextField(null=False, blank=False)
     materials = models.TextField(null=False, blank=False)
     steps = models.TextField(null=False, blank=False)
-    created_on = models.DateTimeField(null=False)
-    updated_on = models.DateTimeField(null=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
