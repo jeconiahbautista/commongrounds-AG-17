@@ -15,13 +15,13 @@ class CommissionAdmin(admin.ModelAdmin):
 
     list_display = ('title', 'description', 'people_required', 'updated_on', 'created_on' )
 
-    list_filter = ('updated_on', )
+    list_filter = ('created_on','updated_on', )
 
     fieldsets = [
         ('Details', {
             'fields': [
                 ('title', 'people_required'), 
-                'commission_type',
+                'type',
                 'description',
             ]
         }),

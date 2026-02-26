@@ -26,7 +26,7 @@ class Commission(models.Model):
     updated_on = models.DateTimeField(auto_now=True, null=False)
 
     def __str__(self):
-        return '{} from {}'.format(self.title, self.commission_type)
+        return '{} from {}'.format(self.title, self.type)
     
     def get_absolute_url(self):
         return reverse('commissions:request-detail', args=[str(self.pk)])
