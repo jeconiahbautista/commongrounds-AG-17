@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block body %}
-
-<h3>Title: {{book.title}}</h3>
-<h5>Genre: {{book.genre}}</h5>
-
-<p>Author: {{book.author}}</p>
-<p>Publication year: {{book.publication_year}}</p>
-<p>Created On: {{book.created_on}}</p>
-<p>Updated On: {{book.updated_on}}</p>
-
-{% endblock %}
+<div class = "book">
+    <h1>{{ book.title }}</h1>
+    <div class ="box"><strong>Genre:</strong> {{book.genre}}</div>
+    <div class ="box"><strong>Author:</strong> {{book.author}}</div>
+    <div class ="box"><strong>Publication Year:</strong> {{book.publication_year}}</div>
+    <div class ="box"><strong>Created On:</strong> {{book.created_on}}</div>
+    <div class ="box"><strong>Updated On:</strong> {{book.updated_on}}</div>
+    <div class="box"><a href="/bookclub/books">Go back to bookclub</a></div>
+</div>
+{% endblock%}

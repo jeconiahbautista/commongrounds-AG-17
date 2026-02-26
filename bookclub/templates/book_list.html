@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block body %}
     <h1>Book List</h1>
-    <ul>
-        {% for book in books %}
-        <li>
-            <a href="{{book.get_absolute_url}}">{{book.title}}</a>
-        </li>
-        {% endfor %}
-    </ul>
+            <div class="main-content">
+                {% for book in books %}
+                <div class="card">
+                    <ul>
+                        <li>
+                            <h2> {{ book.title }}</h2>
+                            <p><strong>Genre:</strong> {{ book.genre }}</p>
+                            <p>{{ book.author|truncatechars:30 }} </p>
+                            <a href='{{ book.get_absolute_url }}'> View Details </a>
+                        </li>
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
 {% endblock %}
