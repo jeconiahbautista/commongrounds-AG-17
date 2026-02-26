@@ -18,6 +18,33 @@ footer {
     text-align: center;
 }
 
+header {
+    padding: 15px;
+    background: #1c2c26;
+    
+}
+
+header ul {
+    list-style: none;
+    display: flex;
+    padding: 0px;
+    gap: 30px;
+    text-align: center;
+}
+
+header a, footer a {
+    text-decoration: none;
+    color: white;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+header a:active {
+    font-weight: bold;
+}
+
 h1 {
     text-align: center;
 }
