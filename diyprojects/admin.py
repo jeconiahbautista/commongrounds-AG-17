@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Project, ProjectCategory
 
-class ProjectInline(admin.TabularInline):
+class ProjectInline(admin.StackedInline):
     model = Project
 
 class ProjectCategoryAdmin(admin.ModelAdmin):
