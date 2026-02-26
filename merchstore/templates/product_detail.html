@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+    <h1>{{ product.name }} </h1>
+    <ul>
+        <p>Price: {{ product.price }}</p>
+        <p>{{ product.product_type.name }} Product: {{ product.product_type.description }}</p>
+        <p>Description: {{ product.description }}</p>
+
+        <p><a href="{% url 'merchstore:product_list' %}">Return to Merchandise List</a></p>
+    </ul>
+{% endblock %}
