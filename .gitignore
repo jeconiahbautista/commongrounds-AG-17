@@ -2,3 +2,5 @@
 db.sqlite3
 django-env/
 */**/*.pyc
+.vscode
+.vscode/
