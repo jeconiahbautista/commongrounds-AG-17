@@ -9,9 +9,10 @@ class EventType(models.Model):
     def __str__(self):
         return self.name
 
-
     class Meta:
-        ordering = ['name',]
+        ordering = [
+            "name",
+        ]
 
 
 class Event(models.Model):
@@ -23,7 +24,7 @@ class Event(models.Model):
         related_name="events",
     )
     description = models.TextField()
-    location = models.CharField(max_length=128)
+    location = models.CharField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     created_on = models.DateTimeField(auto_now_add=True)
@@ -31,12 +32,12 @@ class Event(models.Model):
 
     def __str__(self):
         return "{} ({})".format(self.title, self.category)
-    
-    def get_absolute_url(self):
-        return reverse('localevents:event-detail', args=[self.pk])
 
+    def get_absolute_url(self):
+        return reverse("localevents:event-detail", args=[self.pk])
 
     class Meta:
-        ordering = ['-created_on']    
+        ordering = ["-created_on"]
+
 
 # Create your models here.
