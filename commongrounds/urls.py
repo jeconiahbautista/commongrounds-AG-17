@@ -15,17 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-<<<<<<< HEAD
 from django.urls import include, path
 
 urlpatterns = [
     path('commissions/', include('commissions.urls', namespace="commissions")),
-=======
-
-from django.urls import path, include
-
-urlpatterns = [
     path('', include('bookclub.urls', namespace="bookclub")),
->>>>>>> 2a47399 (Added the BookClub App)
     path('admin/', admin.site.urls),
 ]
