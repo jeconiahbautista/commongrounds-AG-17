@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <h1>{{ project.title }}</h1>
+    <div class="box"><strong>Category:</strong> {{ project.category.name }}</div>
+    <div class="box"><strong>Description:</strong> {{ project.description }}</div>
+    <div class="box">
+        <p><strong>Materials:</strong></p>
+        <p>{{ project.materials }}</p>
+    </div>
+    <div class="box">
+        <p><strong>Steps:</strong></p> 
+        <p>{{ project.steps }}</p>
+    </div>
+    <div class="box"><strong>Created:</strong> {{ project.created_on }}</div>
+    <div class="box"><strong>Updated:</strong> {{ project.updated_on }}</div>
+    <div class="box"><a href="/diyprojects/projects">Go back to Projects</a></div>
+</div>
+{% endblock %}
