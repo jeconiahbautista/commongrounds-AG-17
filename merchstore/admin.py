@@ -8,29 +8,43 @@ class ProductInline(admin.TabularInline):
 
 class ProductTypeAdmin(admin.ModelAdmin):
     model = ProductType
-    inlines = [ProductInline, ]
+    inlines = [
+        ProductInline,
+    ]
 
     fieldsets = [
-        ('Details', {
-            'fields':[
-                ('name', 'description'),
-            ]
-        })
+        (
+            "Details",
+            {
+                "fields": [
+                    ("name", "description"),
+                ]
+            },
+        )
     ]
 
 
 class ProductAdmin(admin.ModelAdmin):
     model = Product
-    search_fields = ('name',)
-    list_display = ('name', 'price', 'product_type',)
-    list_filter = ('product_type', 'price')
+    search_fields = ("name",)
+    list_display = (
+        "name",
+        "price",
+        "product_type",
+    )
+    list_filter = ("product_type", "price")
     fieldsets = [
-        ('Details', {
-            'fields':[
-                ('name', 'product_type', 'price'), 'description',
-            ]
-        })
+        (
+            "Details",
+            {
+                "fields": [
+                    ("name", "product_type", "price"),
+                    "description",
+                ]
+            },
+        )
     ]
+
 
 admin.site.register(ProductType, ProductTypeAdmin)
 admin.site.register(Product, ProductAdmin)
