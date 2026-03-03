@@ -2,22 +2,22 @@
 
 {% block body %}
 <h1>DIY Projects List</h1>
-    {% if projects %}
-        <div class="main-content">
-            {% for project in projects %}
-            <div class="card">
-                <ul>
-                    <li>
-                        <h2>{{ project.title }}</h2>
-                        <p><strong>Category:</strong> {{ project.category.name }}</p>
-                        <p>{{ project.description|truncatechars:30}}</p>
-                        <a href="{{ project.get_absolute_url }}">View Details</a>
-                    </li>
-                </ul>
-            </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>No projects available.</p>
-    {% endif %}
+{% if projects %}
+<div class="main-content">
+    {% for project in projects %}
+    <div class="card">
+        <ul>
+            <li>
+                <h2>{{ project.title }}</h2>
+                <p><strong>Category:</strong> {{ project.category.name }}</p>
+                <p>{{ project.description|truncatechars:30}}</p>
+                <a href="{{ project.get_absolute_url }}">View Details</a>
+            </li>
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No projects available.</p>
+{% endif %}
 {% endblock %}
