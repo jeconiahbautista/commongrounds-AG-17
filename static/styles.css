@@ -5,7 +5,7 @@
 body {
     margin: 0px;
     padding: 0px;
-    color:rgb(36, 36, 36);
+    color: rgb(36, 36, 36);
     font-family: "Roboto", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
@@ -21,7 +21,7 @@ footer {
 header {
     padding: 15px;
     background: #1c2c26;
-    
+
 }
 
 header ul {
@@ -32,7 +32,8 @@ header ul {
     text-align: center;
 }
 
-header a, footer a {
+header a,
+footer a {
     text-decoration: none;
     color: white;
 }
@@ -53,6 +54,11 @@ ul {
     list-style: none;
     margin: 0px;
     padding: 0px 15px 25px;
+}
+
+.else-main-content p {
+    text-align: center;
+    padding-bottom: 10px;
 }
 
 .main-content {

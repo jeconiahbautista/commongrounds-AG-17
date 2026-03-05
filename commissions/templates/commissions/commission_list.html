@@ -3,18 +3,25 @@
 
 {% block body %}
 <h1> Commission Requests List</h1>
-        <div class="main-content">
-            {% for commission in object_list %}
-                <div class="card">
-                    <ul>
-                        <li>
-                            <h2> {{ commission.title }}</h2>
-                            <p><strong>Type:</strong> {{ commission.type }}</p>
-                            <p>{{ commission.description|truncatechars:30 }} </p>
-                            <a href='{{ commission.get_absolute_url }}'> View Details </a>
-                        </li>
-                    </ul>
-                </div>
-            {% endfor %}
-        </div>
+{% if object_list %}
+<div class="main-content">
+    {% for commission in object_list %}
+    <div class="card">
+        <ul>
+            <li>
+                <h2> {{ commission.title }}</h2>
+                <p><strong>Type:</strong> {{ commission.type }}</p>
+                <p>{{ commission.description|truncatechars:30 }} </p>
+                <a href='{{ commission.get_absolute_url }}'> View Details </a>
+            </li>
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="else-main-content">
+    <p><em>No commissions available.</em></p>
+</div>
+{% endif %}
+
 {% endblock %}

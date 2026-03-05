@@ -38,6 +38,3 @@ class Event(models.Model):
 
     class Meta:
         ordering = ["-created_on"]
-
-
-# Create your models here.
