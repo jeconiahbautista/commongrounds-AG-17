@@ -25,6 +25,9 @@ class Project(models.Model):
     category = models.ForeignKey(
         ProjectCategory, on_delete=models.SET_NULL, related_name="projects", null=True
     )
+    creator = models.ForeignKey(
+        Profile, on_delete=models.SET_NULL, related_name="projects", null=True
+    )
     description = models.TextField(null=False, blank=False)
     materials = models.TextField(null=False, blank=False)
     steps = models.TextField(null=False, blank=False)
