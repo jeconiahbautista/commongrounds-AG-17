@@ -3,6 +3,27 @@
 {% block body %}
 <div class="container">
     <h1>{{ project.title }}</h1>
+    <div class="boxes">
+        <div class="box"><strong>Average Rating:</strong> {{ average_rating|floatformat:1 }}/10.0</div>
+        {% if user.is_authenticated %}
+        {% if existing_rating %}
+        <div class="box">
+            <p><em>You rated this project:</em> {{ existing_rating.score }}/10.0</p>
+        </div>
+        {% else %}
+        <div class="box">
+            <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST">
+                {% csrf_token %}
+                <label for="score">
+                    <span><strong>Rate the Project: </strong></span>
+                    <input type="number" id="score" name="score" min="1" max="10">
+                </label>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
     <div class="box"><strong>Category:</strong> {{ project.category.name }}</div>
     <div class="box"><strong>Description:</strong> {{ project.description }}</div>
     <div class="box">
@@ -13,8 +34,10 @@
         <p><strong>Steps:</strong></p>
         <p>{{ project.steps }}</p>
     </div>
-    <div class="box"><strong>Created:</strong> {{ project.created_on }}</div>
-    <div class="box"><strong>Updated:</strong> {{ project.updated_on }}</div>
+    <div class="boxes">
+        <div class="box"><strong>Created:</strong> {{ project.created_on }}</div>
+        <div class="box"><strong>Updated:</strong> {{ project.updated_on }}</div>
+    </div>
     <div class="box"><a href="/diyprojects/projects">Return to Projects List</a></div>
 </div>
 {% endblock %}

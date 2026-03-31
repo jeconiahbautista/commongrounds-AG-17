@@ -86,6 +86,9 @@ class ProjectReview(models.Model):
 
 
 class ProjectRating(models.Model):
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name="ratings", null=True
+    )
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="project_ratings"
     )
@@ -102,3 +105,4 @@ class ProjectRating(models.Model):
     class Meta:
         verbose_name = "Project Rating"
         verbose_name_plural = "Project Ratings"
+        unique_together = ["project", "profile"]

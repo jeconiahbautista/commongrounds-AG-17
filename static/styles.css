@@ -93,3 +93,18 @@ ul {
 .add {
     text-align: center;
 }
+
+.boxes {
+    display: flex;
+    gap: 15px;
+    padding: 0 15px;
+}
+
+.box p {
+    margin: 0;
+}
+
+.boxes .box {
+    flex: auto;
+    margin: 0;
+}
