@@ -16,7 +16,7 @@ class ProjectCategoryAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(admin.ModelAdmin):
     model = Project
-    ordering = ["created_on"]
+    ordering = ["-created_on"]
     search_fields = ("title", "description")
     list_display = ("title", "category", "description", "created_on", "updated_on")
 
