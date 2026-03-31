@@ -1,6 +1,9 @@
 from django.db import models
 from django.urls import reverse
 
+from accounts.models import Profile
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 class ProjectCategory(models.Model):
     name = models.CharField(max_length=255)
@@ -38,3 +41,40 @@ class Project(models.Model):
         ordering = [
             "created_on",
         ]
+
+
+class Favorite(models.Model):
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name="favorites"
+    )
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="favorites"
+    )
+    date_favorited = models.DateField(auto_now_add=True)
+    status = models.CharField(
+        choices=[("backlog", "Backlog"), ("todo", "To-Do"), ("done", "Done")],
+        default="backlog",
+    )
+
+    def __str__(self):
+        return "{} ({})".format(self.project, self.status)
+
+
+class ProjectReview(models.Model):
+    reviewer = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="project_reviews"
+    )
+    comment = models.TextField()
+    image = models.ImageField(upload_to="review_images/", blank=True, null=True)
+
+    def __str__(self):
+        return "Review by {}".format(self.reviewer)
+
+
+class ProjectRating(models.Model):
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="project_ratings"
+    )
+    score = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
