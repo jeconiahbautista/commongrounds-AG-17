@@ -15,9 +15,9 @@ def diyprojects_list(request):
     reviewed_projects = Project.objects.filter(reviews__reviewer=profile)
 
     excluded_projects = Project.objects.filter(
-        Q(owner=profile)
+        Q(creator=profile)
         | Q(favorites__profile=profile)
-        | Q(projectreview__reviewer=profile)
+        | Q(reviews__reviewer=profile)
     ).distinct()
 
     projects = Project.objects.exclude(
