@@ -68,6 +68,9 @@ class Favorite(models.Model):
 
 
 class ProjectReview(models.Model):
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name="reviews", null=True
+    )
     reviewer = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="project_reviews"
     )
