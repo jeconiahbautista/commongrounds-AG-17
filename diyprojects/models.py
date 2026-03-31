@@ -55,12 +55,16 @@ class Favorite(models.Model):
     )
     date_favorited = models.DateField(auto_now_add=True)
     status = models.CharField(
-        choices=[("backlog", "Backlog"), ("todo", "To-Do"), ("done", "Done")],
-        default="backlog",
+        choices=[("Backlog", "Backlog"), ("To-Do", "To-Do"), ("Done", "Done")],
+        default="Backlog",
     )
 
     def __str__(self):
         return "{} ({})".format(self.project, self.status)
+
+    class Meta:
+        verbose_name = "Favorite"
+        verbose_name_plural = "Favorites"
 
 
 class ProjectReview(models.Model):
@@ -73,6 +77,10 @@ class ProjectReview(models.Model):
     def __str__(self):
         return "Review by {}".format(self.reviewer)
 
+    class Meta:
+        verbose_name = "Project Review"
+        verbose_name_plural = "Project Reviews"
+
 
 class ProjectRating(models.Model):
     profile = models.ForeignKey(
@@ -81,3 +89,13 @@ class ProjectRating(models.Model):
     score = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(10)]
     )
+
+    def __str__(self):
+        stars = ""
+        for i in range(self.score):
+            stars += "★"
+        return stars
+
+    class Meta:
+        verbose_name = "Project Rating"
+        verbose_name_plural = "Project Ratings"

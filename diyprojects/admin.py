@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, ProjectCategory
+from .models import Project, ProjectCategory, Favorite, ProjectReview, ProjectRating
 
 
 class ProjectInline(admin.StackedInline):
@@ -14,6 +14,18 @@ class ProjectCategoryAdmin(admin.ModelAdmin):
     ordering = ["name"]
 
 
+class FavoriteAdmin(admin.ModelAdmin):
+    model = Favorite
+
+
+class ProjectReviewAdmin(admin.ModelAdmin):
+    model = ProjectReview
+
+
+class ProjectRatingAdmin(admin.ModelAdmin):
+    model = ProjectRating
+
+
 class ProjectAdmin(admin.ModelAdmin):
     model = Project
     ordering = ["-created_on"]
@@ -23,3 +35,6 @@ class ProjectAdmin(admin.ModelAdmin):
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectCategory, ProjectCategoryAdmin)
+admin.site.register(Favorite, FavoriteAdmin)
+admin.site.register(ProjectRating, ProjectRatingAdmin)
+admin.site.register(ProjectReview, ProjectReviewAdmin)
