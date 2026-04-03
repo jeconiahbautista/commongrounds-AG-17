@@ -17,3 +17,12 @@ class ProjectReviewForm(forms.ModelForm):
             "comment",
             "image",
         ]
+        widgets = {
+            "comment": forms.Textarea(
+                attrs={
+                    "placeholder": "Share your experience with this project...",
+                    "rows": 3,
+                    "cols": 110,
+                }
+            ),
+        }

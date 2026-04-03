@@ -96,6 +96,7 @@ def diyprojects_detail(request, pk):
                     comment=review_form.cleaned_data["comment"],
                     image=review_form.cleaned_data["image"],
                 )
+                return redirect("diyprojects:diyprojects_detail", pk=project.pk)
 
     ctx = {
         "project": project,
