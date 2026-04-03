@@ -8,11 +8,8 @@ from .forms import ProjectRatingForm, ProjectReviewForm
 @login_required
 def diyprojects_list(request):
     profile = request.user.profile
-
     created_projects = Project.objects.filter(creator=profile)
-
     favorited_projects = Project.objects.filter(favorites__profile=profile).distinct()
-
     reviewed_projects = Project.objects.filter(reviews__reviewer=profile).distinct()
 
     excluded_projects = Project.objects.filter(
@@ -35,13 +32,15 @@ def diyprojects_list(request):
 
 def diyprojects_detail(request, pk):
     project = Project.objects.get(pk=pk)
-
     ratings = ProjectRating.objects.filter(project=project)
-
     reviews = ProjectReview.objects.filter(project=project)
 
-    rate_form = ProjectRatingForm()
+    favorite_count = Favorite.objects.filter(project=project).count()
+    existing_rating = None
+    is_favorited = False
+    is_owner = False
 
+    rate_form = ProjectRatingForm()
     review_form = ProjectReviewForm()
 
     if ratings.exists():
@@ -50,12 +49,8 @@ def diyprojects_detail(request, pk):
     else:
         average_rating = None
 
-    favorite_count = Favorite.objects.filter(project=project).count()
-
-    existing_rating = None
-    is_favorited = False
-
     if request.user.is_authenticated:
+        is_owner = project.creator == request.user.profile
         existing_rating = ProjectRating.objects.filter(
             project=project, profile=request.user.profile
         ).first()
@@ -107,6 +102,11 @@ def diyprojects_detail(request, pk):
         "favorite_count": favorite_count,
         "reviews": reviews,
         "review_form": review_form,
+        "is_owner": is_owner,
     }
 
     return render(request, "diy-projects_detail.html", ctx)
+
+
+def diyprojects_edit(request, pk):
+    return render(request, "diy-projects_edit.html")

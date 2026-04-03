@@ -22,7 +22,6 @@ class ProjectReviewForm(forms.ModelForm):
                 attrs={
                     "placeholder": "Share your experience with this project...",
                     "rows": 3,
-                    "cols": 110,
                 }
             ),
         }

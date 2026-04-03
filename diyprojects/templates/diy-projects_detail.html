@@ -35,9 +35,16 @@
                 </button>
             </form>
         </div>
-        <dic class="box">
+        <div class="box">
             <p>{{ favorite_count }} people favorited this project</p>
-        </dic>
+        </div>
+        {% if is_owner %}
+        <div class="box">
+            <a href="{% url 'diyprojects:diyprojects_edit' project.pk %}">
+                Edit Project
+            </a>
+        </div>
+        {% endif %}
     </div>
     <div class="box"><strong>Category:</strong> {{ project.category.name }}</div>
     <div class="box"><strong>Description:</strong> {{ project.description }}</div>
