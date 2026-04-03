@@ -18,11 +18,26 @@
                     <span><strong>Rate the Project: </strong></span>
                     <input type="number" id="score" name="score" min="1" max="10">
                 </label>
-                <input type="submit" value="Submit">
+                <button type="submit" name="action" value="rate">Submit Rating</button>
             </form>
         </div>
         {% endif %}
         {% endif %}
+        <div class="box">
+            <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" name="action" value="favorite">
+                    {% if is_favorited %}
+                    Unfavorite
+                    {% else %}
+                    Favorite
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+        <dic class="box">
+            <p>{{ favorite_count }} people favorited this project</p>
+        </dic>
     </div>
     <div class="box"><strong>Category:</strong> {{ project.category.name }}</div>
     <div class="box"><strong>Description:</strong> {{ project.description }}</div>

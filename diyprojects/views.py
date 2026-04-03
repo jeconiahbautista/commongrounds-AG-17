@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Project, ProjectRating
+from .models import Project, ProjectRating, Favorite
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ProjectRatingForm
@@ -44,23 +44,42 @@ def diyprojects_detail(request, pk):
     else:
         average_rating = None
 
+    favorite_count = Favorite.objects.filter(project=project).count()
+
     existing_rating = None
+    is_favorited = False
+
     if request.user.is_authenticated:
         existing_rating = ProjectRating.objects.filter(
             project=project, profile=request.user.profile
         ).first()
+        is_favorited = Favorite.objects.filter(
+            project=project, profile=request.user.profile
+        ).exists()
 
     if request.method == "POST":
         if not request.user.is_authenticated:
             return redirect("login")
 
-        form = ProjectRatingForm(request.POST)
-        if form.is_valid():
-            ProjectRating.objects.create(
-                project=project,
-                profile=request.user.profile,
-                score=form.cleaned_data["score"],
-            )
+        action = request.POST.get("action")
+
+        if action == "rate":
+            form = ProjectRatingForm(request.POST)
+            if form.is_valid():
+                ProjectRating.objects.create(
+                    project=project,
+                    profile=request.user.profile,
+                    score=form.cleaned_data["score"],
+                )
+                return redirect("diyprojects:diyprojects_detail", pk=project.pk)
+        elif action == "favorite":
+            favorite = Favorite.objects.filter(
+                project=project, profile=request.user.profile
+            ).first()
+            if favorite:
+                favorite.delete()
+            else:
+                Favorite.objects.create(project=project, profile=request.user.profile)
             return redirect("diyprojects:diyprojects_detail", pk=project.pk)
     else:
         form = ProjectRatingForm()
@@ -70,6 +89,8 @@ def diyprojects_detail(request, pk):
         "average_rating": average_rating,
         "existing_rating": existing_rating,
         "form": form,
+        "is_favorited": is_favorited,
+        "favorite_count": favorite_count,
     }
 
     return render(request, "diy-projects_detail.html", ctx)
