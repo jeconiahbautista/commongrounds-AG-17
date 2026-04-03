@@ -16,7 +16,7 @@
                 {% csrf_token %}
                 <label for="score">
                     <span><strong>Rate the Project: </strong></span>
-                    <input type="number" id="score" name="score" min="1" max="10">
+                    {{ rate_form.score }}
                 </label>
                 <button type="submit" name="action" value="rate">Submit Rating</button>
             </form>
@@ -54,5 +54,29 @@
         <div class="box"><strong>Updated:</strong> {{ project.updated_on }}</div>
     </div>
     <div class="box"><a href="/diyprojects/projects">Return to Projects List</a></div>
+    <div class="box">
+        <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST"
+            enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="comment">
+                <p><strong>Tell us your thoughts: </strong></p>
+                <p>{{ review_form.comment }}</p>
+            </label>
+            <label for="comment">
+                <strong>Submit a photo: </strong>
+                {{ review_form.image }}
+            </label>
+            <p><button type="submit" name="action" value="review">Submit Review</button></p>
+        </form>
+    </div>
+    {% for review in reviews %}
+    <div class="box">
+        <p><strong>{{ review.reviewer }}</strong></p>
+        <p>{{ review.comment }}</p>
+        {% if review.image %}
+        <img src="{{ review.image.url }}" width="300">
+        {% endif %}
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

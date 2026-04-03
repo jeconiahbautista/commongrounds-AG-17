@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
-from .models import Project, ProjectRating, Favorite
+from .models import Project, ProjectRating, Favorite, ProjectReview
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .forms import ProjectRatingForm
+from .forms import ProjectRatingForm, ProjectReviewForm
 
 
 @login_required
@@ -11,9 +11,9 @@ def diyprojects_list(request):
 
     created_projects = Project.objects.filter(creator=profile)
 
-    favorited_projects = Project.objects.filter(favorites__profile=profile)
+    favorited_projects = Project.objects.filter(favorites__profile=profile).distinct()
 
-    reviewed_projects = Project.objects.filter(reviews__reviewer=profile)
+    reviewed_projects = Project.objects.filter(reviews__reviewer=profile).distinct()
 
     excluded_projects = Project.objects.filter(
         Q(creator=profile)
@@ -37,6 +37,12 @@ def diyprojects_detail(request, pk):
     project = Project.objects.get(pk=pk)
 
     ratings = ProjectRating.objects.filter(project=project)
+
+    reviews = ProjectReview.objects.filter(project=project)
+
+    rate_form = ProjectRatingForm()
+
+    review_form = ProjectReviewForm()
 
     if ratings.exists():
         total = sum([r.score for r in ratings])
@@ -64,12 +70,12 @@ def diyprojects_detail(request, pk):
         action = request.POST.get("action")
 
         if action == "rate":
-            form = ProjectRatingForm(request.POST)
-            if form.is_valid():
+            rate_form = ProjectRatingForm(request.POST)
+            if rate_form.is_valid():
                 ProjectRating.objects.create(
                     project=project,
                     profile=request.user.profile,
-                    score=form.cleaned_data["score"],
+                    score=rate_form.cleaned_data["score"],
                 )
                 return redirect("diyprojects:diyprojects_detail", pk=project.pk)
         elif action == "favorite":
@@ -81,16 +87,25 @@ def diyprojects_detail(request, pk):
             else:
                 Favorite.objects.create(project=project, profile=request.user.profile)
             return redirect("diyprojects:diyprojects_detail", pk=project.pk)
-    else:
-        form = ProjectRatingForm()
+        elif action == "review":
+            review_form = ProjectReviewForm(request.POST, request.FILES)
+            if review_form.is_valid():
+                ProjectReview.objects.create(
+                    project=project,
+                    reviewer=request.user.profile,
+                    comment=review_form.cleaned_data["comment"],
+                    image=review_form.cleaned_data["image"],
+                )
 
     ctx = {
         "project": project,
         "average_rating": average_rating,
         "existing_rating": existing_rating,
-        "form": form,
+        "rate_form": rate_form,
         "is_favorited": is_favorited,
         "favorite_count": favorite_count,
+        "reviews": reviews,
+        "review_form": review_form,
     }
 
     return render(request, "diy-projects_detail.html", ctx)

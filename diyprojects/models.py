@@ -75,7 +75,7 @@ class ProjectReview(models.Model):
         Profile, on_delete=models.CASCADE, related_name="project_reviews"
     )
     comment = models.TextField()
-    image = models.ImageField(upload_to="review_images/", blank=True, null=True)
+    image = models.ImageField(upload_to="diyprojects_images/", blank=True, null=True)
 
     def __str__(self):
         return "Review by {}".format(self.reviewer)
