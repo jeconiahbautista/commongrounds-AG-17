@@ -5,7 +5,6 @@ from .models import (
     Favorite,
     ProjectReview,
     ProjectCategory,
-    Profile,
 )
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -36,20 +35,10 @@ def diyprojects_list(request):
         "projects": projects,
     }
 
-    if request.method == "POST":
-        p = Project()
-        p.title = request.POST.get("title")
-        p.creator = Profile.objects.get(user=request.user)
-        p.category = ProjectCategory.objects.get(pk=request.POST.get("category"))
-        p.description = request.POST.get("description")
-        p.materials = request.POST.get("materials")
-        p.steps = request.POST.get("steps")
-        p.save()
-        return render(request, "diy-projects_list.html", ctx)
-    else:
-        return render(request, "diy-projects_list.html", ctx)
+    return render(request, "diy-projects_list.html", ctx)
 
 
+@login_required
 def diyprojects_detail(request, pk):
     project = Project.objects.get(pk=pk)
     ratings = ProjectRating.objects.filter(project=project)
@@ -128,15 +117,44 @@ def diyprojects_detail(request, pk):
     return render(request, "diy-projects_detail.html", ctx)
 
 
+@login_required
 def diyprojects_create(request):
     categories = ProjectCategory.objects.all()
-    project_form = ProjectForm()
+    if request.method == "POST":
+        project_form = ProjectForm(request.POST)
+        if project_form.is_valid():
+            project = project_form.save(commit=False)
+            project.creator = request.user.profile
+            project.save()
+            return redirect("diyprojects:diyprojects_detail", pk=project.pk)
+    else:
+        project_form = ProjectForm()
+
     ctx = {
         "project_form": project_form,
         "categories": categories,
     }
-    return render(request, "diy-projects_create.html", ctx)
+    return render(request, "diy-projects_create_edit.html", ctx)
 
 
+@login_required
 def diyprojects_edit(request, pk):
-    return render(request, "diy-projects_edit.html")
+    project = Project.objects.get(pk=pk)
+    categories = ProjectCategory.objects.all()
+    if request.method == "POST":
+        project_form = ProjectForm(
+            request.POST,
+            instance=project,
+        )
+        if project_form.is_valid():
+            project_form.save()
+            return redirect("diyprojects:diyprojects_detail", pk=project.pk)
+    else:
+        project_form = ProjectForm(instance=project)
+
+    ctx = {
+        "project_form": project_form,
+        "categories": categories,
+        "project": project,
+    }
+    return render(request, "diy-projects_create_edit.html", ctx)

@@ -2,8 +2,18 @@
 
 {% block body %}
 <div class="container">
-    <h1>Add a Project</h1>
-    <form action="/diyprojects/projects/" method="POST">
+    <h1>
+        {% if project %}
+        Edit Project
+        {% else %}
+        Add Project
+        {% endif %}
+    </h1>
+    <form action="{% if project %}
+                    {% url 'diyprojects:diyprojects_edit' project.pk %}
+                {% else %}
+                    {% url 'diyprojects:diyprojects_create' %}
+                {% endif %}" method="POST">
         {% csrf_token %}
         <ul>
             <li>
@@ -15,11 +25,7 @@
             <li>
                 <p>
                     <span><strong>Category: </strong></span>
-                    <select name="category" id="category">
-                        {% for category in categories %}
-                        <option value="{{ category.pk }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
+                    {{ project_form.category }}
                 </p>
             </li>
             <li>
@@ -41,7 +47,15 @@
                 </label>
             </li>
             <li>
-                <p><button type="submit" name="action" value="project">Submit</button></p>
+                <p>
+                    <button type="submit" name="action" value="project">
+                        {% if project %}
+                        Update Project
+                        {% else %}
+                        Add Project
+                        {% endif %}
+                    </button>
+                </p>
             </li>
         </ul>
     </form>
