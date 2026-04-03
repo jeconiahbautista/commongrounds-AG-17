@@ -1,8 +1,15 @@
 from django.shortcuts import redirect, render
-from .models import Project, ProjectRating, Favorite, ProjectReview
+from .models import (
+    Project,
+    ProjectRating,
+    Favorite,
+    ProjectReview,
+    ProjectCategory,
+    Profile,
+)
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .forms import ProjectRatingForm, ProjectReviewForm
+from .forms import ProjectRatingForm, ProjectReviewForm, ProjectForm
 
 
 @login_required
@@ -21,13 +28,26 @@ def diyprojects_list(request):
     projects = Project.objects.exclude(
         id__in=excluded_projects.values_list("id", flat=True)
     )
+
     ctx = {
         "created_projects": created_projects,
         "favorited_projects": favorited_projects,
         "reviewed_projects": reviewed_projects,
         "projects": projects,
     }
-    return render(request, "diy-projects_list.html", ctx)
+
+    if request.method == "POST":
+        p = Project()
+        p.title = request.POST.get("title")
+        p.creator = Profile.objects.get(user=request.user)
+        p.category = ProjectCategory.objects.get(pk=request.POST.get("category"))
+        p.description = request.POST.get("description")
+        p.materials = request.POST.get("materials")
+        p.steps = request.POST.get("steps")
+        p.save()
+        return render(request, "diy-projects_list.html", ctx)
+    else:
+        return render(request, "diy-projects_list.html", ctx)
 
 
 def diyprojects_detail(request, pk):
@@ -106,6 +126,16 @@ def diyprojects_detail(request, pk):
     }
 
     return render(request, "diy-projects_detail.html", ctx)
+
+
+def diyprojects_create(request):
+    categories = ProjectCategory.objects.all()
+    project_form = ProjectForm()
+    ctx = {
+        "project_form": project_form,
+        "categories": categories,
+    }
+    return render(request, "diy-projects_create.html", ctx)
 
 
 def diyprojects_edit(request, pk):
