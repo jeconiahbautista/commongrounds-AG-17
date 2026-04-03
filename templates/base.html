@@ -19,6 +19,16 @@
             <li><a href="/bookclub/books">Book Club</a></li>
             <li><a href="/diyprojects/projects">DIY Projects</a></li>
             <li><a href="/commissions/requests">Commission Requests</a></li>
+            <li>
+                {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+                {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </li>
         </ul>
     </header>
     {% block body %}{% endblock %}
