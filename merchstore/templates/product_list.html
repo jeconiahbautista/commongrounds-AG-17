@@ -3,6 +3,7 @@
 
 {% block body %}
 <h1> Product List</h1>
+<<<<<<< HEAD
 {% if products %}
 <div class="main-content">
     {% for product in products %}
@@ -24,4 +25,20 @@
 </div>
 {% endif %}
 
+=======
+        <div class="main-content">
+            {% for product in products %}
+                <div class="card">
+                    <ul>
+                        <li>
+                            <h2>{{ product.name }}</h2>
+                            <p><strong>({{ product.product_type.name }})</strong></p>
+                            <p>Php {{ product.price }} </p>
+                            <a href="{{ product.get_absolute_url }}">View Details</a>
+                        </li>
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+>>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
 {% endblock %}

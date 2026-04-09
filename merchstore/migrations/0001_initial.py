@@ -5,6 +5,7 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+<<<<<<< HEAD
 
     initial = True
 
@@ -34,6 +35,59 @@ class Migration(migrations.Migration):
             ],
             options={
                 'ordering': ['name'],
+=======
+    initial = True
+
+    dependencies = []
+
+    operations = [
+        migrations.CreateModel(
+            name="ProductType",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("description", models.TextField()),
+            ],
+            options={
+                "ordering": ["name"],
+            },
+        ),
+        migrations.CreateModel(
+            name="Product",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("description", models.TextField()),
+                ("price", models.DecimalField(decimal_places=2, max_digits=20)),
+                (
+                    "product_type",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="products",
+                        to="merchstore.producttype",
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ["name"],
+>>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
             },
         ),
     ]

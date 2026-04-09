@@ -40,12 +40,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+<<<<<<< HEAD
     "commissions",
     "bookclub",
     "merchstore",
     "localevents",
     "diyprojects",
     "accounts",
+=======
+    "merchstore",
+>>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
 ]
 
 MIDDLEWARE = [
@@ -122,13 +126,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+<<<<<<< HEAD
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/accounts/login"
 
+=======
+>>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
 STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+<<<<<<< HEAD
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+=======
+>>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
