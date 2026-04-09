@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <h1>
+        {% if project %}
+        Edit Project
+        {% else %}
+        Add Project
+        {% endif %}
+    </h1>
+    <form action="{% if project %}
+                    {% url 'diyprojects:diyprojects_edit' project.pk %}
+                {% else %}
+                    {% url 'diyprojects:diyprojects_create' %}
+                {% endif %}" method="POST">
+        {% csrf_token %}
+        <ul>
+            <li>
+                <label for="title">
+                    <span><strong>Title: </strong></span>
+                    {{ project_form.title }}
+                </label>
+            </li>
+            <li>
+                <p>
+                    <span><strong>Category: </strong></span>
+                    {{ project_form.category }}
+                </p>
+            </li>
+            <li>
+                <label for="description">
+                    <p><strong>Description: </strong></p>
+                    {{ project_form.description }}
+                </label>
+            </li>
+            <li>
+                <label for="materials">
+                    <p><strong>Materials: </strong></p>
+                    {{ project_form.materials }}
+                </label>
+            </li>
+            <li>
+                <label for="steps">
+                    <p><strong>Steps: </strong></p>
+                    {{ project_form.steps }}
+                </label>
+            </li>
+            <li>
+                <p>
+                    <button type="submit" name="action" value="project">
+                        {% if project %}
+                        Update Project
+                        {% else %}
+                        Add Project
+                        {% endif %}
+                    </button>
+                </p>
+            </li>
+        </ul>
+    </form>
+</div>
+{% endblock %}

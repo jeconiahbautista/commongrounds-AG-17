@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container">
+    <h1> {{ event.title }} </h1>
+    <div class="box"><strong>Category:</strong> {{ event.category }}</div>
+    <div class="box"><strong>Description:</strong> {{ event.description }}</div>
+    <div class="box"><strong>Start Time:</strong> {{ event.start_time }}</div>
+    <div class="box"><strong>End Time:</strong> {{ event.end_time }}</div>
+    <div class="box"><strong>Created:</strong> {{ event.created_on }}</div>
+    <div class="box"><strong>Updated:</strong>:</strong> {{ event.updated_on }}</div>
+    <div class="box"><a href="/localevents/events">Return to Events List</a></div>
+</div>
+{% endblock %}

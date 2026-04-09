@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block body %}
-<div class = "book">
-    <h1>{{ book.title }}</h1>
-    <div class ="box"><strong>Genre:</strong> {{book.genre}}</div>
-    <div class ="box"><strong>Author:</strong> {{book.author}}</div>
-    <div class ="box"><strong>Publication Year:</strong> {{book.publication_year}}</div>
-    <div class ="box"><strong>Created On:</strong> {{book.created_on}}</div>
-    <div class ="box"><strong>Updated On:</strong> {{book.updated_on}}</div>
+<div class="container">
+    <h1>{{book.title}}</h1>
+    <div class="box"><strong>Genre:</strong> {{book.genre}}</div>
+    <div class="box"><strong>Author:</strong> {{book.author}}</div>
+    <div class="box"><strong>Publication year:</strong> {{book.publication_year}}</div>
+    <div class="box"><strong>Created On:</strong> {{book.created_on}}</div>
+    <div class="box"><strong>Updated On:</strong> {{book.updated_on}}</div>
     <div class="box"><a href="{% url 'bookclub:book-list' %}">Return to Book List</a></div>
 </div>
-{% endblock%}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<h1> Events List </h1>
+{% if events %}
+<div class="main-content">
+    {% for event in events %}
+    <div class="card">
+        <ul>
+            <li>
+                <h2> {{ event.title }}</h2>
+                <p><strong>Category:</strong> {{ event.category }}</p>
+                <p>{{ event.description|truncatechars:30 }} </p>
+                <a href='{{ event.get_absolute_url }}'> View Details </a>
+            </li>
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="else-main-content">
+    <p><em>No events available.</em></p>
+</div>
+{% endif %}
+
+{% endblock %}

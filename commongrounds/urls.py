@@ -16,10 +16,20 @@ Including another URLconf
 """
 
 from django.contrib import admin
-
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from accounts.views import dashboard
 
 urlpatterns = [
-    path("bookclub/", include("bookclub.urls", namespace="bookclub")),
     path("admin/", admin.site.urls),
+    path('', dashboard, name='dashboard'),
+    path("commissions/", include("commissions.urls", namespace="commissions")),
+    path("bookclub/", include("bookclub.urls", namespace="bookclub")),
+    path("merchstore/", include("merchstore.urls", namespace="merchstore")),
+    path("localevents/", include("localevents.urls", namespace="localevents")),
+    path("diyprojects/", include("diyprojects.urls", namespace="diyprojects")),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
