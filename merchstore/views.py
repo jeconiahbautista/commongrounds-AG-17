@@ -1,8 +1,12 @@
+from django.shortcuts import render, redirect
+from django.http import Http404
+
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from .forms import TransactionForm
 from .models import Product
 
 
@@ -30,12 +34,75 @@ class ProductListView(ListView):
 
         return context
 
+
 class ProductDetailView(DetailView):
     model = Product
     context_object_name = "product"
     template_name = "product_detail.html"
 
+    def get(self, request, pk):
+        try:
+            product = Product.object.get(pk=pk)
+        except Product.DoesNotExist:
+            raise Http404("Product does not exist")
+        
+        form = TransactionForm()
+        
+        is_owner = (
+            request.user.is_authenticated
+            and 
+            request.user.profile == product.owner
+        )
+        can_buy = (
+            request.user.is_authenticated
+            and
+            not is_owner
+            and 
+            product.stock > 0
+        )
 
+        return render(request, self.template_name, {
+            'product': product,
+            'form': form,
+            'is_owner': is_owner,
+            'can_buy': can_buy,
+        })
+
+    def post(self, request, pk):
+        try:
+            product = Product.object.get(pk=pk)
+        except Product.DoesNotExist:
+            raise Http404("Product does not exist")
+        
+        if not request.user.is_authenticated:
+            return redirect('login')
+        
+        if request.user.profile == product.owner:
+            return redirect('merchstore:product_detail', pk=pk)
+
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            transaction.product = product
+            transaction.buyer = request.user.profile
+
+            if transaction.amount > product.stock:
+                form.add_error('amount', "Only {} item(s) in stock.".format(product.stock)  )
+            else:
+                product.stock -= transaction.amount
+                product.save()
+                transaction.save()
+                return redirect('merchstore:cart')
+        
+        return render(request, self.template_name, {
+            'product': product,
+            'form': form,
+            'is_owner': False,
+            'can_buy': product.stock > 0,
+        })
+
+
+'''
 class ProductCreateView
 
 
@@ -46,3 +113,4 @@ class CartView
 
 
 class TransactionListView
+'''
