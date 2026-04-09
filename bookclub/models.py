@@ -22,8 +22,8 @@ class Book(models.Model):
     )
     author = models.CharField()
     publication_year = models.IntegerField()
-    created_on = models.DateTimeField(auto_now_add=True, null=False)
-    updated_on = models.DateTimeField(auto_now=True, null=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -33,7 +33,5 @@ class Book(models.Model):
 
     class Meta:
         ordering = [
-            "created_on",
+            "-created_on",
         ]
-        verbose_name = "book"
-        verbose_name_plural = "books"
