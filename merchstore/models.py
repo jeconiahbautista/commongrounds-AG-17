@@ -1,12 +1,9 @@
 from django.db import models
 from django.urls import reverse
 
-<<<<<<< HEAD
 from accounts.models import Profile
 from django.core.validators import MinValueValidator
 
-=======
->>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
 
 class ProductType(models.Model):
     name = models.CharField(max_length=255)
@@ -15,12 +12,6 @@ class ProductType(models.Model):
     def __str__(self):
         return self.name
 
-<<<<<<< HEAD
-=======
-    def get_absolute_url(self):
-        return reverse("merchstore:product_list", args=[str(self.id)])
-
->>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
     class Meta:
         ordering = ["name"]
 
@@ -28,7 +19,6 @@ class ProductType(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     product_type = models.ForeignKey(
-<<<<<<< HEAD
         ProductType, 
         null=True, 
         on_delete=models.SET_NULL, 
@@ -66,18 +56,11 @@ class Product(models.Model):
         if self.stock == 0:
             self.status = 'OUT_OF_STOCK'
         super().save(*args, **kwargs)
-=======
-        ProductType, null=True, on_delete=models.SET_NULL, related_name="products"
-    )
-    description = models.TextField()
-    price = models.DecimalField(max_digits=20, decimal_places=2)
->>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-<<<<<<< HEAD
         return reverse(
             "merchstore:product_detail", 
             args=[str(self.id)]
@@ -127,9 +110,3 @@ class Transaction(models.Model):
         ordering = ['created_on']
 
     
-=======
-        return reverse("merchstore:product_detail", args=[str(self.id)])
-
-    class Meta:
-        ordering = ["name"]
->>>>>>> d84fe996d28cbf8ed17b5636734b55e71fc4b160
