@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+<div class="container">
+    <h1>Create New Product</h1>
+    
+    <form action="{% url 'merchstore:product_create' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <p>
+            {{ form.name.label_tag }}<br>
+            {{ form.name }}
+        </p>
+        <p>
+            {{ form.product_type.label_tag }}<br>
+            {{ form.product_type }}
+        </p>
+        <p>
+            {{ form.description.label_tag }}<br>
+            {{ form.description }}
+        </p>
+        <p>
+            {{ form.price.label_tag }}<br>
+            {{ form.price }}
+        </p>
+        <p>
+            {{ form.stock.label_tag }}<br>
+            {{ form.stock }}
+        </p>
+            <p>
+            {{ form.status.label_tag }}<br>
+            {{ form.status }}
+        </p>
+            <p>
+            {{ form.product_image.label_tag }}<br>
+            {{ form.product_image }}
+        </p>
+        <p>
+            <button type="submit">Add Product</button>
+            <a href="{% url 'merchstore:product_list' %}" class="cancel-button">Cancel</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

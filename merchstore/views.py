@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.http import Http404
 
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic import CreateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import TransactionForm
+from .forms import TransactionForm, ProductCreateForm
 from .models import Product
 
 
@@ -101,11 +103,25 @@ class ProductDetailView(DetailView):
             'can_buy': product.stock > 0,
         })
 
+#Market seller not yet included
+class ProductCreateView(LoginRequiredMixin, CreateView):
+    model = Product
+    form_class = ProductCreateForm
+    template_name = "product_create.html"
+    
+    def get_success_url(self):
+        return reverse_lazy(
+            'merchstore:product_detail', 
+            kwargs={'pk': self.object.pk}
+        )
+    
+    def form_valid(self, form):
+        form.instance.owner = self.request.user.profile
+        return super().form_valid(form)
+
+
 
 '''
-class ProductCreateView
-
-
 class ProductUpdateView
 
 
