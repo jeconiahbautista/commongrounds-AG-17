@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+<h1>Your Cart</h1>
+
+{% if cart_by_owner %}
+    {% for owner, transactions in cart_by_owner.items %}
+    <div class="owner-group">
+        <h2>
+            Seller: {{ owner.display_name }}
+        </h2>
+        <div class="container">
+            {% for i in transactions %}
+            <div class="box">
+                Product: {{ i.product.name }}<br>
+                Price: {{ i.product.price }}<br>
+                Amount: {{ i.amount }}<br>
+                Status: {{ i.product.get_status_display }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
+
+{% endblock %}

@@ -4,12 +4,12 @@ from django.http import Http404
 
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, TemplateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TransactionForm, ProductCreateUpdateForm
-from .models import Product
+from .models import Product, Transaction
 
 
 class ProductListView(ListView):
@@ -142,7 +142,26 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+class CartView(LoginRequiredMixin, TemplateView):
+    template_name = "cart.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_profile = self.request.user.profile
+
+        transactions = Transaction.objects.filter(
+            buyer=user_profile
+        ).select_related('product', 'product__owner')
+
+        cart_by_owner = {}
+        for i in transactions:
+            owner = i.product.owner
+            if owner not in cart_by_owner:
+                cart_by_owner[owner] = []
+            cart_by_owner[owner].append(i)
+
+        context['cart_by_owner'] = cart_by_owner
+        return context
 
 
-#class CartView
 #class TransactionListView
