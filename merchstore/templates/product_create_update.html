@@ -4,9 +4,15 @@
 
 {% block body %}
 <div class="container">
-    <h1>Create New Product</h1>
+    <h1>
+        {% if object %}
+            Update Product
+        {% else %}
+            Create New Product
+        {% endif %}
+    </h1>
     
-    <form action="{% url 'merchstore:product_create' %}" method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         <p>
@@ -38,8 +44,13 @@
             {{ form.product_image }}
         </p>
         <p>
-            <button type="submit">Add Product</button>
+            {% if object %}
+            <button type="submit">Update Product</button>
+            <a href="{% url 'merchstore:product_detail' object.pk %}" class="cancel-button">Cancel</a>
+            {% else %}
+            <button type="submit">Create New Product</button>
             <a href="{% url 'merchstore:product_list' %}" class="cancel-button">Cancel</a>
+            {% endif %}
         </p>
     </form>
 </div>

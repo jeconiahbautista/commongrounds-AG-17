@@ -4,11 +4,11 @@ from django.http import Http404
 
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import TransactionForm, ProductCreateForm
+from .forms import TransactionForm, ProductCreateUpdateForm
 from .models import Product
 
 
@@ -106,7 +106,7 @@ class ProductDetailView(DetailView):
 #Market seller not yet included
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
-    form_class = ProductCreateForm
+    form_class = ProductCreateUpdateForm
     template_name = "product_create.html"
     
     def get_success_url(self):
@@ -120,13 +120,29 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+    model = Product
+    form_class = ProductCreateUpdateForm
+    template_name = "product_update.html"
 
-'''
-class ProductUpdateView
+    def get_success_url(self):
+        return reverse_lazy(
+            'merchstore:product_detail', 
+            kwargs={'pk': self.object.pk}
+        )
+    
+    def form_valid(self, form):
+        form.instance.owner = self.object.owner
+
+        if form.instance.stock == 0:
+            form.instance.status = 'OUT_OF_STOCK'
+        else:
+            form.instance.status = 'AVAILABLE'
+
+        return super().form_valid(form)
 
 
-class CartView
 
 
-class TransactionListView
-'''
+#class CartView
+#class TransactionListView

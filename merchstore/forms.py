@@ -11,7 +11,7 @@ class TransactionForm(forms.ModelForm):
         fields = ['amount']
     
 
-class ProductCreateForm(forms.ModelForm):
+class ProductCreateUpdateForm(forms.ModelForm):
 
     product_type = forms.ModelChoiceField(
         queryset=ProductType.objects.all(),
