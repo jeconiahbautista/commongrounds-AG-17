@@ -20,7 +20,7 @@ class Book(models.Model):
     genre = models.ForeignKey(
         Genre, on_delete=models.SET_NULL, related_name="genres", null=True
     )
-    author = models.CharField()
+    author = models.CharField(max_length=255)
     publication_year = models.IntegerField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

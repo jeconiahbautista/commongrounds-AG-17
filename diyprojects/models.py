@@ -55,6 +55,7 @@ class Favorite(models.Model):
     )
     date_favorited = models.DateField(auto_now_add=True)
     status = models.CharField(
+        max_length=255,
         choices=[("Backlog", "Backlog"), ("To-Do", "To-Do"), ("Done", "Done")],
         default="Backlog",
     )
