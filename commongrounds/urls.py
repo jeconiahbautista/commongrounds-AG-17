@@ -23,7 +23,8 @@ from accounts.views import dashboard
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', dashboard, name='dashboard'),
+    path("", dashboard, name="dashboard"),
+    path("accounts/", include("accounts.urls"), namespace="accounts"),
     path("commissions/", include("commissions.urls", namespace="commissions")),
     path("bookclub/", include("bookclub.urls", namespace="bookclub")),
     path("merchstore/", include("merchstore.urls", namespace="merchstore")),

@@ -36,7 +36,6 @@ class Commission(models.Model):
 
     class Meta:
         ordering = ["created_on"]
-<<<<<<< HEAD
         verbose_name = "commission"
         verbose_name_plural = "commissions"
 
@@ -63,5 +62,3 @@ class Job(models.Model):
         ordering = ["-status", "-manpower_required", "role"]
         verbose_name = "job"
         verbose_name_plural = "jobs"
-=======
->>>>>>> b692fddf2df8e427bd4c0436c6a54a9f1968de88
