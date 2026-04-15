@@ -1,4 +1,4 @@
-# commongrounds-G-17
+# commongrounds-AG-17
 Midterm Project for CSCI 40
 
 Bandola, Joshua Patrick
