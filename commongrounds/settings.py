@@ -112,11 +112,7 @@ WSGI_APPLICATION = "commongrounds.wsgi.application"
 #     }
 # }
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3'
-    )
-}
+DATABASES = {"default": dj_database_url.config(default="sqlite:///db.sqlite3")}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -151,7 +147,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/accounts/dashboard"
 LOGOUT_REDIRECT_URL = "/accounts/login"
 
 STATIC_URL = "static/"

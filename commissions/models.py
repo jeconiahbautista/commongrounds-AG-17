@@ -59,6 +59,6 @@ class Job(models.Model):
     )
 
     class Meta:
-        ordering = ["-status", "-manpower_required", "role"]
+        ordering = ["-status", "-manpower", "role"]
         verbose_name = "job"
         verbose_name_plural = "jobs"

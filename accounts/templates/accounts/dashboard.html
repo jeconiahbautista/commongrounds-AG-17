@@ -1,2 +1,7 @@
-{% extends 'registration/login.html' %}
+<h1>Dashboard</h1>
+<p>Welcome, {{ user.username }}!</p>
 
+<form method="post" action="/accounts/logout/">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
