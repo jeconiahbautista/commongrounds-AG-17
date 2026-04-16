@@ -1,27 +1,69 @@
 {% extends 'base.html' %}
-{% load static %}
+
 
 {% block body %}
 <h1>Book List</h1>
-{% if books %}
-<div class="main-content">
-    {% for book in books %}
-    <div class="card">
-        <ul>
-            <li>
-                <h2> {{ book.title }}</h2>
-                <p><strong>Genre:</strong> {{ book.genre }}</p>
-                <p>{{ book.author }} </p>
-                <a href='{{ book.get_absolute_url }}'> View Details </a>
-            </li>
-        </ul>
+<div class="content">
+     <div class="add">
+        <a href="/bookclub/book/add">Add a book here</a>
     </div>
-    {% endfor %}
-</div>
-{% else %}
-<div class="else-main-content">
-    <p><em>No books available.</em></p>
-</div>
-{% endif %}
+    <h2> Books Created</h2>
+    {% if contributed_book %}
+    <div class="main-content" >
+        {% for book in contributed_book %}
+        <div class ="card">
+            <ul>
+                <li>
+                    <h2>{{book.title}}</h2>
+                    <p><strong> Genre:</strong> {{ book.genre }}</p>
+                    <p>{{ book.author }} </p>
+                    <a href='{{ book.get_absolute_url }}'> View Details </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <div class="else-main-content">
+        <p><em>No created books.</em></p>
+    {% endif %}
 
+
+    <h2> Bookmarked Books </h2>
+    {% if bookmarked_books %}
+    <div class="main-content" >
+        {% for book in bookmarked_books %}
+        <div class ="card">
+            <ul>
+               <li>
+                    <h2>{{book.title}}</h2>
+                    <p><strong> Genre:</strong> {{ book.genre }}</p>
+                    <p>{{ book.author }} </p>
+                    <a href='{{ book.get_absolute_url }}'> View Details </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <div class="else-main-content">
+        <p><em>No bookmarks.</em></p>
+    {% endif %}
+
+
+    <h2> Reviewed Books </h2>
+    {% if reviewed_books %}
+    <div class="main-content" >
+        {% for book in reviewed_books %}
+        <div class ="card">
+            <ul>
+               <li>
+                    <h2>{{book.title}}</h2>
+                    <p><strong> Genre:</strong> {{ book.genre }}</p>
+                    <p>{{ book.author }} </p>
+                    <a href='{{ book.get_absolute_url }}'> View Details </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <div class="else-main-content">
+        <p><em>No reviewed books.</em></p>
+    {% endif %}
 {% endblock %}
+
