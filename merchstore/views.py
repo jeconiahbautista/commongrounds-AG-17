@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.http import Http404
-
+from collections import defaultdict
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView, TemplateView
@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TransactionForm, ProductCreateUpdateForm
 from .models import Product, Transaction
+
 
 
 class ProductListView(ListView):
@@ -164,4 +165,26 @@ class CartView(LoginRequiredMixin, TemplateView):
         return context
 
 
-#class TransactionListView
+class TransactionListView(LoginRequiredMixin, ListView):
+    model = Transaction
+    context_object_name = "transactions"
+    template_name = "transaction_list.html"
+    
+    def get_queryset(self):
+        # Transactions where logged-in user is the sellet
+        return Transaction.objects.filter(
+            product_owner=self.request.user.profile
+            ).select_related("buyer", "product")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        grouped_transactions = defaultdict(list)
+
+        for transaction in context["transactions"]:
+            buyer = transaction.buyer
+            grouped_transactions[buyer].append(transaction)
+
+        context["group_transactions"] = dict(grouped_transactions)
+        return context
+
