@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TransactionForm, ProductCreateUpdateForm
 from .models import Product, Transaction
-
+from accounts.mixins import RoleRequiredMixin
 
 
 class ProductListView(ListView):
@@ -105,10 +105,11 @@ class ProductDetailView(DetailView):
         })
 
 #Market seller not yet included
-class ProductCreateView(LoginRequiredMixin, CreateView):
+class ProductCreateView(RoleRequiredMixin, LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductCreateUpdateForm
     template_name = "product_create.html"
+    required_role = "Market Seller"
     
     def get_success_url(self):
         return reverse_lazy(
@@ -121,10 +122,11 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(RoleRequiredMixin, LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductCreateUpdateForm
     template_name = "product_update.html"
+    required_role = "Market Seller"
 
     def get_success_url(self):
         return reverse_lazy(
@@ -173,7 +175,7 @@ class TransactionListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         # Transactions where logged-in user is the sellet
         return Transaction.objects.filter(
-            product_owner=self.request.user.profile
+            product__owner=self.request.user.profile
             ).select_related("buyer", "product")
     
     def get_context_data(self, **kwargs):
@@ -185,6 +187,6 @@ class TransactionListView(LoginRequiredMixin, ListView):
             buyer = transaction.buyer
             grouped_transactions[buyer].append(transaction)
 
-        context["group_transactions"] = dict(grouped_transactions)
+        context["grouped_transactions"] = dict(grouped_transactions)
         return context
 
