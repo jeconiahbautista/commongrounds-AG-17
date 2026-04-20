@@ -8,28 +8,30 @@ class CommissionInline(admin.TabularInline):
 
 
 class CommissionTypeAdmin(admin.ModelAdmin):
-    inlines = [
-        CommissionInline,
-    ]
+    inlines = [CommissionInline]
 
 
 class CommissionAdmin(admin.ModelAdmin):
-    model = Commission
-
     search_fields = ("title",)
 
     list_display = (
         "title",
-        "description",
+        "type",
+        "maker",
         "people_required",
-        "updated_on",
+        "status",
         "created_on",
+        "updated_on",
     )
 
     list_filter = (
+        "status",
+        "type",
         "created_on",
         "updated_on",
     )
+
+    readonly_fields = ("created_on", "updated_on")
 
     fieldsets = [
         (
@@ -38,6 +40,8 @@ class CommissionAdmin(admin.ModelAdmin):
                 "fields": [
                     ("title", "people_required"),
                     "type",
+                    "maker",
+                    "status",
                     "description",
                 ]
             },
