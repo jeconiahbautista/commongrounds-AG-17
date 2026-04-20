@@ -21,7 +21,7 @@
     </div>
     {% endfor %}
 
-    <a href="{% url 'localevents:event-add' %}">Create Event</a>
+    <a href="{% url 'localevents:event-create' %}">Create Event</a>
 
     <h2>Signed Events</h2>
 
@@ -52,7 +52,6 @@
         </ul>
     </div>
     {% endfor %}
-
 </div>
 {% else %}
 <div class="else-main-content">

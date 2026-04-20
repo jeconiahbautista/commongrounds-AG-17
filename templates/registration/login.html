@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% if request.user.is_authenticated %}
+<h1>Welcome, {{ request.user.username }}!</h1>
+{% else %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>
+<p></p>
+<a href="{% url 'password_reset' %}">Forgot password?</a>
+{% endif %}
+{% endblock %}

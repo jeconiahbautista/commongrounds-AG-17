@@ -6,48 +6,84 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('accounts', '0001_initial'),
-        ('localevents', '0002_alter_event_location'),
+        ("accounts", "0001_initial"),
+        ("localevents", "0002_alter_event_id_alter_eventtype_id"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='event_capacity',
-            field=models.PositiveIntegerField(default=1, validators=[django.core.validators.MinValueValidator(1)]),
+            model_name="event",
+            name="event_capacity",
+            field=models.PositiveIntegerField(
+                default=1, validators=[django.core.validators.MinValueValidator(1)]
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='event',
-            name='event_image',
-            field=models.ImageField(default=0, upload_to='localevents_images/'),
+            model_name="event",
+            name="event_image",
+            field=models.ImageField(default=0, upload_to="localevents_images/"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='event',
-            name='organizer',
-            field=models.ManyToManyField(null=True, related_name='organizers', to='accounts.profile'),
+            model_name="event",
+            name="organizer",
+            field=models.ManyToManyField(
+                null=True, related_name="organizers", to="accounts.profile"
+            ),
         ),
         migrations.AddField(
-            model_name='event',
-            name='status',
-            field=models.CharField(choices=[('Available', 'Available'), ('Full', 'Full'), ('Done', 'Done'), ('Cancelled', 'Cancelled')], default='Available', max_length=10),
+            model_name="event",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("Available", "Available"),
+                    ("Full", "Full"),
+                    ("Done", "Done"),
+                    ("Cancelled", "Cancelled"),
+                ],
+                default="Available",
+                max_length=10,
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='event',
-            name='location',
+            model_name="event",
+            name="location",
             field=models.CharField(max_length=255),
         ),
         migrations.CreateModel(
-            name='EventSignup',
+            name="EventSignup",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('new_registrant', models.CharField(max_length=255)),
-                ('event', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='events', to='localevents.event')),
-                ('user_registrant', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='users', to='accounts.profile')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("new_registrant", models.CharField(max_length=255)),
+                (
+                    "event",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="events",
+                        to="localevents.event",
+                    ),
+                ),
+                (
+                    "user_registrant",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="users",
+                        to="accounts.profile",
+                    ),
+                ),
             ],
         ),
     ]

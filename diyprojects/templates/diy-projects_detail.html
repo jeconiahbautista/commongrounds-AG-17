@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <h1>{{ project.title }}</h1>
+    <div class="boxes">
+        <div class="box"><strong>Average Rating:</strong> {{ average_rating|floatformat:1 }}/10.0</div>
+        {% if user.is_authenticated %}
+        {% if existing_rating %}
+        <div class="box">
+            <p><em>You rated this project:</em> {{ existing_rating.score }}/10.0</p>
+        </div>
+        {% else %}
+        <div class="box">
+            <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST">
+                {% csrf_token %}
+                <label for="score">
+                    <span><strong>Rate the Project: </strong></span>
+                    {{ rate_form.score }}
+                </label>
+                <button type="submit" name="action" value="rate">Submit Rating</button>
+            </form>
+        </div>
+        {% endif %}
+        {% endif %}
+        <div class="box">
+            <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" name="action" value="favorite">
+                    {% if is_favorited %}
+                    Unfavorite
+                    {% else %}
+                    Favorite
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+        <div class="box">
+            <p>{{ favorite_count }} people favorited this project</p>
+        </div>
+        {% if is_owner %}
+        <div class="box">
+            <a href="{% url 'diyprojects:diyprojects_edit' project.pk %}">
+                Edit Project
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="box"><strong>Category:</strong> {{ project.category.name }}</div>
+    <div class="box"><strong>Description:</strong> {{ project.description }}</div>
+    <div class="box">
+        <p><strong>Materials:</strong></p>
+        <p>{{ project.materials }}</p>
+    </div>
+    <div class="box">
+        <p><strong>Steps:</strong></p>
+        <p>{{ project.steps }}</p>
+    </div>
+    <div class="boxes">
+        <div class="box"><strong>Created:</strong> {{ project.created_on }}</div>
+        <div class="box"><strong>Updated:</strong> {{ project.updated_on }}</div>
+    </div>
+    <div class="box"><a href="/diyprojects/projects">Return to Projects List</a></div>
+    <div class="box">
+        <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST"
+            enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="comment">
+                <p><strong>Reviews: </strong></p>
+                <p>{{ review_form.comment }}</p>
+            </label>
+            <label for="image">
+                <strong>Submit a photo: </strong>
+                {{ review_form.image }}
+            </label>
+            <p><button type="submit" name="action" value="review">Submit Review</button></p>
+        </form>
+    </div>
+    {% if reviews %}
+    {% for review in reviews %}
+    <div class="box">
+        <p><em>Reviewed by: {{ review.reviewer }}</em></p>
+        <p>{{ review.comment }}</p>
+        {% if review.image %}
+        <img src="{{ review.image.url }}" width="300">
+        {% endif %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="box">
+        <p><em>No reviews yet.</em></p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

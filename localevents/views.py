@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Event, EventSignup
 from .forms import EventForm
+from accounts.decorators import role_required
 
 
 def event_list(request):
@@ -52,6 +53,7 @@ def event_detail(request, pk):
 
 
 @login_required
+@role_required("Event Organizer")
 def event_create(request):
     form = EventForm()
 
@@ -70,6 +72,7 @@ def event_create(request):
 
 
 @login_required
+@role_required("Event Organizer")
 def event_edit(request, pk):
     event = Event.objects.get(pk=pk)
 
