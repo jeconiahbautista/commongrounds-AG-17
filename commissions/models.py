@@ -20,10 +20,14 @@ class CommissionType(models.Model):
 class Commission(models.Model):
     STATUS_OPEN = "0"
     STATUS_FULL = "1"
+    STATUS_COMPLETED = "2"
+    STATUS_DISCONTINUED = "3"
 
     STATUS_CHOICES = [
         (STATUS_OPEN, "Open"),
         (STATUS_FULL, "Full"),
+        (STATUS_COMPLETED, "Completed"),
+        (STATUS_DISCONTINUED, "Discontinued"),
     ]
 
     type = models.ForeignKey(
@@ -101,15 +105,16 @@ class JobApplication(models.Model):
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default=STATUS_PENDING
     )
-    applied_on =  models.DateTimeField(auto_now_add=True)
+    applied_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "{} - {}".format(self.applicant, self.job)
 
     class Meta:
         ordering = ["status", "-applied_on"]
-        verbose_name = "application"
-        verbose_name_plural = "applications"
+        unique_together = ["job", "applicant"]
+        verbose_name = "job application"
+        verbose_name_plural = "job applications"
         
 
 

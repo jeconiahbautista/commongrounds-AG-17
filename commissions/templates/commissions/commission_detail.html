@@ -3,12 +3,52 @@
 
 {% block body %}
 <div class="container">
-    <h1> {{ commission.title }} </h1>
+    <h1>{{ commission.title }}</h1>
+
     <div class="box"><strong>Type:</strong> {{ commission.type.name }}</div>
     <div class="box"><strong>Description:</strong> {{ commission.description }}</div>
     <div class="box"><strong>People Required:</strong> {{ commission.people_required }}</div>
+    <div class="box"><strong>Status:</strong> {{ commission.get_status_display }}</div>
     <div class="box"><strong>Created:</strong> {{ commission.created_on }}</div>
-    <div class="box"><strong>Updated:</strong></strong> {{ commission.updated_on }}</div>
-    <div class="box"><a href="/commissions/requests">Return to Commissions List</a></div>
+    <div class="box"><strong>Updated:</strong> {{ commission.updated_on }}</div>
+
+    <div class="box"><strong>Total Manpower Required:</strong> {{ total_manpower }}</div>
+    <div class="box"><strong>Open Manpower:</strong> {{ total_open_manpower }}</div>
+
+    {% if is_owner %}
+        <div class="box">
+            <a href="{% url 'commissions:request-edit' commission.pk %}">Edit Commission</a>
+        </div>
+    {% endif %}
+
+    <h2>Jobs Needed</h2>
+
+    {% if job_data %}
+        {% for item in job_data %}
+            <div class="box">
+                <p><strong>Role:</strong> {{ item.job.role }}</p>
+                <p><strong>Manpower Required:</strong> {{ item.job.manpower_required }}</p>
+                <p><strong>Status:</strong> {{ item.job.get_status_display }}</p>
+                <p><strong>Accepted Applications:</strong> {{ item.accepted }}</p>
+                <p><strong>Open Slots:</strong> {{ item.open_slots }}</p>
+
+                {% if user.is_authenticated %}
+                    {% if item.can_apply %}
+                        <a href="{% url 'commissions:job-apply' item.job.pk %}">Apply to Job</a>
+                    {% elif item.already_applied %}
+                        <button disabled>Already Applied</button>
+                    {% else %}
+                        <button disabled>Apply to Job</button>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="box">No jobs listed for this commission yet.</div>
+    {% endif %}
+
+    <div class="box">
+        <a href="{% url 'commissions:request-list' %}">Return to Commissions List</a>
+    </div>
 </div>
 {% endblock %}
