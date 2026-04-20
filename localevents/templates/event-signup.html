@@ -1,0 +1,21 @@
+{% extends "base.html "%}
+
+{% block body %}
+
+<h2>Sign up for {{ event.title }}</h2>
+
+<p><strong>Location:</strong> {{ event.location }}</p>
+<p><strong>Start:</strong> {{ event.start_time }}</p>
+<p><strong>End:</strong> {{ event.end_time }}</p>
+<p><strong>Description:</strong> {{ event.description }}</p>
+
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label for="name">Your Name:</label>
+    <input type="text" name="name" id="name" required>
+
+    <button type="submit">Sign Up</button>
+</form>

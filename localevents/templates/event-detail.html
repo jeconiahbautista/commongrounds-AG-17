@@ -12,5 +12,15 @@
     <div class="box"><strong>Updated:</strong>:</strong> {{ event.updated_on }}</div>
     <div class="box"><a href="/localevents/events">Go back to events</a></div>
 </div>
-{% endblock %}
 
+{% if not is_organizer %}
+<a href="{% url 'localevents:event-signup' event.pk %}">
+    <button {% if is_full %}Sign up full{% endif%}>
+        Sign up
+    </button>
+</a>
+{% else %}
+
+
+{% endif %}
+{% endblock %}
