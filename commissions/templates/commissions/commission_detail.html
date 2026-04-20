@@ -5,7 +5,7 @@
 <div class="container">
     <h1>{{ commission.title }}</h1>
 
-    <div class="box"><strong>Type:</strong> {{ commission.type.name }}</div>
+    <div class="box"><strong>Type:</strong> {{ commission.type.name|default:"No Type" }}</div>
     <div class="box"><strong>Description:</strong> {{ commission.description }}</div>
     <div class="box"><strong>People Required:</strong> {{ commission.people_required }}</div>
     <div class="box"><strong>Status:</strong> {{ commission.get_status_display }}</div>

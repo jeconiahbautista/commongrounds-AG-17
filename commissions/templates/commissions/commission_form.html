@@ -14,6 +14,7 @@
 
         <fieldset>
             <legend>Commission Information</legend>
+            {{ form.non_field_errors }}
             {{ form.as_p }}
         </fieldset>
 
@@ -23,6 +24,7 @@
 
             {% for job_form in job_formset %}
                 <div class="box">
+                    {{ job_form.non_field_errors }}
                     {{ job_form.id }}
                     <p>{{ job_form.role.label_tag }} {{ job_form.role }}</p>
                     <p>{{ job_form.manpower_required.label_tag }} {{ job_form.manpower_required }}</p>

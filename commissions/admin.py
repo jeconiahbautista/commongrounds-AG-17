@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Commission, CommissionType
+from .models import Commission, CommissionType, Job, JobApplication
 
 
 class CommissionInline(admin.TabularInline):
@@ -49,5 +49,18 @@ class CommissionAdmin(admin.ModelAdmin):
     ]
 
 
+class JobAdmin(admin.ModelAdmin):
+    list_display = ("role", "commission", "manpower_required", "status")
+    list_filter = ("status",)
+
+
+class JobApplicationAdmin(admin.ModelAdmin):
+    list_display = ("job", "applicant", "status", "applied_on")
+    list_filter = ("status",)
+    search_fields = ("applicant__display_name",)
+
+
 admin.site.register(CommissionType, CommissionTypeAdmin)
 admin.site.register(Commission, CommissionAdmin)
+admin.site.register(Job, JobAdmin)
+admin.site.register(JobApplication, JobApplicationAdmin)

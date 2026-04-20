@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from accounts.mixins import RoleRequiredMixin
 from .forms import CommissionForm, JobFormSet
 from .models import Commission, Job, JobApplication
+from .services import CommissionService
 
 
 class CommissionListView(ListView):
@@ -59,17 +60,13 @@ class CommissionDetailView(DetailView):
         commission = self.object
         jobs = commission.jobs.all()
 
-        total_manpower = 0
-        total_open = 0
+        summary = CommissionService.get_commission_summary(commission)
 
         job_data = []
 
         for job in jobs:
             accepted = job.applications.filter(status="1").count()
             open_slots = max(job.manpower_required - accepted, 0)
-
-            total_manpower += job.manpower_required
-            total_open += open_slots
 
             already_applied = False
             if self.request.user.is_authenticated:
@@ -86,8 +83,8 @@ class CommissionDetailView(DetailView):
             })
 
         context["job_data"] = job_data
-        context["total_manpower"] = total_manpower
-        context["total_open_manpower"] = total_open
+        context["total_manpower"] = summary["total_manpower"]
+        context["total_open_manpower"] = summary["open_manpower"]
 
         if self.request.user.is_authenticated:
             context["is_owner"] = (
@@ -117,13 +114,14 @@ class CommissionCreateView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
         context = self.get_context_data()
         job_formset = context["job_formset"]
 
-        form.instance.maker = self.request.user.profile
-
         if job_formset.is_valid():
-            self.object = form.save()
-            job_formset.instance = self.object
-            job_formset.save()
-            return redirect(self.object.get_absolute_url())
+            commission = CommissionService.create_commission(
+                author=self.request.user.profile,
+                data=form.cleaned_data,
+                jobs_data=[f.cleaned_data for f in job_formset.forms],
+            )
+            return redirect(commission.get_absolute_url())
+
         return self.form_invalid(form)
     
 
@@ -156,10 +154,7 @@ class CommissionUpdateView(LoginRequiredMixin, RoleRequiredMixin, UpdateView):
             job_formset.instance = self.object
             job_formset.save()
 
-            jobs = self.object.jobs.all()
-            if jobs.exists() and all(job.status == "1" for job in jobs):
-                self.object.status = "1"
-                self.object.save()
+            CommissionService.sync_commission_status(self.object)
 
             return redirect(self.object.get_absolute_url())
         return self.form_invalid(form)
@@ -169,18 +164,6 @@ def apply_to_job(request, pk):
     job = Job.objects.get(pk=pk)
     applicant = request.user.profile
 
-    accepted_count = job.applications.filter(status="1").count()
-
-    if accepted_count >= job.manpower_required:
-        return redirect(job.commission.get_absolute_url())
-
-    if JobApplication.objects.filter(job=job, applicant=applicant).exists():
-        return redirect(job.commission.get_absolute_url())
-
-    JobApplication.objects.create(
-        job=job,
-        applicant=applicant,
-        status="0",
-    )
+    CommissionService.apply_to_job(applicant, job)
 
     return redirect(job.commission.get_absolute_url())

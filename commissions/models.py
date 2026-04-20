@@ -95,7 +95,6 @@ class JobApplication(models.Model):
         (STATUS_REJECTED, "Rejected"),
     ]
 
-
     job = models.ForeignKey(
         Job, on_delete=models.CASCADE, related_name="applications"
     )
