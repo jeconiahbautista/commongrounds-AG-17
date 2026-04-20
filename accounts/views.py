@@ -26,11 +26,5 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 def dashboard(request):
     return render(request, "accounts/dashboard.html")
 
-
-@role_required("Market Seller")
-def seller_dashboard(request):
-    return render(request, "accounts/seller_dashboard.html")
-
-
 def permission_denied_view(request):
     return render(request, "accounts/permission_denied.html")

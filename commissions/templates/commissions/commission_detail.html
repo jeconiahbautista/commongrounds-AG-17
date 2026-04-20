@@ -41,6 +41,26 @@
                         <button disabled>Apply to Job</button>
                     {% endif %}
                 {% endif %}
+
+                {% if is_owner %}
+                    <h4>Applications</h4>
+                    {% if item.applications %}
+                        <ul>
+                            {% for application in item.applications %}
+                                <li>
+                                    {{ application.applicant.display_name }} - {{ application.get_status_display }}
+
+                                    {% if application.status == "0" %}
+                                        <a href="{% url 'commissions:application-accept' application.pk %}">Accept</a>
+                                        <a href="{% url 'commissions:application-reject' application.pk %}">Reject</a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No applications yet.</p>
+                    {% endif %}
+                {% endif %}
             </div>
         {% endfor %}
     {% else %}

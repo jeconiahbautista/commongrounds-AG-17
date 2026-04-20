@@ -77,3 +77,39 @@ class CommissionService:
             "total_manpower": total_manpower,
             "open_manpower": open_manpower,
         }
+    
+    @staticmethod
+    def accept_job_application(application):
+        job = application.job
+
+        accepted_count = job.applications.filter(status="1").count()
+
+        if application.status == "1":
+            return application
+
+        if accepted_count >= job.manpower_required:
+            return None
+
+        application.status = "1"
+        application.save()
+
+        if job.applications.filter(status="1").count() >= job.manpower_required:
+            job.status = "1"
+            job.save()
+
+        CommissionService.sync_commission_status(job.commission)
+        return application
+
+    @staticmethod
+    def reject_job_application(application):
+        application.status = "2"
+        application.save()
+
+        job = application.job
+
+        if job.applications.filter(status="1").count() < job.manpower_required:
+            job.status = "0"
+            job.save()
+
+        CommissionService.sync_commission_status(job.commission)
+        return application

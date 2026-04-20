@@ -79,6 +79,7 @@ class CommissionDetailView(DetailView):
                 "accepted": accepted,
                 "open_slots": open_slots,
                 "already_applied": already_applied,
+                "applications": job.applications.all(),
                 "can_apply": self.request.user.is_authenticated and open_slots > 0 and not already_applied,
             })
 
@@ -167,3 +168,24 @@ def apply_to_job(request, pk):
     CommissionService.apply_to_job(applicant, job)
 
     return redirect(job.commission.get_absolute_url())
+
+@login_required
+def accept_job_application(request, pk):
+    application = JobApplication.objects.get(pk=pk)
+
+    if application.job.commission.maker != request.user.profile:
+        return redirect(application.job.commission.get_absolute_url())
+
+    CommissionService.accept_job_application(application)
+    return redirect(application.job.commission.get_absolute_url())
+
+
+@login_required
+def reject_job_application(request, pk):
+    application = JobApplication.objects.get(pk=pk)
+
+    if application.job.commission.maker != request.user.profile:
+        return redirect(application.job.commission.get_absolute_url())
+
+    CommissionService.reject_job_application(application)
+    return redirect(application.job.commission.get_absolute_url())
