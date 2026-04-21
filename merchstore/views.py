@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import TransactionForm, ProductCreateUpdateForm
 from .models import Product, Transaction
 from accounts.mixins import RoleRequiredMixin
-
+from .strategies import AuthenticatedPurchaseStrategy, GuestPurchaseStrategy
 
 class ProductListView(ListView):
     model = Product
@@ -76,26 +76,42 @@ class ProductDetailView(DetailView):
             product = Product.object.get(pk=pk)
         except Product.DoesNotExist:
             raise Http404("Product does not exist")
-        
-        if not request.user.is_authenticated:
-            return redirect('login')
-        
-        if request.user.profile == product.owner:
-            return redirect('merchstore:product_detail', pk=pk)
 
         form = TransactionForm(request.POST)
-        if form.is_valid():
-            transaction = form.save(commit=False)
-            transaction.product = product
-            transaction.buyer = request.user.profile
 
-            if transaction.amount > product.stock:
-                form.add_error('amount', "Only {} item(s) in stock.".format(product.stock)  )
+        if form.is_valid():
+            if request.user.is_authenticated:
+                strategy = AuthenticatedPurchaseStrategy()
             else:
-                product.stock -= transaction.amount
-                product.save()
-                transaction.save()
-                return redirect('merchstore:cart')
+                strategy = GuestPurchaseStrategy()
+
+            return strategy.execute(request, product, form)
+
+        return render(request, self.template_name, {
+            'product': product,
+            'form': form,
+            'is_owner': False,
+            'can_buy': product.stock > 0
+        })       
+        # if not request.user.is_authenticated:
+        #     return redirect('login')
+        
+        # if request.user.profile == product.owner:
+        #     return redirect('merchstore:product_detail', pk=pk)
+
+        # form = TransactionForm(request.POST)
+        # if form.is_valid():
+        #     transaction = form.save(commit=False)
+        #     transaction.product = product
+        #     transaction.buyer = request.user.profile
+
+        #     if transaction.amount > product.stock:
+        #         form.add_error('amount', "Only {} item(s) in stock.".format(product.stock)  )
+        #     else:
+        #         product.stock -= transaction.amount
+        #         product.save()
+        #         transaction.save()
+        #         return redirect('merchstore:cart')
         
         return render(request, self.template_name, {
             'product': product,
