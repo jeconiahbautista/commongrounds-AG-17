@@ -87,7 +87,7 @@ os.environ.setdefault("PGDATABASE", "railway")
 os.environ.setdefault("PGUSER", "postgres")
 os.environ.setdefault("PGPASSWORD", "ByZzsVVnCmiOpKblpGRwHeLJmJrmITDI")
 os.environ.setdefault("PGHOST", "postgres.railway.internal")
-os.environ.setdefault("PGPORT", "29706")
+os.environ.setdefault("PGPORT", "5432")
 
 DATABASES = {
     'default': {
