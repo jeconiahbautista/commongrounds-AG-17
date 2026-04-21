@@ -9,18 +9,32 @@
     <div class="box"><strong>Started Time:</strong> {{ event.start_time }}</div>
     <div class="box"><strong>End Time:</strong> {{ event.end_time }}</div>
     <div class="box"><strong>Created:</strong> {{ event.created_on }}</div>
-    <div class="box"><strong>Updated:</strong>:</strong> {{ event.updated_on }}</div>
+    <div class="box"><strong>Updated:</strong> {{ event.updated_on }}</div>
     <div class="box"><a href="/localevents/events">Go back to events</a></div>
 </div>
 
-{% if not is_organizer %}
-<a href="{% url 'localevents:event-signup' event.pk %}">
-    <button {% if is_full %}Sign up full{% endif%}>
-        Sign up
-    </button>
+{% if is_organizer %}
+<a href="{% url 'localevents:event-detail-edit' event.pk %}">
+    <button>Edit Event</button>
 </a>
+
 {% else %}
 
+{% if is_authenticated %}
+<a href="{% url 'localevents:event-list' %}">
+    <button {% if is_full %}disabled{% endif %}>
+        {% if is_full %}Full{% else %}Sign up{% endif %}
+    </button>
+</a>
+
+{% else %}
+<a href="{% url 'localevents:event-detail-signup' event.pk %}">
+    <button {% if is_full %}disabled{% endif %}>
+        {% if is_full %}Full{% else %}Sign up{% endif %}
+    </button>
+</a>
+{% endif %}
 
 {% endif %}
+
 {% endblock %}

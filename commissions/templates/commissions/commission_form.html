@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container">
+    {% if commission %}
+        <h1>Edit Commission</h1>
+    {% else %}
+        <h1>Create Commission</h1>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <fieldset>
+            <legend>Commission Information</legend>
+            {{ form.non_field_errors }}
+            {{ form.as_p }}
+        </fieldset>
+
+        <fieldset>
+            <legend>Jobs</legend>
+            {{ job_formset.management_form }}
+
+            {% for job_form in job_formset %}
+                <div class="box">
+                    {{ job_form.non_field_errors }}
+                    {{ job_form.id }}
+                    <p>{{ job_form.role.label_tag }} {{ job_form.role }}</p>
+                    <p>{{ job_form.manpower_required.label_tag }} {{ job_form.manpower_required }}</p>
+                    <p>{{ job_form.status.label_tag }} {{ job_form.status }}</p>
+                    {% if job_formset.can_delete %}
+                        <p>{{ job_form.DELETE.label_tag }} {{ job_form.DELETE }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <div class="box">
+        <a href="{% url 'commissions:request-list' %}">Back to Commissions</a>
+    </div>
+</div>
+{% endblock %}

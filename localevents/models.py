@@ -63,12 +63,19 @@ class EventSignup(models.Model):
         Event,
         null=True,
         on_delete=models.CASCADE,
-        related_name="events",
+        related_name="signups",
     )
     user_registrant = models.ForeignKey(
         Profile,
         null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name="users",
     )
-    new_registrant = models.CharField(max_length=255)
+    new_registrant = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
+    class Meta:
+        unique_together = ("event", "user_registrant")

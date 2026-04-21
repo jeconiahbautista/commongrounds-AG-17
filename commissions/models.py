@@ -13,11 +13,25 @@ class CommissionType(models.Model):
 
     class Meta:
         ordering = ["name"]
+        verbose_name = "commission type"
+        verbose_name_plural = "commission types"
 
 
 class Commission(models.Model):
+    STATUS_OPEN = "0"
+    STATUS_FULL = "1"
+    STATUS_COMPLETED = "2"
+    STATUS_DISCONTINUED = "3"
+
+    STATUS_CHOICES = [
+        (STATUS_OPEN, "Open"),
+        (STATUS_FULL, "Full"),
+        (STATUS_COMPLETED, "Completed"),
+        (STATUS_DISCONTINUED, "Discontinued"),
+    ]
+
     type = models.ForeignKey(
-        CommissionType, on_delete=models.CASCADE, related_name="commissions"
+        CommissionType, on_delete=models.SET_NULL, null=True, related_name="commissions"
     )
     maker = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="commissions"
@@ -25,6 +39,9 @@ class Commission(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     people_required = models.PositiveIntegerField()
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default=STATUS_OPEN
+    )
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -41,8 +58,8 @@ class Commission(models.Model):
 
 
 class Job(models.Model):
-    STATUS_OPEN = "OPEN"
-    STATUS_FULL = "FULL"
+    STATUS_OPEN = "0"
+    STATUS_FULL = "1"
 
     STATUS_CHOICES = [
         (STATUS_OPEN, "Open"),
@@ -53,12 +70,50 @@ class Job(models.Model):
         Commission, on_delete=models.CASCADE, related_name="jobs"
     )
     role = models.CharField(max_length=255)
-    manpower = models.IntegerField()
+    manpower_required = models.PositiveIntegerField()
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default=STATUS_OPEN
     )
 
+    def __str__(self):
+        return "{} for {}".format(self.role, self.commission)
+
     class Meta:
-        ordering = ["-status", "-manpower", "role"]
+        ordering = ["status", "-manpower_required", "role"]
         verbose_name = "job"
         verbose_name_plural = "jobs"
+
+
+class JobApplication(models.Model):
+    STATUS_PENDING = "0"
+    STATUS_ACCEPTED = "1"
+    STATUS_REJECTED = "2"
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, "Pending"),
+        (STATUS_ACCEPTED, "Accepted"),
+        (STATUS_REJECTED, "Rejected"),
+    ]
+
+    job = models.ForeignKey(
+        Job, on_delete=models.CASCADE, related_name="applications"
+    )
+    applicant = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="applications"
+    )
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default=STATUS_PENDING
+    )
+    applied_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{} - {}".format(self.applicant, self.job)
+
+    class Meta:
+        ordering = ["status", "-applied_on"]
+        unique_together = ["job", "applicant"]
+        verbose_name = "job application"
+        verbose_name_plural = "job applications"
+        
+
+

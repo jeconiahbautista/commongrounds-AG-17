@@ -52,6 +52,7 @@ class EventAdmin(admin.ModelAdmin):
                     (
                         "title",
                         "category",
+                        "organizer",
                         "event_image",
                         "location",
                         "description",
