@@ -4,6 +4,11 @@
 {% block body %}
 <div class="container">
     <h1> {{ event.title }} </h1>
+
+    {% if event.event_image %}
+    <img src="{{ event.event_image.url }}" alt="Event Image" width="300">
+    {% endif %}
+
     <div class="box"><strong>Category:</strong> {{ event.category }}</div>
     <div class="box"><strong>Description:</strong> {{ event.description }}</div>
     <div class="box"><strong>Started Time:</strong> {{ event.start_time }}</div>
@@ -19,14 +24,13 @@
 </a>
 
 {% else %}
-
 {% if is_authenticated %}
-<a href="{% url 'localevents:event-list' %}">
-    <button {% if is_full %}disabled{% endif %}>
+<form method="post" action="{% url 'localevents:event-detail-signup' event.pk %}">
+    {% csrf_token %}
+    <button type="submit" {% if is_full %}disabled{% endif %}>
         {% if is_full %}Full{% else %}Sign up{% endif %}
     </button>
-</a>
-
+</form>
 {% else %}
 <a href="{% url 'localevents:event-detail-signup' event.pk %}">
     <button {% if is_full %}disabled{% endif %}>
@@ -34,7 +38,5 @@
     </button>
 </a>
 {% endif %}
-
 {% endif %}
-
 {% endblock %}

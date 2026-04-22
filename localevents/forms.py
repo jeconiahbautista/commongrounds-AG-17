@@ -8,6 +8,7 @@ class EventForm(forms.ModelForm):
         fields = [
             "title",
             "category",
+            "organizer",
             "event_image",
             "description",
             "location",
@@ -16,3 +17,11 @@ class EventForm(forms.ModelForm):
             "event_capacity",
             "status",
         ]
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
+        super().__init__(*args, **kwargs)
+
+        if user:
+            self.fields["organizer"].initial = [user.profile]
+            self.fields["organizer"].disabled = True

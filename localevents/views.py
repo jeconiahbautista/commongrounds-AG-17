@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views import View
+from django.http import HttpResponseForbidden
 
+from accounts.decorators import role_required
 from .models import Event, EventSignup
 from .forms import EventForm
-from accounts.decorators import role_required
 
 
 def event_list(request):
@@ -49,7 +51,7 @@ def event_detail(request, pk):
         profile = request.user.profile
         is_organizer = profile in event.organizer.all()
 
-    signup_count = event.signups.count()
+    signup_count = event.signups.all().count()
     is_full = signup_count >= event.event_capacity
 
     ctx = {
@@ -65,10 +67,10 @@ def event_detail(request, pk):
 @login_required
 @role_required("Event Organizer")
 def event_create(request):
-    form = EventForm()
+    form = EventForm(user=request.user)
 
     if request.method == "POST":
-        form = EventForm(request.POST, request.FILES)
+        form = EventForm(request.POST or None, request.FILES or None, user=request.user)
 
         if form.is_valid():
             event = form.save()
@@ -89,7 +91,9 @@ def event_edit(request, pk):
     if request.user.profile not in event.organizer.all():
         return redirect("localevents:event-list")
 
-    form = EventForm(request.POST or None, request.FILES or None, instance=event)
+    form = EventForm(
+        request.POST or None, request.FILES or None, instance=event, user=request.user
+    )
     form.fields["status"].disabled = True
 
     if request.method == "POST" and form.is_valid():
@@ -110,21 +114,80 @@ def event_edit(request, pk):
     return render(request, "event-form.html", {"form": form, "event": event})
 
 
-def event_signup(request, pk):
-    event = Event.objects.get(pk=pk)
+# def event_signup(request, pk):
+#     event = Event.objects.get(pk=pk)
 
-    if request.user.is_authenticated:
-        profile = request.user.profile
+#     if request.user.is_authenticated:
+#         profile = request.user.profile
 
-        EventSignup.objects.create(event=event, user_registrant=profile)
+#         EventSignup.objects.create(event=event, user_registrant=profile)
 
-        return redirect("localevents:event-list")
+#         return redirect("localevents:event-list")
 
-    if request.method == "POST":
-        name = request.POST.get("name")
+#     if request.method == "POST":
+#         name = request.POST.get("name")
 
-        EventSignup.objects.create(event=event, new_registrant=name)
+#         EventSignup.objects.create(event=event, new_registrant=name)
 
-        return redirect("localevents:event-list")
+#         return redirect("localevents:event-list")
 
-    return render(request, "event-signup.html", {"event": event})
+#     return render(request, "event-signup.html", {"event": event})
+
+
+class BaseSignupView(View):
+    def post(self, request, pk):
+        event = self.get_event(pk)
+
+        if not self.check_capacity(event):
+            return HttpResponseForbidden("Event is full")
+
+        if not self.can_signup(event, request.user):
+            return HttpResponseForbidden("You cannot sign up to your own event")
+
+        self.create_signup(event, request)
+
+        return redirect(self.get_redirect_url(event))
+
+    def get(self, request, pk):
+        event = self.get_event(pk)
+        return render(request, "event-signup.html", {"event": event})
+
+    def get_event(self, pk):
+        raise NotImplementedError
+
+    def check_capacity(self, event):
+        raise NotImplementedError
+
+    def can_signup(self, event, user):
+        raise NotImplementedError
+
+    def create_signup(self, event, request):
+        raise NotImplementedError
+
+    def get_redirect_url(self, event):
+        raise NotImplementedError
+
+
+class EventSignupView(BaseSignupView):
+    def get_event(self, pk):
+        return Event.objects.get(pk=pk)
+
+    def check_capacity(self, event):
+        return event.signups.count() < event.event_capacity
+
+    def can_signup(self, event, user):
+        if not user.is_authenticated:
+            return True
+        return user.profile not in event.organizer.all()
+
+    def create_signup(self, event, request):
+        if request.user.is_authenticated:
+            EventSignup.objects.get_or_create(
+                event=event, user_registrant=request.user.profile
+            )
+        else:
+            name = request.POST.get("name")
+            EventSignup.objects.create(event=event, new_registrant=name)
+
+    def get_redirect_url(self, event):
+        return "localevents:event-list"

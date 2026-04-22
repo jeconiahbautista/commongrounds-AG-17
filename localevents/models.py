@@ -27,7 +27,6 @@ class Event(models.Model):
     )
     organizer = models.ManyToManyField(
         Profile,
-        null=True,
         related_name="organizers",
     )
     event_image = models.ImageField(upload_to="localevents_images/", null=False)
@@ -76,6 +75,14 @@ class EventSignup(models.Model):
         max_length=255,
         blank=True,
     )
+
+    def __str__(self):
+        if self.user_registrant:
+            return f"User: {self.user_registrant} | Event: {self.event}"
+        return f"Guest: {self.new_registrant} | Event: {self.event}"
+
+    def get_absolute_url(self):
+        return reverse("localevents:event-detail", args=[self.event.pk])
 
     class Meta:
         unique_together = ("event", "user_registrant")

@@ -4,9 +4,10 @@
 {% block body %}
 <h1> Events List </h1>
 
+<a href="{% url 'localevents:event-create' %}">Create Event</a>
+
 <div class="main-content">
     {% if created_events %}
-
 
     <h2>Created Events</h2>
     <section>
@@ -23,8 +24,6 @@
         </div>
         {% endfor %}
     </section>
-
-    <a href="{% url 'localevents:event-create' %}">Create Event</a>
 
     {% endif %}
     {% if signed_events %}
