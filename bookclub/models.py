@@ -16,6 +16,8 @@ class Genre(models.Model):
         ordering = [
             "name",
         ]
+        verbose_name = "genre"
+        verbose_name_plural = "genres"
 
 
 class Book(models.Model):
@@ -24,10 +26,10 @@ class Book(models.Model):
         Genre, on_delete=models.SET_NULL, related_name="books", null=True
     )
     contributor = models.ForeignKey(
-        Profile, on_delete=models.SET_NULL, related_name = "books", null=True
+        Profile, on_delete=models.SET_NULL, related_name = "contributed_books", null=True
     )
-    author = models.CharField()
-    synopsis = models.TextField(default="")
+    author = models.CharField(max_length=255)
+    synopsis = models.TextField()
     publication_year = models.IntegerField()
     available_to_borrow = models.BooleanField(default=True)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -46,17 +48,28 @@ class Book(models.Model):
         ordering = [
             "-publication_year",
         ]
+        verbose_name = "book"
+        verbose_name_plural = "books"
+
 
 class BookReview(models.Model):
     user_reviewer = models.ForeignKey(
-        Profile, on_delete = models.CASCADE, related_name="reviews", null=True,
+        Profile, on_delete = models.CASCADE, related_name="reviews", null=True, blank = True
     )
     anon_reviewer = models.TextField(blank=True, null=True)
     book = models.ForeignKey(
         Book, on_delete=models.CASCADE, related_name="bookreviews"
     )
-    title = models.CharField()
+    title = models.CharField(max_length=255)
     comment = models.TextField()
+
+    def __str__(self):
+        reviewer = self.user_reviewer or self.anon_reviewer
+        return f"{reviewer} - {self.title}"
+
+    class Meta:
+        verbose_name = "book review"
+        verbose_name_plural = "book reviews"
 
 
 class Bookmark(models.Model):
@@ -68,17 +81,32 @@ class Bookmark(models.Model):
     )
     date_bookmarked = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.profile} bookmarked {self.book}"
+
+    class Meta:
+        verbose_name = "bookmark"
+        verbose_name_plural = "bookmarks"
+
 
 class Borrow(models.Model):
     book = models.ForeignKey(
         Book, on_delete = models.CASCADE
     )
     borrower = models.ForeignKey(
-        Profile, on_delete = models.CASCADE
+        Profile, on_delete = models.CASCADE, null = True, blank = True
     )
-    name = models.CharField()
+    name = models.CharField(max_length=255, blank = True, null = True)
     date_borrowed = models.DateField()
     date_to_return = models.DateField()
+
+    def __str__(self):
+        borrower_name = self.name if self.name else str(self.borrower)
+        return f"{borrower_name} borrowed {self.book}"
+
+    class Meta:
+        verbose_name = "borrow"
+        verbose_name_plural = "borrows"
 
 
 

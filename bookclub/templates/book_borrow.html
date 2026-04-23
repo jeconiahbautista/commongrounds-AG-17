@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container">
+    <h1>Borrow: {{ book.title }}</h1>
+
+    <div class="box">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p><em>Return date is set to 2 weeks.</em></p>
+            <button type="submit">Confirm Borrow</button>
+        </form>
+    </div>
+
+    <div class="box">
+        <a href="{% url 'bookclub:book-detail' book.pk %}">Cancel</a>
+    </div>
+</div>
+{% endblock %}
