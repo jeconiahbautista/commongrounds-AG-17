@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-import dj_database_url
 
 
 load_dotenv()
@@ -83,36 +82,13 @@ WSGI_APPLICATION = "commongrounds.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# Set default values for the environment variables if they’re not already set
-
-# os.environ.setdefault("PGDATABASE", "liftoff_dev")
-# os.environ.setdefault("PGUSER", "username")
-# os.environ.setdefault("PGPASSWORD", "")
-# os.environ.setdefault("PGHOST", "localhost")
-# os.environ.setdefault("PGPORT", "5432")
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ["PGDATABASE"],
-#         'USER': os.environ["PGUSER"],
-#         'PASSWORD': os.environ["PGPASSWORD"],
-#         'HOST': os.environ["PGHOST"],
-#         'PORT': os.environ["PGPORT"],
-#     }
-# }
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-DATABASES = {"default": dj_database_url.config(default="sqlite:///db.sqlite3")}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -162,3 +138,7 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://commongrounds-ag-17-production.up.railway.app"
+]

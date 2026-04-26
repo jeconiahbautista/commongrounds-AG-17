@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Commission, CommissionType
+from .models import Commission, CommissionType, Job, JobApplication
 
 
 class CommissionInline(admin.TabularInline):
@@ -8,28 +8,30 @@ class CommissionInline(admin.TabularInline):
 
 
 class CommissionTypeAdmin(admin.ModelAdmin):
-    inlines = [
-        CommissionInline,
-    ]
+    inlines = [CommissionInline]
 
 
 class CommissionAdmin(admin.ModelAdmin):
-    model = Commission
-
     search_fields = ("title",)
 
     list_display = (
         "title",
-        "description",
+        "type",
+        "maker",
         "people_required",
-        "updated_on",
+        "status",
         "created_on",
+        "updated_on",
     )
 
     list_filter = (
+        "status",
+        "type",
         "created_on",
         "updated_on",
     )
+
+    readonly_fields = ("created_on", "updated_on")
 
     fieldsets = [
         (
@@ -38,6 +40,8 @@ class CommissionAdmin(admin.ModelAdmin):
                 "fields": [
                     ("title", "people_required"),
                     "type",
+                    "maker",
+                    "status",
                     "description",
                 ]
             },
@@ -45,5 +49,18 @@ class CommissionAdmin(admin.ModelAdmin):
     ]
 
 
+class JobAdmin(admin.ModelAdmin):
+    list_display = ("role", "commission", "manpower_required", "status")
+    list_filter = ("status",)
+
+
+class JobApplicationAdmin(admin.ModelAdmin):
+    list_display = ("job", "applicant", "status", "applied_on")
+    list_filter = ("status",)
+    search_fields = ("applicant__display_name",)
+
+
 admin.site.register(CommissionType, CommissionTypeAdmin)
 admin.site.register(Commission, CommissionAdmin)
+admin.site.register(Job, JobAdmin)
+admin.site.register(JobApplication, JobApplicationAdmin)
