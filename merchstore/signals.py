@@ -11,15 +11,17 @@ def update_product_stock(sender, instance, created, **kwargs):
 
     product = instance.product
 
-    product.stock = max(0, product.stock - instance.amount)
+    with db_transaction.atomic():
+        product.stock -= instance.amount
 
-    if product.stock == 0:
-        product.status = "OUT_OF_STOCK"
-    else:
-        product.status = "AVAILABLE"
-        
-    product.save()
+        if product.stock <= 0:
+            product.stock = 0
+            product.status = "OUT_OF_STOCK"
+        else:
+            if product.status == "OUT_OF_STOCK":
+                product.status = "AVAILABLE"
 
+        product.save()
 
         
         

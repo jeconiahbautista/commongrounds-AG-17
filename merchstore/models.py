@@ -20,15 +20,17 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     product_type = models.ForeignKey(
         ProductType, 
-        null=True, 
+        null=True,
+        blank=True, 
         on_delete=models.SET_NULL, 
-        related_name="products",
-        editable=False
+        related_name="products"
     )
     owner = models.ForeignKey(
         Profile, 
         on_delete=models.CASCADE, 
-        related_name="products"
+        related_name="products",
+        null=True,
+        blank=True 
     )
     product_image = models.ImageField(
         upload_to='product_images/', 
@@ -52,11 +54,6 @@ class Product(models.Model):
         default='AVAILABLE',
     )
 
-    def save(self, *args, **kwargs):
-        if self.stock == 0:
-            self.status = 'OUT_OF_STOCK'
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return self.name
 
@@ -75,16 +72,14 @@ class Transaction(models.Model):
         Profile,
         null=True,
         on_delete=models.SET_NULL,
-        related_name='transactions'
+        related_name='buyer_transactions'
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
         related_name='transactions'
     )
-    amount = models.PositiveIntegerField(
-        validators=[MinValueValidator(1)]
-    )
+    amount = models.PositiveIntegerField()
     STATUS_CHOICES = [
         ('ON_CART', 'On cart'),
         ('TO_PAY', 'To Pay'),
