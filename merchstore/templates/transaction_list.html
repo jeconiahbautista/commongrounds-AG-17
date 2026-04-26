@@ -32,7 +32,7 @@
                                 <td>{{ transaction.product.name }}</td>
                                 <td>{{ transaction.amount }}</td>
                                 <td>{{ transaction.status }}</td>
-                                <td>{{ transaction.created_on }}</td>
+                                <td>{{ transaction.created_on|date:"M d, Y H:i" }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -42,7 +42,7 @@
     {% endfor %}
 
 {% else %}
-    <p>No transaction found.</p>
+    <p>No transactions found.</p>
 {% endif %}
 
 {% endblock}

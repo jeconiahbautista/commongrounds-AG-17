@@ -14,7 +14,7 @@
 
     {% if is_owner %}
     <div class="box">
-        <a href="{% url 'merchstore:product_update' %}">Edit Product Details</a>
+        <a href="{% url 'merchstore:product_update' product.pk %}">Edit Product Details</a>
     </div>
     {% endif %}
 
