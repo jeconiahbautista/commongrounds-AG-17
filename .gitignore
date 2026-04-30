@@ -5,3 +5,4 @@ django-env/
 .vscode
 .vscode/
 .DS_Store
+media/
