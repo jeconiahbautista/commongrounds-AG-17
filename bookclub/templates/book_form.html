@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container">
+    {% if book %}
+        <h1>Edit Book</h1>
+    {% else %}
+        <h1>Add a Book</h1>
+    {% endif %}
+
+    <div class="box">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">
+                {% if action == "Add" %}Add Book{% else %}Save Changes{% endif %}
+            </button>
+            <a href="{% url 'bookclub:book-list' %}">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

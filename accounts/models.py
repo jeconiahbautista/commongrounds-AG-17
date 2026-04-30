@@ -10,6 +10,7 @@ class Profile(models.Model):
         ("Event Organizer", "Event Organizer"),
         ("Customer", "Customer"),
         ("Commission Maker", "Commission Maker"),
+        ("Book Contributor", "Book Contributor"),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
