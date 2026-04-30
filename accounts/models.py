@@ -11,6 +11,7 @@ class Profile(models.Model):
         ("Customer", "Customer"),
         ("Commission Maker", "Commission Maker"),
         ("Project Creator", "Project Creator"),
+        ("Book Contributor", "Book Contributor"),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)

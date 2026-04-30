@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ request.user.profile.display_name}}'s Sales Transactions</h1>
+
+{% if grouped_transactions %}
+
+    {% for buyer, transactions in grouped_transactions.items %}
+        <div>
+
+            <h2>
+                Buyer:
+                {% if buyer %}
+                    {{ buyer.display_name }}
+                {% else %}
+                    Anonymous Buyer
+                {% endif %}
+            </h2>
+
+            <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.product.name }}</td>
+                                <td>{{ transaction.amount }}</td>
+                                <td>{{ transaction.status }}</td>
+                                <td>{{ transaction.created_on|date:"M d, Y H:i" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+            </table>
+
+        </div>
+    {% endfor %}
+
+{% else %}
+    <p>No transactions found.</p>
+{% endif %}
+
+{% endblock}
+

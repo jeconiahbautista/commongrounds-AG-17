@@ -7,8 +7,66 @@
     <div class="box"><strong>Genre:</strong> {{book.genre}}</div>
     <div class="box"><strong>Author:</strong> {{book.author}}</div>
     <div class="box"><strong>Publication year:</strong> {{book.publication_year}}</div>
+    <div class="box"><strong>Synopis: </strong> {{book.synopsis}}</div>
     <div class="box"><strong>Created On:</strong> {{book.created_on}}</div>
     <div class="box"><strong>Updated On:</strong> {{book.updated_on}}</div>
-    <div class="box"><a href="{% url 'bookclub:book-list' %}">Return to Book List</a></div>
+
+    <div class="box">
+        <strong>Status: </strong>
+        {% if book.available_to_borrow %}
+            Available to Borrow 
+        {% else %}
+            Not Available
+        {% endif %}
+    </div>
+
+     {% if book.available_to_borrow %}
+        <div class="box">
+            <a href="{% url 'bookclub:book-borrow' book.pk %}"> Borrow this Book</a>
+        </div>
+    {% endif %}
+
+    {% if is_contributor %}
+        <div class="box">
+            <a href="{% url 'bookclub:book-update' book.pk %}">Edit Book</a>
+        </div>
+    {% endif %}
+
+    <div class="box">
+        {% if user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="bookmark">
+                    {% if is_bookmarked %} Unbookmark {% else %} Bookmark {% endif %}
+                </button>
+            </form>
+        {% endif %}
+        <span>{{ bookmark_count }} bookmark{{bookmark_count|pluralize}}</span>
+    </div>
+
+    <div class="box">
+        <h2>Leave a Review</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type ="submit">Submit Review</button>
+        </form>
+    </div>
+
+    <div class="box">
+        <h2>Reviews</h2>
+        {% for review in reviews %}
+            <div>
+                <strong>{{ review.title }}</strong>
+                <p>{{ review.comment }}</p>
+                <p>{{ review.user_reviewer.display_name |default:review.anon_reviewer }}</p>
+            </div>
+            {% empty %}
+                <p>No reviews yet.</p>
+        {% endfor %}
+    </div>
+    <div class="box">
+        <a href="{% url 'bookclub:book-list' %}">Return to Book List</a>
+    </div>
 </div>
 {% endblock %}

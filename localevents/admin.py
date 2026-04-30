@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, EventType
+from .models import Event, EventType, EventSignup
 
 
 class EventInLine(admin.StackedInline):
@@ -12,6 +12,10 @@ class EventTypeAdmin(admin.ModelAdmin):
     inlines = [
         EventInLine,
     ]
+
+
+class EventSignupInline(admin.TabularInline):
+    model = EventSignup
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -26,14 +30,20 @@ class EventAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "category",
+        "event_image",
         "location",
         "description",
         "start_time",
         "end_time",
+        "event_capacity",
+        "status",
         "updated_on",
         "created_on",
     )
     list_filter = ("category",)
+
+    inlines = [EventSignupInline]
+
     fieldsets = [
         (
             "Details",
@@ -42,15 +52,33 @@ class EventAdmin(admin.ModelAdmin):
                     (
                         "title",
                         "category",
+                        "organizer",
+                        "event_image",
                         "location",
                         "description",
                     ),
-                    ("start_time", "end_time"),
+                    (
+                        "start_time",
+                        "end_time",
+                        "event_capacity",
+                        "status",
+                    ),
                 ]
             },
         )
     ]
 
 
+class EventSignupAdmin(admin.ModelAdmin):
+    list_display = (
+        "event",
+        "user_registrant",
+        "new_registrant",
+    )
+
+    search_fields = ("event__title",)
+
+
 admin.site.register(EventType, EventTypeAdmin)
 admin.site.register(Event, EventAdmin)
+admin.site.register(EventSignup, EventSignupAdmin)

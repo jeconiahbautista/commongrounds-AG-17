@@ -4,12 +4,39 @@
 {% block body %}
 <div class="container">
     <h1> {{ event.title }} </h1>
+
+    {% if event.event_image %}
+    <img src="{{ event.event_image.url }}" alt="Event Image" width="300">
+    {% endif %}
+
     <div class="box"><strong>Category:</strong> {{ event.category }}</div>
     <div class="box"><strong>Description:</strong> {{ event.description }}</div>
-    <div class="box"><strong>Start Time:</strong> {{ event.start_time }}</div>
+    <div class="box"><strong>Started Time:</strong> {{ event.start_time }}</div>
     <div class="box"><strong>End Time:</strong> {{ event.end_time }}</div>
     <div class="box"><strong>Created:</strong> {{ event.created_on }}</div>
-    <div class="box"><strong>Updated:</strong>:</strong> {{ event.updated_on }}</div>
-    <div class="box"><a href="/localevents/events">Return to Events List</a></div>
+    <div class="box"><strong>Updated:</strong> {{ event.updated_on }}</div>
+    <div class="box"><a href="/localevents/events">Go back to events</a></div>
 </div>
+
+{% if is_organizer %}
+<a href="{% url 'localevents:event-detail-edit' event.pk %}">
+    <button>Edit Event</button>
+</a>
+
+{% else %}
+{% if is_authenticated %}
+<form method="post" action="{% url 'localevents:event-detail-signup' event.pk %}">
+    {% csrf_token %}
+    <button type="submit" {% if is_full %}disabled{% endif %}>
+        {% if is_full %}Full{% else %}Sign up{% endif %}
+    </button>
+</form>
+{% else %}
+<a href="{% url 'localevents:event-detail-signup' event.pk %}">
+    <button {% if is_full %}disabled{% endif %}>
+        {% if is_full %}Full{% else %}Sign up{% endif %}
+    </button>
+</a>
+{% endif %}
+{% endif %}
 {% endblock %}

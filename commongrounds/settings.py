@@ -123,9 +123,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/accounts/dashboard"
+LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "/accounts/login"
+
 
 STATIC_URL = "static/"
 
@@ -137,6 +139,4 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://commongrounds-ag-17-production.up.railway.app"
-]
+CSRF_TRUSTED_ORIGINS = ["https://commongrounds-ag-17-production.up.railway.app"]
