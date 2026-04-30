@@ -42,7 +42,7 @@ class Project(models.Model):
 
     class Meta:
         ordering = [
-            "created_on",
+            "-created_on",
         ]
 
 

@@ -11,22 +11,28 @@ from django.db.models import Q
 from .forms import ProjectRatingForm, ProjectReviewForm, ProjectForm
 
 
-@login_required
 def diyprojects_list(request):
-    profile = request.user.profile
-    created_projects = Project.objects.filter(creator=profile)
-    favorited_projects = Project.objects.filter(favorites__profile=profile).distinct()
-    reviewed_projects = Project.objects.filter(reviews__reviewer=profile).distinct()
+    if request.user.is_authenticated:
+        profile = request.user.profile
 
-    excluded_projects = Project.objects.filter(
-        Q(creator=profile)
-        | Q(favorites__profile=profile)
-        | Q(reviews__reviewer=profile)
-    ).distinct()
+        created_projects = Project.objects.filter(creator=profile)
+        favorited_projects = Project.objects.filter(favorites__profile=profile).distinct()
+        reviewed_projects = Project.objects.filter(reviews__reviewer=profile).distinct()
 
-    projects = Project.objects.exclude(
-        id__in=excluded_projects.values_list("id", flat=True)
-    )
+        excluded_projects = Project.objects.filter(
+            Q(creator=profile)
+            | Q(favorites__profile=profile)
+            | Q(reviews__reviewer=profile)
+        ).distinct()
+
+        projects = Project.objects.exclude(
+            id__in=excluded_projects.values_list("id", flat=True)
+        )
+    else:
+        created_projects = []
+        favorited_projects = []
+        reviewed_projects = []
+        projects = Project.objects.all()
 
     ctx = {
         "created_projects": created_projects,
@@ -76,10 +82,10 @@ def diyprojects_detail(request, pk):
         if action == "rate":
             rate_form = ProjectRatingForm(request.POST)
             if rate_form.is_valid():
-                ProjectRating.objects.create(
+                ProjectRating.objects.update_or_create(
                     project=project,
                     profile=request.user.profile,
-                    score=rate_form.cleaned_data["score"],
+                    defaults={"score": rate_form.cleaned_data["score"]},
                 )
                 return redirect("diyprojects:diyprojects_detail", pk=project.pk)
         elif action == "favorite":
@@ -119,7 +125,11 @@ def diyprojects_detail(request, pk):
 
 @login_required
 def diyprojects_create(request):
+    if request.user.profile.role != "Project Creator":
+        return redirect("diyprojects:diyprojects_list")
+    
     categories = ProjectCategory.objects.all()
+    
     if request.method == "POST":
         project_form = ProjectForm(request.POST)
         if project_form.is_valid():
@@ -139,7 +149,14 @@ def diyprojects_create(request):
 
 @login_required
 def diyprojects_edit(request, pk):
+    if request.user.profile.role != "Project Creator":
+        return redirect("diyprojects:diyprojects_list")
+
     project = Project.objects.get(pk=pk)
+
+    if project.creator != request.user.profile:
+        return redirect("diyprojects:diyprojects_detail", pk=project.pk)
+
     categories = ProjectCategory.objects.all()
     if request.method == "POST":
         project_form = ProjectForm(

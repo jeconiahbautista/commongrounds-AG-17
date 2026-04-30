@@ -10,6 +10,7 @@ class Profile(models.Model):
         ("Event Organizer", "Event Organizer"),
         ("Customer", "Customer"),
         ("Commission Maker", "Commission Maker"),
+        ("Project Creator", "Project Creator"),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -19,7 +20,8 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.display_name
-    
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -29,4 +31,3 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
-
