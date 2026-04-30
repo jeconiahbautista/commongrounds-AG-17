@@ -3,9 +3,7 @@ from .views import permission_denied_view, ProfileUpdateView
 
 urlpatterns = [
     path("permission-denied/", permission_denied_view, name="permission_denied"),
-    path(
-        "profiles/<str:username>/", ProfileUpdateView.as_view(), name="profile_update"
-    ),
+    path("profiles/<str:username>/", ProfileUpdateView.as_view(), name="profile_update"),
 ]
 
 app_name = "accounts"
