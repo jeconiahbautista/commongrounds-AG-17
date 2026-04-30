@@ -7,10 +7,10 @@
         <a href="{% url 'bookclub:book-create' %}">Add a book here</a>
     </div>
     <h2> Books Created</h2>
-    {% if contributed_book %}
-    <div class="main-content" >
-        {% for book in contributed_book %}
-        <div class ="card">
+    {% if contributed_books %}
+    <div class="main-content">
+        {% for book in contributed_books %}
+        <div class="card">
             <ul>
                 <li>
                     <h2>{{book.title}}</h2>
@@ -27,12 +27,12 @@
         <p><em>No created books.</em></p>
     </div>
     {% endif %}
-        
+
     <h2> Bookmarked Books </h2>
     {% if bookmarked_books %}
-    <div class="main-content" >
+    <div class="main-content">
         {% for book in bookmarked_books %}
-        <div class ="card">
+        <div class="card">
             <ul>
                 <li>
                     <h2>{{book.title}}</h2>
@@ -53,9 +53,9 @@
 
     <h2> Reviewed Books </h2>
     {% if reviewed_books %}
-    <div class="main-content" >
+    <div class="main-content">
         {% for book in reviewed_books %}
-        <div class ="card">
+        <div class="card">
             <ul>
                 <li>
                     <h2>{{book.title}}</h2>
@@ -74,25 +74,25 @@
     {% endif %}
 
     <h2>All Books</h2>
-    {% if books %}
-        <div class="main-content">
-            {% for book in all_books %}
-                <div class="card">
-                    <ul>
-                        <li>
-                            <h2>{{ book.title }}</h2>
-                            <p><strong>Genre:</strong> {{ book.genre }}</p>
-                            <p>{{ book.author }}</p>
-                            <a href="{% url 'bookclub:book-detail' book.pk %}">View Details</a>
-                        </li>
-                    </ul>
-                </div>
-            {% endfor %}
+    {% if all_books %}
+    <div class="main-content">
+        {% for book in all_books %}
+        <div class="card">
+            <ul>
+                <li>
+                    <h2>{{ book.title }}</h2>
+                    <p><strong>Genre:</strong> {{ book.genre }}</p>
+                    <p>{{ book.author }}</p>
+                    <a href="{% url 'bookclub:book-detail' book.pk %}">View Details</a>
+                </li>
+            </ul>
         </div>
+        {% endfor %}
+    </div>
     {% else %}
-        <div class="else-main-content">
-            <p><em>No books available.</em></p>
-        </div>
+    <div class="else-main-content">
+        <p><em>No books available.</em></p>
+    </div>
     {% endif %}
 </div>
 {% endblock %}

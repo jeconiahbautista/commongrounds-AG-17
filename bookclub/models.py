@@ -3,14 +3,13 @@ from django.urls import reverse
 
 from accounts.models import Profile
 
+
 class Genre(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
 
-
     def __str__(self):
         return self.name
-
 
     class Meta:
         ordering = [
@@ -26,7 +25,7 @@ class Book(models.Model):
         Genre, on_delete=models.SET_NULL, related_name="books", null=True
     )
     contributor = models.ForeignKey(
-        Profile, on_delete=models.SET_NULL, related_name = "contributed_books", null=True
+        Profile, on_delete=models.SET_NULL, related_name="contributed_books", null=True
     )
     author = models.CharField(max_length=255)
     synopsis = models.TextField()
@@ -35,14 +34,11 @@ class Book(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-
     def __str__(self):
         return self.title
 
-
     def get_absolute_url(self):
         return reverse("bookclub:book-detail", args=[str(self.pk)])
-
 
     class Meta:
         ordering = [
@@ -54,12 +50,10 @@ class Book(models.Model):
 
 class BookReview(models.Model):
     user_reviewer = models.ForeignKey(
-        Profile, on_delete = models.CASCADE, related_name="reviews", null=True, blank = True
+        Profile, on_delete=models.CASCADE, related_name="reviews", null=True, blank=True
     )
     anon_reviewer = models.TextField(blank=True, null=True)
-    book = models.ForeignKey(
-        Book, on_delete=models.CASCADE, related_name="bookreviews"
-    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="bookreviews")
     title = models.CharField(max_length=255)
     comment = models.TextField()
 
@@ -73,12 +67,8 @@ class BookReview(models.Model):
 
 
 class Bookmark(models.Model):
-    profile = models.ForeignKey(
-        Profile, on_delete = models.CASCADE
-    )
-    book = models.ForeignKey(
-        Book, on_delete = models.CASCADE
-    )
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="bookmarks")
     date_bookmarked = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -90,13 +80,11 @@ class Bookmark(models.Model):
 
 
 class Borrow(models.Model):
-    book = models.ForeignKey(
-        Book, on_delete = models.CASCADE
-    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
     borrower = models.ForeignKey(
-        Profile, on_delete = models.CASCADE, null = True, blank = True
+        Profile, on_delete=models.CASCADE, null=True, blank=True
     )
-    name = models.CharField(max_length=255, blank = True, null = True)
+    name = models.CharField(max_length=255, blank=True, null=True)
     date_borrowed = models.DateField()
     date_to_return = models.DateField()
 
@@ -107,6 +95,3 @@ class Borrow(models.Model):
     class Meta:
         verbose_name = "borrow"
         verbose_name_plural = "borrows"
-
-
-

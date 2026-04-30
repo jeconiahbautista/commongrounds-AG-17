@@ -8,6 +8,7 @@ from .models import (
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ProjectRatingForm, ProjectReviewForm, ProjectForm
+from accounts.decorators import role_required
 from .repositories import ProjectRepository
 
 
@@ -47,7 +48,6 @@ def diyprojects_list(request):
     return render(request, "diy-projects_list.html", ctx)
 
 
-@login_required
 def diyprojects_detail(request, pk):
     repo = ProjectRepository()
 
@@ -79,7 +79,6 @@ def diyprojects_detail(request, pk):
         ).exists()
 
     if request.method == "POST":
-
         action = request.POST.get("action")
 
         if action == "rate":
@@ -127,6 +126,7 @@ def diyprojects_detail(request, pk):
 
 
 @login_required
+@role_required("Project Creator")
 def diyprojects_create(request):
     if request.user.profile.role != "Project Creator":
         return redirect("diyprojects:diyprojects_list")
@@ -151,6 +151,7 @@ def diyprojects_create(request):
 
 
 @login_required
+@role_required("Project Creator")
 def diyprojects_edit(request, pk):
     repo = ProjectRepository()
 

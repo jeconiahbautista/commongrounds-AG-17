@@ -32,11 +32,6 @@ def event_list(request):
         "signed_events": signed_events,
     }
 
-    print("ALL:", Event.objects.count())
-    print("CREATED:", len(created_events))
-    print("SIGNED:", len(signed_events))
-    print("FINAL ALL:", events.count())
-
     return render(request, "event-list.html", ctx)
 
 
