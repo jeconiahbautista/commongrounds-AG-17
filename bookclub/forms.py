@@ -10,17 +10,15 @@ class BookContributeForm(forms.ModelForm):
             "title",
             "genre",
             "author",
-            "contributor",
             "synopsis",
             "publication_year",
             "available_to_borrow",
         ]
 
-    def __init__(self, *args, user=None, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-        if user and user.is_authenticated:
-            self.fields['contributor'].initial = user.profile
-            self.fields['contributor'].widget = forms.HiddenInput()
+
 
 class BookUpdateForm(forms.ModelForm):
     class Meta:
@@ -41,6 +39,9 @@ class BookReviewForm(forms.ModelForm):
             "title",
             "comment",
         ]
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class BorrowForm(forms.ModelForm):
