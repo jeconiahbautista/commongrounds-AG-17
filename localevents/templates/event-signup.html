@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<h2>Sign up for {{ event.title }}</h2>
+
+{% if event.event_image %}
+<img src="{{ event.event_image.url }}" alt="Event Image" width="300">
+{% endif %}
+
+<p><strong>Category:</strong> {{ event.category }}</p>
+<p><strong>Organizer:</strong>
+    {% for org in event.organizer.all %}
+    {{ org }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</p>
+
+<p><strong>Location:</strong> {{ event.location }}</p>
+<p><strong>Start:</strong> {{ event.start_time }}</p>
+<p><strong>End:</strong> {{ event.end_time }}</p>
+<p><strong>Description:</strong> {{ event.description }}</p>
+
+<p><strong>Capacity:</strong> {{ event.event_capacity }}</p>
+<p><strong>Status:</strong> {{ event.status }}</p>
+
+<p><strong>Created:</strong> {{ event.created_on }}</p>
+<p><strong>Updated:</strong> {{ event.updated_on }}</p>
+
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label for="name">Your Name:</label>
+    <input type="text" name="name" id="name" required>
+
+    <button type="submit">Sign Up</button>
+</form>
+
+{% endblock %}

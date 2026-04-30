@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+<h2>
+    {% if event %}
+    Edit Event
+    {% else %}
+    Create Event
+    {% endif%}
+</h2>
+
+{% block body %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">
+        {% if event %}
+        Update Event
+        {% else %}
+        Create Event
+        {% endif%}
+    </button>
+</form>
+
+{% endblock %}

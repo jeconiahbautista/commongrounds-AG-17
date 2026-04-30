@@ -125,7 +125,7 @@ USE_TZ = True
 
 
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/accounts/dashboard"
+LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "/accounts/login"
 
 
@@ -139,6 +139,4 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://commongrounds-ag-17-production.up.railway.app"
-]
+CSRF_TRUSTED_ORIGINS = ["https://commongrounds-ag-17-production.up.railway.app"]
