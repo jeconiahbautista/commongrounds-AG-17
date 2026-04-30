@@ -1,6 +1,5 @@
 from django.shortcuts import redirect, render
 from .models import (
-    Project,
     ProjectRating,
     Favorite,
     ProjectReview,
@@ -9,30 +8,34 @@ from .models import (
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ProjectRatingForm, ProjectReviewForm, ProjectForm
+from .repositories import ProjectRepository
 
 
 def diyprojects_list(request):
+    repo = ProjectRepository()
+    all_projects = repo.get_all()
+
     if request.user.is_authenticated:
         profile = request.user.profile
 
-        created_projects = Project.objects.filter(creator=profile)
-        favorited_projects = Project.objects.filter(favorites__profile=profile).distinct()
-        reviewed_projects = Project.objects.filter(reviews__reviewer=profile).distinct()
+        created_projects = all_projects.filter(creator=profile).distinct()
+        favorited_projects = all_projects.filter(favorites__profile=profile).distinct()
+        reviewed_projects = all_projects.filter(reviews__reviewer=profile).distinct()
 
-        excluded_projects = Project.objects.filter(
+        excluded_projects = all_projects.filter(
             Q(creator=profile)
             | Q(favorites__profile=profile)
             | Q(reviews__reviewer=profile)
         ).distinct()
 
-        projects = Project.objects.exclude(
+        projects = all_projects.exclude(
             id__in=excluded_projects.values_list("id", flat=True)
         )
     else:
         created_projects = []
         favorited_projects = []
         reviewed_projects = []
-        projects = Project.objects.all()
+        projects = all_projects
 
     ctx = {
         "created_projects": created_projects,
@@ -46,7 +49,9 @@ def diyprojects_list(request):
 
 @login_required
 def diyprojects_detail(request, pk):
-    project = Project.objects.get(pk=pk)
+    repo = ProjectRepository()
+
+    project = repo.get_by_id(pk)
     ratings = ProjectRating.objects.filter(project=project)
     reviews = ProjectReview.objects.filter(project=project)
 
@@ -74,8 +79,6 @@ def diyprojects_detail(request, pk):
         ).exists()
 
     if request.method == "POST":
-        if not request.user.is_authenticated:
-            return redirect("login")
 
         action = request.POST.get("action")
 
@@ -127,9 +130,9 @@ def diyprojects_detail(request, pk):
 def diyprojects_create(request):
     if request.user.profile.role != "Project Creator":
         return redirect("diyprojects:diyprojects_list")
-    
+
     categories = ProjectCategory.objects.all()
-    
+
     if request.method == "POST":
         project_form = ProjectForm(request.POST)
         if project_form.is_valid():
@@ -149,10 +152,12 @@ def diyprojects_create(request):
 
 @login_required
 def diyprojects_edit(request, pk):
+    repo = ProjectRepository()
+
     if request.user.profile.role != "Project Creator":
         return redirect("diyprojects:diyprojects_list")
 
-    project = Project.objects.get(pk=pk)
+    project = repo.get_by_id(pk)
 
     if project.creator != request.user.profile:
         return redirect("diyprojects:diyprojects_detail", pk=project.pk)
