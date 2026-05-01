@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 
 from accounts.decorators import role_required
 from .models import Event, EventSignup
@@ -32,22 +33,21 @@ def event_list(request):
         "signed_events": signed_events,
     }
 
-    print("ALL:", Event.objects.count())
-    print("CREATED:", len(created_events))
-    print("SIGNED:", len(signed_events))
-    print("FINAL ALL:", events.count())
-
     return render(request, "event-list.html", ctx)
 
 
 def event_detail(request, pk):
     event = Event.objects.get(pk=pk)
 
+    has_signed_up = False
     is_organizer = False
     is_full = False
     is_authenticated = request.user.is_authenticated
 
     if is_authenticated:
+        has_signed_up = event.signups.filter(
+            user_registrant=request.user.profile
+        ).exists()
         profile = request.user.profile
         is_organizer = profile in event.organizer.all()
 
@@ -59,6 +59,7 @@ def event_detail(request, pk):
         "is_organizer": is_organizer,
         "is_full": is_full,
         "is_authenticated": is_authenticated,
+        "has_signed_up": has_signed_up,
     }
 
     return render(request, "event-detail.html", ctx)
@@ -75,6 +76,8 @@ def event_create(request):
         if form.is_valid():
             event = form.save()
             event.organizer.add(request.user.profile)
+
+            messages.success(request, event.title, extra_tags="event_created")
 
             return redirect("localevents:event-list")
 
@@ -109,29 +112,24 @@ def event_edit(request, pk):
 
         event.save()
 
+        messages.success(request, event.title, extra_tags="event_edited")
+
         return redirect(event.get_absolute_url())
 
     return render(request, "event-form.html", {"form": form, "event": event})
 
 
-# def event_signup(request, pk):
-#     event = Event.objects.get(pk=pk)
+@login_required
+def cancel_signup(request, pk):
+    event = Event.objects.get(pk=pk)
 
-#     if request.user.is_authenticated:
-#         profile = request.user.profile
+    EventSignup.objects.filter(
+        event=event, user_registrant=request.user.profile
+    ).delete()
 
-#         EventSignup.objects.create(event=event, user_registrant=profile)
+    messages.success(request, event.title, extra_tags="event_cancelled")
 
-#         return redirect("localevents:event-list")
-
-#     if request.method == "POST":
-#         name = request.POST.get("name")
-
-#         EventSignup.objects.create(event=event, new_registrant=name)
-
-#         return redirect("localevents:event-list")
-
-#     return render(request, "event-signup.html", {"event": event})
+    return redirect(event.get_absolute_url())
 
 
 class BaseSignupView(View):
@@ -190,4 +188,7 @@ class EventSignupView(BaseSignupView):
             EventSignup.objects.create(event=event, new_registrant=name)
 
     def get_redirect_url(self, event):
+
+        messages.success(self.request, event.title, extra_tags="event_signed")
+
         return "localevents:event-list"

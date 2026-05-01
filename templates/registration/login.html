@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 
 {% block body %}
+
+{% if messages %}
+{% for message in messages %}
+{% if "merch_login_required" in message.tags %}
+<div class="alert success">
+    {{ message }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 {% if request.user.is_authenticated %}
 <h1>Welcome, {{ request.user.username }}!</h1>
 {% else %}

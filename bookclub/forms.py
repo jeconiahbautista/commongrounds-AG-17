@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, BookReview, Borrow
+from .models import Book, BookReview, Borrow, BookRating
 from datetime import timedelta
 
 
@@ -10,17 +10,15 @@ class BookContributeForm(forms.ModelForm):
             "title",
             "genre",
             "author",
-            "contributor",
             "synopsis",
             "publication_year",
             "available_to_borrow",
         ]
 
-    def __init__(self, *args, user=None, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-        if user and user.is_authenticated:
-            self.fields['contributor'].initial = user.profile
-            self.fields['contributor'].widget = forms.HiddenInput()
+
 
 class BookUpdateForm(forms.ModelForm):
     class Meta:
@@ -34,6 +32,7 @@ class BookUpdateForm(forms.ModelForm):
             "available_to_borrow",
         ]
 
+
 class BookReviewForm(forms.ModelForm):
     class Meta:
         model = BookReview
@@ -41,6 +40,9 @@ class BookReviewForm(forms.ModelForm):
             "title",
             "comment",
         ]
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class BorrowForm(forms.ModelForm):
@@ -59,6 +61,7 @@ class BorrowForm(forms.ModelForm):
             borrow.save()
         return borrow
 
+
 class BookFormFactory:
     @classmethod
     def get_form(cls, context, user=None, **kwargs):
@@ -72,4 +75,7 @@ class BookFormFactory:
             raise ValueError(f"Unknown form context: {context}")
 
 
-
+class BookRatingForm(forms.ModelForm):
+    class Meta:
+        model = BookRating
+        fields = ["score"]

@@ -2,6 +2,33 @@
 {% load static %}
 
 {% block body %}
+
+{% if messages %}
+{% for message in messages %}
+{% if "commission_created" in message.tags %}
+<div class="alert success">
+    You have successfully created commission: {{ message }}
+</div>
+{% elif "commission_updated" in message.tags %}
+<div class="alert success">
+    You have successfully updated commission: {{ message }}
+</div>
+{% elif "job_applied" in message.tags %}
+<div class="alert success">
+    You have succefully applied for the role {{ message }}
+</div>
+{% elif "application_accepted" in message.tags %}
+<div class="alert success">
+    You haev accepted {{ message }} for the role
+</div>
+{% elif "application_rejected" in message.tags %}
+<div class="alert success">
+    You have rejected {{ message }} for the role
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 <div class="container">
     <h1>{{ commission.title }}</h1>
 
@@ -16,55 +43,55 @@
     <div class="box"><strong>Open Manpower:</strong> {{ total_open_manpower }}</div>
 
     {% if is_owner %}
-        <div class="box">
-            <a href="{% url 'commissions:request-edit' commission.pk %}">Edit Commission</a>
-        </div>
+    <div class="box">
+        <a href="{% url 'commissions:request-edit' commission.pk %}">Edit Commission</a>
+    </div>
     {% endif %}
 
     <h2>Jobs Needed</h2>
 
     {% if job_data %}
-        {% for item in job_data %}
-            <div class="box">
-                <p><strong>Role:</strong> {{ item.job.role }}</p>
-                <p><strong>Manpower Required:</strong> {{ item.job.manpower_required }}</p>
-                <p><strong>Status:</strong> {{ item.job.get_status_display }}</p>
-                <p><strong>Accepted Applications:</strong> {{ item.accepted }}</p>
-                <p><strong>Open Slots:</strong> {{ item.open_slots }}</p>
+    {% for item in job_data %}
+    <div class="box">
+        <p><strong>Role:</strong> {{ item.job.role }}</p>
+        <p><strong>Manpower Required:</strong> {{ item.job.manpower_required }}</p>
+        <p><strong>Status:</strong> {{ item.job.get_status_display }}</p>
+        <p><strong>Accepted Applications:</strong> {{ item.accepted }}</p>
+        <p><strong>Open Slots:</strong> {{ item.open_slots }}</p>
 
-                {% if user.is_authenticated %}
-                    {% if item.can_apply %}
-                        <a href="{% url 'commissions:job-apply' item.job.pk %}">Apply to Job</a>
-                    {% elif item.already_applied %}
-                        <button disabled>Already Applied</button>
-                    {% else %}
-                        <button disabled>Apply to Job</button>
-                    {% endif %}
+        {% if user.is_authenticated %}
+        {% if item.can_apply %}
+        <a href="{% url 'commissions:job-apply' item.job.pk %}">Apply to Job</a>
+        {% elif item.already_applied %}
+        <button disabled>Already Applied</button>
+        {% else %}
+        <button disabled>Apply to Job</button>
+        {% endif %}
+        {% endif %}
+
+        {% if is_owner %}
+        <h4>Applications</h4>
+        {% if item.applications %}
+        <ul>
+            {% for application in item.applications %}
+            <li>
+                {{ application.applicant.display_name }} - {{ application.get_status_display }}
+
+                {% if application.status == "0" %}
+                <a href="{% url 'commissions:application-accept' application.pk %}">Accept</a>
+                <a href="{% url 'commissions:application-reject' application.pk %}">Reject</a>
                 {% endif %}
-
-                {% if is_owner %}
-                    <h4>Applications</h4>
-                    {% if item.applications %}
-                        <ul>
-                            {% for application in item.applications %}
-                                <li>
-                                    {{ application.applicant.display_name }} - {{ application.get_status_display }}
-
-                                    {% if application.status == "0" %}
-                                        <a href="{% url 'commissions:application-accept' application.pk %}">Accept</a>
-                                        <a href="{% url 'commissions:application-reject' application.pk %}">Reject</a>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No applications yet.</p>
-                    {% endif %}
-                {% endif %}
-            </div>
-        {% endfor %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No applications yet.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+    {% endfor %}
     {% else %}
-        <div class="box">No jobs listed for this commission yet.</div>
+    <div class="box">No jobs listed for this commission yet.</div>
     {% endif %}
 
     <div class="box">

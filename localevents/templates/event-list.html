@@ -2,69 +2,99 @@
 {% load static %}
 
 {% block body %}
-<h1> Events List </h1>
 
-<a href="{% url 'localevents:event-create' %}">Create Event</a>
+{% if messages %}
+{% for message in messages %}
 
-<div class="main-content">
-    {% if created_events %}
+{% if "event_signed" in message.tags %}
+<div class="alert success">
+    You have succesfully signed up for {{ message }}
+</div>
 
+{% elif "event_created" in message.tags %}
+<div class="alert success">
+    You have successfully created the event: {{ message }}
+</div>
+
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+<h1>Event List</h1>
+
+<div class="content">
+    <div class="add">
+        <a href="{% url 'localevents:event-create' %}">Create Event</a>
+    </div>
+
+    <!-- CREATED EVENTS -->
     <h2>Created Events</h2>
-    <section>
+    {% if created_events %}
+    <div class="main-content">
         {% for event in created_events %}
         <div class="card">
             <ul>
                 <li>
-                    <h2> {{ event.title }}</h2>
+                    <h2>{{ event.title }}</h2>
                     <p><strong>Category:</strong> {{ event.category }}</p>
-                    <p>{{ event.description|truncatechars:30 }} </p>
-                    <a href='{{ event.get_absolute_url }}'> View Details </a>
+                    <p>{{ event.description|truncatechars:30 }}</p>
+                    <a href="{{ event.get_absolute_url }}">View Details</a>
                 </li>
             </ul>
         </div>
         {% endfor %}
-    </section>
-
+    </div>
+    {% else %}
+    <div class="else-main-content">
+        <p><em>No created events.</em></p>
+    </div>
     {% endif %}
-    {% if signed_events %}
 
+    <!-- SIGNED EVENTS -->
     <h2>Signed Events</h2>
-
-    {% for event in signed_events %}
-    <div class="card">
-        <ul>
-            <li>
-                <h2> {{ event.title }}</h2>
-                <p><strong>Category:</strong> {{ event.category }}</p>
-                <p>{{ event.description|truncatechars:30 }} </p>
-                <a href='{{ event.get_absolute_url }}'> View Details </a>
-            </li>
-        </ul>
+    {% if signed_events %}
+    <div class="main-content">
+        {% for event in signed_events %}
+        <div class="card">
+            <ul>
+                <li>
+                    <h2>{{ event.title }}</h2>
+                    <p><strong>Category:</strong> {{ event.category }}</p>
+                    <p>{{ event.description|truncatechars:30 }}</p>
+                    <a href="{{ event.get_absolute_url }}">View Details</a>
+                </li>
+            </ul>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    {% else %}
+    <div class="else-main-content">
+        <p><em>No signed events.</em></p>
+    </div>
     {% endif %}
 
+    <!-- ALL EVENTS -->
     <h2>All Events</h2>
-
     {% if events %}
-
-    {% for event in events %}
-    <div class="card">
-        <ul>
-            <li>
-                <h2> {{ event.title }}</h2>
-                <p><strong>Category:</strong> {{ event.category }}</p>
-                <p>{{ event.description|truncatechars:30 }} </p>
-                <a href='{{ event.get_absolute_url }}'> View Details </a>
-            </li>
-        </ul>
+    <div class="main-content">
+        {% for event in events %}
+        <div class="card">
+            <ul>
+                <li>
+                    <h2>{{ event.title }}</h2>
+                    <p><strong>Category:</strong> {{ event.category }}</p>
+                    <p>{{ event.description|truncatechars:30 }}</p>
+                    <a href="{{ event.get_absolute_url }}">View Details</a>
+                </li>
+            </ul>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    {% else %}
+    <div class="else-main-content">
+        <p><em>No events available.</em></p>
+    </div>
+    {% endif %}
 </div>
-{% else %}
-<div class="else-main-content">
-    <p><em>No events available.</em></p>
-</div>
-{% endif %}
-
 {% endblock %}
