@@ -2,6 +2,21 @@
 {% load static %}
 
 {% block body %}
+
+{% if messages %}
+{% for message in messages %}
+{% if "product_updated" in message.tags %}
+<div class="alert success">
+    You have successfully updated details of {{ message }}.
+</div>
+{% elif "product_created" in message.tags %}
+<div class="alert success">
+    You have successfully created the product: {{ message }}.
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 <h1> {{ product.name }} </h1>
 
 <div class="container">
@@ -28,9 +43,9 @@
         {% else %}
         <button disabled>
             {% if product.stock == 0 %}
-                Product is out of stock. Sorry for the inconvenience.
+            Product is out of stock. Sorry for the inconvenience.
             {% else %}
-                Cannot Buy Your Own Product.
+            Cannot Buy Your Own Product.
             {% endif %}
         </button>
         {% endif %}

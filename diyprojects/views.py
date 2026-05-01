@@ -7,6 +7,7 @@ from .models import (
 )
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib import messages
 from .forms import ProjectRatingForm, ProjectReviewForm, ProjectForm
 from accounts.decorators import role_required
 from .repositories import ProjectRepository
@@ -89,6 +90,7 @@ def diyprojects_detail(request, pk):
                     profile=request.user.profile,
                     defaults={"score": rate_form.cleaned_data["score"]},
                 )
+                messages.success(request, project.title, extra_tags="project_rated")
                 return redirect("diyprojects:diyprojects_detail", pk=project.pk)
         elif action == "favorite":
             favorite = Favorite.objects.filter(
@@ -96,8 +98,12 @@ def diyprojects_detail(request, pk):
             ).first()
             if favorite:
                 favorite.delete()
+                messages.success(
+                    request, project.title, extra_tags="project_unfavorited"
+                )
             else:
                 Favorite.objects.create(project=project, profile=request.user.profile)
+                messages.success(request, project.title, extra_tags="project_favorited")
             return redirect("diyprojects:diyprojects_detail", pk=project.pk)
         elif action == "review":
             review_form = ProjectReviewForm(request.POST, request.FILES)
@@ -108,6 +114,7 @@ def diyprojects_detail(request, pk):
                     comment=review_form.cleaned_data["comment"],
                     image=review_form.cleaned_data["image"],
                 )
+                messages.success(request, project.title, extra_tags="project_reviewed")
                 return redirect("diyprojects:diyprojects_detail", pk=project.pk)
 
     ctx = {
@@ -139,6 +146,9 @@ def diyprojects_create(request):
             project = project_form.save(commit=False)
             project.creator = request.user.profile
             project.save()
+
+            messages.success(request, project.title, extra_tags="project_created")
+
             return redirect("diyprojects:diyprojects_detail", pk=project.pk)
     else:
         project_form = ProjectForm()
@@ -171,6 +181,7 @@ def diyprojects_edit(request, pk):
         )
         if project_form.is_valid():
             project_form.save()
+            messages.success(request, project.title, extra_tags="project_edited")
             return redirect("diyprojects:diyprojects_detail", pk=project.pk)
     else:
         project_form = ProjectForm(instance=project)

@@ -2,6 +2,29 @@
 {% load static %}
 
 {% block body %}
+
+{% if messages %}
+{% for message in messages %}
+{% if "book_reviewed" in message.tags %}
+<div class="alert success">
+    You added a review for {{ message }}
+</div>
+{% elif "book_updated" in message.tags %}
+<div class="alert success">
+    You have succesfully updated book: {{ message }}
+</div>
+{% elif "book_bookmarked" in message.tags %}
+<div class="alert success">
+    You have bookmarked: {{ message }}
+</div>
+{% elif "book_unbookmarked" in message.tags %}
+<div class="alert success">
+    You have unbookmarked: {{ message }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 <div class="container">
     <h1>{{book.title}}</h1>
     <div class="box"><strong>Genre:</strong> {{book.genre}}</div>
@@ -14,32 +37,39 @@
     <div class="box">
         <strong>Status: </strong>
         {% if book.available_to_borrow %}
-            Available to Borrow 
+        Available to Borrow
         {% else %}
-            Not Available
+        Not Available
         {% endif %}
     </div>
 
-     {% if book.available_to_borrow %}
-        <div class="box">
-            <a href="{% url 'bookclub:book-borrow' book.pk %}"> Borrow this Book</a>
-        </div>
+    {% if book.available_to_borrow %}
+    <div class="box">
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'bookclub:book-borrow' book.pk %}">
+            {% csrf_token %}
+            <button type="submit">Borrow this Book</button>
+        </form>
+        {% else %}
+        <a href="{% url 'bookclub:book-borrow' book.pk %}">Borrow this Book</a>
+        {% endif %}
+    </div>
     {% endif %}
 
     {% if is_contributor %}
-        <div class="box">
-            <a href="{% url 'bookclub:book-update' book.pk %}">Edit Book</a>
-        </div>
+    <div class="box">
+        <a href="{% url 'bookclub:book-update' book.pk %}">Edit Book</a>
+    </div>
     {% endif %}
 
     <div class="box">
         {% if user.is_authenticated %}
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" name="bookmark">
-                    {% if is_bookmarked %} Unbookmark {% else %} Bookmark {% endif %}
-                </button>
-            </form>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" name="bookmark">
+                {% if is_bookmarked %} Unbookmark {% else %} Bookmark {% endif %}
+            </button>
+        </form>
         {% endif %}
         <span>{{ bookmark_count }} bookmark{{bookmark_count|pluralize}}</span>
     </div>
@@ -49,20 +79,20 @@
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type ="submit">Submit Review</button>
+            <button type="submit">Submit Review</button>
         </form>
     </div>
 
     <div class="box">
         <h2>Reviews</h2>
         {% for review in reviews %}
-            <div>
-                <strong>{{ review.title }}</strong>
-                <p>{{ review.comment }}</p>
-                <p>{{ review.user_reviewer.display_name |default:review.anon_reviewer }}</p>
-            </div>
-            {% empty %}
-                <p>No reviews yet.</p>
+        <div>
+            <strong>{{ review.title }}</strong>
+            <p>{{ review.comment }}</p>
+            <p>{{ review.user_reviewer.display_name |default:review.anon_reviewer }}</p>
+        </div>
+        {% empty %}
+        <p>No reviews yet.</p>
         {% endfor %}
     </div>
     <div class="box">

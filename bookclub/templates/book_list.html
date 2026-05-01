@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 
 {% block body %}
+
+{% if messages %}
+{% for message in messages %}
+{% if "book_created" in message.tags %}
+<div class="alert success">
+    You successfully created book: {{ message }}
+</div>
+{% elif "book_borrowed" in message.tags %}
+<div class="alert success">
+    You successfully borrowed the book: {{ message }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 <h1>Book List</h1>
 <div class="content">
     <div class="add">

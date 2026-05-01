@@ -3,9 +3,13 @@ from .models import (
     Book,
     BookReview,
     Bookmark,
+    Borrow,
 )
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
 from accounts.decorators import role_required
 from .forms import BookUpdateForm, BookReviewForm, BorrowForm, BookFormFactory
 
@@ -65,11 +69,17 @@ def book_detail(request, pk):
 
     if request.method == "POST":
         if "bookmark" in request.POST and request.user.is_authenticated:
-            bookmark, created = Bookmark.objects.get_or_create(
+            bookmark = Bookmark.objects.filter(
                 profile=request.user.profile, book=book
-            )
-            if not created:
+            ).first()
+
+            if bookmark:
                 bookmark.delete()
+                messages.success(request, book.title, extra_tags="book_unbookmarked")
+            else:
+                Bookmark.objects.create(profile=request.user.profile, book=book)
+                messages.success(request, book.title, extra_tags="book_bookmarked")
+
             return redirect("bookclub:book-detail", pk=pk)
 
         form = BookReviewForm(request.POST)
@@ -81,10 +91,13 @@ def book_detail(request, pk):
                 review.user_reviewer = request.user.profile
             else:
                 review.anon_reviewer = "Anonymous"
+
             review.save()
+            messages.success(request, book.title, extra_tags="book_reviewed")
+
             return redirect("bookclub:book-detail", pk=pk)
-    else:
-        form = BookReviewForm()
+        else:
+            form = BookReviewForm()
 
     ctx = {
         "book": book,
@@ -109,6 +122,9 @@ def book_create(request):
         book = form.save(commit=False)
         book.contributor = request.user.profile
         book.save()
+
+        messages.success(request, book.title, extra_tags="book_created")
+
         return redirect("bookclub:book-detail", pk=book.pk)
 
     ctx = {
@@ -132,6 +148,7 @@ def book_update(request, pk):
         form = BookUpdateForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
+            messages.success(request, book.title, extra_tags="book_updated")
             return redirect("bookclub:book-detail", pk=pk)
 
     ctx = {
@@ -146,14 +163,25 @@ def book_borrow(request, pk):
     book = Book.objects.get(pk=pk)
 
     if request.method == "POST":
+        if request.user.is_authenticated:
+            Borrow.objects.create(
+                book=book,
+                borrower=request.user.profile,
+                name=request.user.profile.display_name,
+                date_borrowed=timezone.now().date(),
+                date_to_return=timezone.now().date() + timedelta(days=14),
+            )
+
+            messages.success(request, book.title, extra_tags="book_borrowed")
+            return redirect("bookclub:book-list")
+
         form = BorrowForm(request.POST)
         if form.is_valid():
             borrow = form.save(commit=False)
             borrow.book = book
-            if request.user.is_authenticated:
-                borrow.borrower = request.user.profile
-                borrow.name = request.user.profile.display_name
             borrow.save()
+
+            messages.success(request, book.title, extra_tags="book_borrowed")
             return redirect("bookclub:book-list")
     else:
         form = BorrowForm()

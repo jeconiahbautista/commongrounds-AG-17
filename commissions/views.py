@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
@@ -13,42 +14,43 @@ from .services import CommissionService
 
 class CommissionListView(ListView):
     model = Commission
-    template_name  = "commissions/commission_list.html"
+    template_name = "commissions/commission_list.html"
     context_object_name = "all_commissions"
 
     def get_queryset(self):
         return Commission.objects.all().order_by("status", "-created_on")
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         if self.request.user.is_authenticated:
             profile = self.request.user.profile
 
-            created = Commission.objects.filter(
-                maker=profile
-            ).order_by("status", "-created_on")
+            created = Commission.objects.filter(maker=profile).order_by(
+                "status", "-created_on"
+            )
 
-            applied = Commission.objects.filter(
-                jobs__applications__applicant=profile
-            ).distinct().exclude(
-               maker=profile
-            ).order_by("status", "-created_on")
+            applied = (
+                Commission.objects.filter(jobs__applications__applicant=profile)
+                .distinct()
+                .exclude(maker=profile)
+                .order_by("status", "-created_on")
+            )
 
             excluded_ids = list(created.values_list("id", flat=True)) + list(
                 applied.values_list("id", flat=True)
             )
 
-            all_commissions = Commission.objects.exclude(
-                id__in=excluded_ids
-            ).order_by("status", "-created_on")
+            all_commissions = Commission.objects.exclude(id__in=excluded_ids).order_by(
+                "status", "-created_on"
+            )
 
             context["created_commissions"] = created
             context["applied_commissions"] = applied
             context["all_commissions"] = all_commissions
-        
+
         return context
-    
+
 
 class CommissionDetailView(DetailView):
     model = Commission
@@ -74,28 +76,30 @@ class CommissionDetailView(DetailView):
                     applicant=self.request.user.profile
                 ).exists()
 
-            job_data.append({
-                "job": job,
-                "accepted": accepted,
-                "open_slots": open_slots,
-                "already_applied": already_applied,
-                "applications": job.applications.all(),
-                "can_apply": self.request.user.is_authenticated and open_slots > 0 and not already_applied,
-            })
+            job_data.append(
+                {
+                    "job": job,
+                    "accepted": accepted,
+                    "open_slots": open_slots,
+                    "already_applied": already_applied,
+                    "applications": job.applications.all(),
+                    "can_apply": self.request.user.is_authenticated
+                    and open_slots > 0
+                    and not already_applied,
+                }
+            )
 
         context["job_data"] = job_data
         context["total_manpower"] = summary["total_manpower"]
         context["total_open_manpower"] = summary["open_manpower"]
 
         if self.request.user.is_authenticated:
-            context["is_owner"] = (
-                commission.maker == self.request.user.profile
-            )
+            context["is_owner"] = commission.maker == self.request.user.profile
         else:
             context["is_owner"] = False
 
         return context
-    
+
 
 class CommissionCreateView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
     model = Commission
@@ -121,10 +125,15 @@ class CommissionCreateView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
                 data=form.cleaned_data,
                 jobs_data=[f.cleaned_data for f in job_formset.forms],
             )
+
+            messages.success(
+                self.request, commission.title, extra_tags="commission_created"
+            )
+
             return redirect(commission.get_absolute_url())
 
         return self.form_invalid(form)
-    
+
 
 class CommissionUpdateView(LoginRequiredMixin, RoleRequiredMixin, UpdateView):
     model = Commission
@@ -139,9 +148,7 @@ class CommissionUpdateView(LoginRequiredMixin, RoleRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context["job_formset"] = JobFormSet(
-                self.request.POST, instance=self.object
-            )
+            context["job_formset"] = JobFormSet(self.request.POST, instance=self.object)
         else:
             context["job_formset"] = JobFormSet(instance=self.object)
         return context
@@ -156,10 +163,14 @@ class CommissionUpdateView(LoginRequiredMixin, RoleRequiredMixin, UpdateView):
             job_formset.save()
 
             CommissionService.sync_commission_status(self.object)
+            messages.success(
+                self.request, self.object.title, extra_tags="commission_updated"
+            )
 
             return redirect(self.object.get_absolute_url())
         return self.form_invalid(form)
-    
+
+
 @login_required
 def apply_to_job(request, pk):
     job = Job.objects.get(pk=pk)
@@ -167,7 +178,10 @@ def apply_to_job(request, pk):
 
     CommissionService.apply_to_job(applicant, job)
 
+    messages.success(request, job.role, extra_tags="job_applied")
+
     return redirect(job.commission.get_absolute_url())
+
 
 @login_required
 def accept_job_application(request, pk):
@@ -177,6 +191,8 @@ def accept_job_application(request, pk):
         return redirect(application.job.commission.get_absolute_url())
 
     CommissionService.accept_job_application(application)
+
+    messages.success(request, application.applicant, extra_tags="application_accepted")
     return redirect(application.job.commission.get_absolute_url())
 
 
@@ -188,4 +204,6 @@ def reject_job_application(request, pk):
         return redirect(application.job.commission.get_absolute_url())
 
     CommissionService.reject_job_application(application)
+
+    messages.success(request, application.applicant, extra_tags="application_rejected")
     return redirect(application.job.commission.get_absolute_url())

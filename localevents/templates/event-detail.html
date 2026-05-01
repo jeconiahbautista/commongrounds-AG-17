@@ -2,6 +2,21 @@
 {% load static %}
 
 {% block body %}
+
+{% if messages %}
+{% for message in messages %}
+{% if "event_edited" in message.tags %}
+<div class="alert success">
+    You successfully edited {{ message }}
+</div>
+{% elif "event_cancelled" in message.tags %}
+<div class="alert success">
+    You cancelled your signup for "{{ message }}"
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 <div class="container">
     <h1> {{ event.title }} </h1>
 
@@ -24,7 +39,12 @@
 </a>
 
 {% else %}
-{% if is_authenticated %}
+{% if has_signed_up %}
+<form method="post" action="{% url 'localevents:event-cancel-signup' event.pk %}">
+    {% csrf_token %}
+    <button type="submit">Cancel Signup</button>
+</form>
+{% elif is_authenticated %}
 <form method="post" action="{% url 'localevents:event-detail-signup' event.pk %}">
     {% csrf_token %}
     <button type="submit" {% if is_full %}disabled{% endif %}>

@@ -1,6 +1,37 @@
 {% extends 'base.html' %}
 
 {% block body %}
+
+{% if messages %}
+{% for message in messages %}
+{% if "project_rated" in message.tags %}
+<div class="alert success">
+    You have submitted a rating for {{ message }}
+</div>
+{% elif "project_unfavorited" in message.tags %}
+<div class="alert success">
+    You removed {{ message }} from your favorites
+</div>
+{% elif "project_favorited" in message.tags %}
+<div class="alert success">
+    You added {{ message }} to your favorites
+</div>
+{% elif "project_reviewed" in message.tags %}
+<div class="alert success">
+    You added a review for {{ message }}
+</div>
+{% elif "project_created" in message.tags %}
+<div class="alert success">
+    You have succesfully created the project: {{ message }}
+</div>
+{% elif "project_edited" in message.tags %}
+<div class="alert success">
+    You have succesfully edited the project: {{ message }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 <div class="container">
     <h1>{{ project.title }}</h1>
     <div class="boxes">
@@ -18,6 +49,9 @@
                     <span><strong>Rate the Project: </strong></span>
                     {{ rate_form.score }}
                 </label>
+
+                {{ rate_form.score.errors }}
+
                 <button type="submit" name="action" value="rate">Submit Rating</button>
             </form>
         </div>

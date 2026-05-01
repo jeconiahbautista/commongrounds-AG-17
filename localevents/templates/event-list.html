@@ -2,6 +2,25 @@
 {% load static %}
 
 {% block body %}
+
+{% if messages %}
+{% for message in messages %}
+
+{% if "event_signed" in message.tags %}
+<div class="alert success">
+    You have succesfully signed up for {{ message }}
+</div>
+
+{% elif "event_created" in message.tags %}
+<div class="alert success">
+    You have successfully created the event: {{ message }}
+</div>
+
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
 <h1>Event List</h1>
 
 <div class="content">
