@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 from accounts.models import Profile
 
@@ -95,3 +96,14 @@ class Borrow(models.Model):
     class Meta:
         verbose_name = "borrow"
         verbose_name_plural = "borrows"
+
+
+class BookRating(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="ratings")
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="book_ratings"
+    )
+    score = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+    class Meta:
+        unique_together = ["book", "profile"]

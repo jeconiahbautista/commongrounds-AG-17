@@ -21,6 +21,10 @@
 <div class="alert success">
     You have unbookmarked: {{ message }}
 </div>
+{% elif "book_rated" in message.tags %}
+<div class="alert success">
+    You rated this book: {{ message }}
+</div>
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -73,6 +77,24 @@
         {% endif %}
         <span>{{ bookmark_count }} bookmark{{bookmark_count|pluralize}}</span>
     </div>
+
+    <div class="box">
+        <strong>Average Rating:</strong>
+        {{ average_rating|default:"No ratings yet"|floatformat:1 }}
+    </div>
+
+    {% if user.is_authenticated %}
+    {% if existing_rating %}
+    <p>You rated this: {{ existing_rating.score }}/5</p>
+    {% else %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ rating_form.score }}
+        {{ rating_form.score.errors }}
+        <button type="submit" name="rate">Submit Rating</button>
+    </form>
+    {% endif %}
+    {% endif %}
 
     <div class="box">
         <h2>Leave a Review</h2>

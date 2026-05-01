@@ -57,7 +57,12 @@ class BookAdmin(admin.ModelAdmin):
 
 
 class BookReviewAdmin(admin.ModelAdmin):
-    list_display = ("book", "user_reviewer", "anon_reviewer", "title")
+    list_display = (
+        "book",
+        "user_reviewer",
+        "anon_reviewer",
+        "title",
+    )
     search_fields = ("title",)
     list_filter = ("book",)
 

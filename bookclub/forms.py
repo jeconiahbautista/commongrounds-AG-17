@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, BookReview, Borrow
+from .models import Book, BookReview, Borrow, BookRating
 from datetime import timedelta
 
 
@@ -32,6 +32,7 @@ class BookUpdateForm(forms.ModelForm):
             "available_to_borrow",
         ]
 
+
 class BookReviewForm(forms.ModelForm):
     class Meta:
         model = BookReview
@@ -60,6 +61,7 @@ class BorrowForm(forms.ModelForm):
             borrow.save()
         return borrow
 
+
 class BookFormFactory:
     @classmethod
     def get_form(cls, context, user=None, **kwargs):
@@ -73,4 +75,7 @@ class BookFormFactory:
             raise ValueError(f"Unknown form context: {context}")
 
 
-
+class BookRatingForm(forms.ModelForm):
+    class Meta:
+        model = BookRating
+        fields = ["score"]

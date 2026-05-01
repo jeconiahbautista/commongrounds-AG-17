@@ -28,6 +28,14 @@
 <div class="alert success">
     You have succesfully edited the project: {{ message }}
 </div>
+{% elif "review_replied" in message.tags %}
+<div class="alert success">
+    You have succesfully replied to a review: {{ message }}
+</div>
+{% elif "review_voted" in message.tags %}
+<div class="alert success">
+    You have succesfully voted a review: {{ message }}
+</div>
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -58,6 +66,7 @@
         {% endif %}
         {% endif %}
         <div class="box">
+            {% if user.is_authenticated %}
             <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" name="action" value="favorite">
@@ -68,6 +77,9 @@
                     {% endif %}
                 </button>
             </form>
+            {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}">Login to favorite</a>
+            {% endif %}
         </div>
         <div class="box">
             <p>{{ favorite_count }} people favorited this project</p>
@@ -96,6 +108,7 @@
     </div>
     <div class="box"><a href="/diyprojects/projects">Return to Projects List</a></div>
     <div class="box">
+        {% if user.is_authenticated %}
         <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST"
             enctype="multipart/form-data">
             {% csrf_token %}
@@ -109,15 +122,61 @@
             </label>
             <p><button type="submit" name="action" value="review">Submit Review</button></p>
         </form>
+        {% else %}
+        <p><a href="{% url 'login' %}?next={{ request.path }}">Login to leave a review</a></p>
+        {% endif %}
     </div>
     {% if reviews %}
     {% for review in reviews %}
-    <div class="box">
-        <p><em>Reviewed by: {{ review.reviewer }}</em></p>
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+
+        <strong>{{ review.reviewer }}</strong>
         <p>{{ review.comment }}</p>
+
         {% if review.image %}
-        <img src="{{ review.image.url }}" width="300">
+        <img src="{{ review.image.url }}" style="max-width:200px; display:block; margin-top:10px;">
         {% endif %}
+
+        <p>Score: {{ review.score|default:0 }}</p>
+
+        {% if user.is_authenticated %}
+
+        <!-- VOTE -->
+        <form method="POST" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="review_id" value="{{ review.id }}">
+            <input type="hidden" name="value" value="1">
+            <button name="action" value="vote">👍</button>
+        </form>
+
+        <form method="POST" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="review_id" value="{{ review.id }}">
+            <input type="hidden" name="value" value="-1">
+            <button name="action" value="vote">👎</button>
+        </form>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="parent_id" value="{{ review.id }}">
+            <input type="text" name="comment" placeholder="Reply...">
+            <button name="action" value="reply">Reply</button>
+        </form>
+        {% else %}
+        <small>
+            <a href="{% url 'login' %}?next={{ request.path }}">
+                Login to vote or reply
+            </a>
+        </small>
+        {% endif %}
+
+        {% for reply in review.replies.all %}
+        <div style="margin-left: 30px; border-left:2px solid gray; padding-left:10px;">
+            <strong>{{ reply.reviewer }}</strong>
+            <p>{{ reply.comment }}</p>
+        </div>
+        {% endfor %}
+
     </div>
     {% endfor %}
     {% else %}

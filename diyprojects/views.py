@@ -4,9 +4,11 @@ from .models import (
     Favorite,
     ProjectReview,
     ProjectCategory,
+    ReviewVote,
 )
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.contrib import messages
 from .forms import ProjectRatingForm, ProjectReviewForm, ProjectForm
 from accounts.decorators import role_required
@@ -54,7 +56,11 @@ def diyprojects_detail(request, pk):
 
     project = repo.get_by_id(pk)
     ratings = ProjectRating.objects.filter(project=project)
-    reviews = ProjectReview.objects.filter(project=project)
+    reviews = (
+        ProjectReview.objects.filter(project=project, parent__isnull=True)
+        .annotate(score=Sum("votes__value"))
+        .order_by("-score")
+    )
 
     favorite_count = Favorite.objects.filter(project=project).count()
     existing_rating = None
@@ -81,8 +87,13 @@ def diyprojects_detail(request, pk):
 
     if request.method == "POST":
         action = request.POST.get("action")
+        if (
+            action in ["review", "rate", "vote", "reply", "favorite"]
+            and not request.user.is_authenticated
+        ):
+            return redirect(f"{reverse('login')}?next={request.path}")
 
-        if action == "rate":
+        elif action == "rate":
             rate_form = ProjectRatingForm(request.POST)
             if rate_form.is_valid():
                 ProjectRating.objects.update_or_create(
@@ -116,6 +127,36 @@ def diyprojects_detail(request, pk):
                 )
                 messages.success(request, project.title, extra_tags="project_reviewed")
                 return redirect("diyprojects:diyprojects_detail", pk=project.pk)
+        elif action == "reply":
+            parent_id = request.POST.get("parent_id")
+            parent_review = ProjectReview.objects.get(id=parent_id)
+
+            ProjectReview.objects.create(
+                project=project,
+                reviewer=request.user.profile,
+                comment=request.POST.get("comment"),
+                parent=ProjectReview.objects.get(id=parent_id),
+            )
+            messages.success(
+                request,
+                parent_review.reviewer.display_name,
+                extra_tags="review_replied",
+            )
+            return redirect("diyprojects:diyprojects_detail", pk=project.pk)
+        elif action == "vote":
+            review_id = request.POST.get("review_id")
+            value = int(request.POST.get("value"))
+            parent_review = ProjectReview.objects.get(id=review_id)
+
+            ReviewVote.objects.update_or_create(
+                review_id=review_id,
+                user=request.user.profile,
+                defaults={"value": value},
+            )
+            messages.success(
+                request, parent_review.reviewer.display_name, extra_tags="review_voted"
+            )
+            return redirect("diyprojects:diyprojects_detail", pk=project.pk)
 
     ctx = {
         "project": project,

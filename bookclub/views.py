@@ -1,17 +1,17 @@
 from django.shortcuts import redirect, render
-from .models import (
-    Book,
-    BookReview,
-    Bookmark,
-    Borrow,
-)
+from .models import Book, BookReview, Bookmark, Borrow, BookRating
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
 from accounts.decorators import role_required
-from .forms import BookUpdateForm, BookReviewForm, BorrowForm, BookFormFactory
+from .forms import (
+    BookUpdateForm,
+    BorrowForm,
+    BookFormFactory,
+    BookRatingForm,
+)
 
 
 def book_list(request):
@@ -53,6 +53,12 @@ def book_list(request):
 
 def book_detail(request, pk):
     book = Book.objects.get(pk=pk)
+    ratings = BookRating.objects.filter(book=book)
+
+    average_rating = None
+    if ratings.exists():
+        average_rating = sum(r.score for r in ratings) / ratings.count()
+
     bookmark_count = Bookmark.objects.filter(book=book).count()
     reviews = BookReview.objects.filter(book=book)
     form = BookFormFactory.get_form("review", user=request.user)
@@ -62,10 +68,16 @@ def book_detail(request, pk):
     )
 
     is_bookmarked = False
+    existing_rating = None
     if request.user.is_authenticated:
         is_bookmarked = Bookmark.objects.filter(
             book=book, profile=request.user.profile
         ).exists()
+        existing_rating = BookRating.objects.filter(
+            book=book, profile=request.user.profile
+        ).first()
+
+    rating_form = BookRatingForm()
 
     if request.method == "POST":
         if "bookmark" in request.POST and request.user.is_authenticated:
@@ -82,7 +94,19 @@ def book_detail(request, pk):
 
             return redirect("bookclub:book-detail", pk=pk)
 
-        form = BookReviewForm(request.POST)
+        if "rate" in request.POST and request.user.is_authenticated:
+            rating_form = BookRatingForm(request.POST)
+            if rating_form.is_valid():
+                BookRating.objects.update_or_create(
+                    book=book,
+                    profile=request.user.profile,
+                    defaults={"score": rating_form.cleaned_data["score"]},
+                )
+
+                messages.success(request, book.title, extra_tags="book_rated")
+                return redirect("bookclub:book-detail", pk=pk)
+
+        form = BookFormFactory.get_form("review", user=request.user, data=request.POST)
         if form.is_valid():
             review = form.save(commit=False)
             review.book = book
@@ -96,8 +120,6 @@ def book_detail(request, pk):
             messages.success(request, book.title, extra_tags="book_reviewed")
 
             return redirect("bookclub:book-detail", pk=pk)
-        else:
-            form = BookReviewForm()
 
     ctx = {
         "book": book,
@@ -106,6 +128,9 @@ def book_detail(request, pk):
         "form": form,
         "is_contributor": is_contributor,
         "is_bookmarked": is_bookmarked,
+        "average_rating": average_rating,
+        "existing_rating": existing_rating,
+        "rating_form": rating_form,
     }
     return render(request, "book_detail.html", ctx)
 

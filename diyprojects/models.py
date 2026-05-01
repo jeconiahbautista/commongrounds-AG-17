@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.db.models import Sum
 
 from accounts.models import Profile
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -78,8 +79,19 @@ class ProjectReview(models.Model):
     comment = models.TextField()
     image = models.ImageField(upload_to="diyprojects_images/", blank=True, null=True)
 
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="replies",
+    )
+
     def __str__(self):
         return "Review by {}".format(self.reviewer)
+
+    def score(self):
+        return self.votes.aggregate(total=Sum("value"))["total"] or 0
 
     class Meta:
         verbose_name = "Project Review"
@@ -107,3 +119,17 @@ class ProjectRating(models.Model):
         verbose_name = "Project Rating"
         verbose_name_plural = "Project Ratings"
         unique_together = ["project", "profile"]
+
+
+class ReviewVote(models.Model):
+    review = models.ForeignKey(
+        ProjectReview,
+        on_delete=models.CASCADE,
+        related_name="votes",
+    )
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    value = models.IntegerField(choices=[(1, "Upvote"), (-1, "Downvote")])
+
+    class Meta:
+        unique_together = ["review", "user"]
