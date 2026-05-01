@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from accounts.models import Profile
+from django.core.validators import MinValueValidator
 
 
 class EventType(models.Model):
@@ -23,10 +25,25 @@ class Event(models.Model):
         on_delete=models.SET_NULL,
         related_name="events",
     )
+    organizer = models.ManyToManyField(
+        Profile,
+        related_name="organizers",
+    )
+    event_image = models.ImageField(upload_to="localevents_images/", null=False)
     description = models.TextField()
     location = models.CharField(max_length=255)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    event_capacity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    status = models.CharField(
+        max_length=10,
+        choices=[
+            ("Available", "Available"),
+            ("Full", "Full"),
+            ("Done", "Done"),
+            ("Cancelled", "Cancelled"),
+        ],
+    )
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -38,3 +55,34 @@ class Event(models.Model):
 
     class Meta:
         ordering = ["-created_on"]
+
+
+class EventSignup(models.Model):
+    event = models.ForeignKey(
+        Event,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="signups",
+    )
+    user_registrant = models.ForeignKey(
+        Profile,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="users",
+    )
+    new_registrant = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
+    def __str__(self):
+        if self.user_registrant:
+            return f"User: {self.user_registrant} | Event: {self.event}"
+        return f"Guest: {self.new_registrant} | Event: {self.event}"
+
+    def get_absolute_url(self):
+        return reverse("localevents:event-detail", args=[self.event.pk])
+
+    class Meta:
+        unique_together = ("event", "user_registrant")

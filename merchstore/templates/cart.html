@@ -5,27 +5,37 @@
 {% block body %}
 <h1>Your Cart</h1>
 
+{% if messages %}
+{% for message in messages %}
+{% if "product_added_to_cart" in message.tags %}
+<div class="alert success">
+    You successfully added {{ message }} to your cart
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 {% if cart_by_owner %}
-    {% for owner, transactions in cart_by_owner.items %}
-    <div class="owner-group">
-        <h2>
-            Seller: {{ owner.display_name }}
-        </h2>
-        <div class="container">
-            {% for transaction in transactions %}
-            <div class="box">
-                <p>Product: {{ transaction.product.name }}<br></p>
-                <p>Price: Php{{ transaction.product.price }}<br></p>
-                <p>Amount: {{ transaction.amount }}<br></p>
-                <p>Status: {{ transaction.product.get_status_display }}</p>
-            </div>
-            {% endfor %}
+{% for owner, transactions in cart_by_owner.items %}
+<div class="owner-group">
+    <h2>
+        Seller: {{ owner.display_name }}
+    </h2>
+    <div class="container">
+        {% for transaction in transactions %}
+        <div class="box">
+            <p>Product: {{ transaction.product.name }}<br></p>
+            <p>Price: Php{{ transaction.product.price }}<br></p>
+            <p>Amount: {{ transaction.amount }}<br></p>
+            <p>Status: {{ transaction.product.get_status_display }}</p>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+</div>
+{% endfor %}
 {% else %}
-    <p>Your cart is empty.</p>
-    
+<p>Your cart is empty.</p>
+
 {% endif %}
 
 {% endblock %}

@@ -37,3 +37,4 @@ class ProjectForm(forms.ModelForm):
             "materials",
             "steps",
         ]
+        exclude = ["Project Creator"]

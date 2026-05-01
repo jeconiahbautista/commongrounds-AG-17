@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import permission_denied_view,  ProfileUpdateView
+from .views import permission_denied_view, ProfileUpdateView
 
 urlpatterns = [
     path("permission-denied/", permission_denied_view, name="permission_denied"),
