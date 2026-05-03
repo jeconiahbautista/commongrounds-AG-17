@@ -6,37 +6,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
     <title> Common Grounds </title>
     <style></style>
     {% block head %}{% endblock %}
 </head>
 
 <body>
-    <header>
-        <ul>
-            <li><a href="/merchstore/items">Merchandise Store</a></li>
-            <li><a href="/localevents/events">Local Events</a></li>
-            <li><a href="/bookclub/books">Book Club</a></li>
-            <li><a href="/diyprojects/projects">DIY Projects</a></li>
-            <li><a href="/commissions/requests">Commission Requests</a></li>
-            <li>
+    <div class="navigation-bar">
+        <div class="nav-wrapper">
+            <p class="logo">GCXVII</p>
+            <div class="nav-buttons-wrapper">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/merchstore/items">Merchandise Store</a>
+                <a class="nav-link" href="/localevents/events">Local Events</a>
+                <a class="nav-link" href="/bookclub/books">Book Club</a>
+                <a class="nav-link" href="/diyprojects/projects">DIY Projects</a>
+                <a class="nav-link" href="/commissions/requests">Commission Requests</a>
                 {% if request.user.is_authenticated %}
-                <form method="POST" action="{% url 'logout' %}">
+                <form method="POST" action="{% url 'logout' %}" class="logout-form">
                     {% csrf_token %}
-                    <button type="submit">Logout</button>
+                    <button type="submit" class="nav-link logout-button">Logout</button>
                 </form>
-                {% else %}
-                <a href="{% url 'login' %}">Login</a>
                 {% endif %}
-            </li>
-        </ul>
-    </header>
-    {% block body %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        {% block body %}{% endblock %}
+    </div>
     {% block scripts %}{% endblock %}
+    <footer>
+        <p>&copy; Common Grounds 2026</p>
+        {% block footer %}{% endblock %}
+    </footer>
 </body>
-<footer>
-    <p>&copy; Common Grounds 2026</p>
-    {% block footer %}{% endblock %}
-</footer>
 
 </html>

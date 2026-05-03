@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+{% if request.user.is_authenticated %}
+<h1>Already logged in</h1>
+{% else %}
+<div class="login-block">
+    <h1 class="login-heading">Create Account</h1>
+    <div class="login-details">
+        <form method="POST" class="form-block">
+            {% csrf_token %}
+
+            <p class="login-label">Username</p>
+            {{ form.username }}
+
+            <p class="login-label">Password</p>
+            {{ form.password1 }}
+
+            <p class="login-label">Confirm Password</p>
+            {{ form.password2 }}
+
+            <div class="login-buttons">
+                <a href="{% url 'login' %}" class="login-links">Already have an account?</a>
+                <button type="submit" class="submit-button">Register</button>
+            </div>
+
+            {% if form.errors %}
+            <div class="error">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

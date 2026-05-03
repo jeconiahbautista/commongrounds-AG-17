@@ -15,12 +15,27 @@
 {% if request.user.is_authenticated %}
 <h1>Welcome, {{ request.user.username }}!</h1>
 {% else %}
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
-<p></p>
-<a href="{% url 'password_reset' %}">Forgot password?</a>
+<div class="login-block">
+    <h1 class="login-heading">Login</h1>
+    <div class="login-details">
+        <form method="POST" class="form-block">
+            <div class="forms">
+                {% csrf_token %}
+                <p class="login-label">{{form.username.label}}</p>
+                {{form.username}}
+                <a class="login-links" href="/accounts/register">Don't have an account? Create here.</a>
+                <p class="login-label">{{form.password.label}}</p>
+                {{form.password}}
+                <div class="login-buttons">
+                    <a class="login-links" href="{% url 'password_reset' %}">Forgot password?</a>
+                    <div class="submit-block">
+                        <img src="/static/icons/Right Arrow.svg" alt="arrow icon" width="24">
+                        <button type="submit" class="submit-button">Login</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 {% endif %}
 {% endblock %}

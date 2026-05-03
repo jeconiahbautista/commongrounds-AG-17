@@ -2,61 +2,199 @@
     box-sizing: border-box;
 }
 
+:root {
+    --brand-white: rgb(233, 233, 233);
+    --gradient-background: linear-gradient(rgb(20, 20, 20), rgb(44, 44, 44));
+}
+
+html,
 body {
-    margin: 0px;
-    padding: 0px;
-    color: rgb(36, 36, 36);
-    font-family: "Roboto", sans-serif;
+    height: 100%;
+    margin: 0;
+    background: var(--gradient-background);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    color: var(--brand-white);
+    font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 400;
     font-style: normal;
-    font-variation-settings:
-        "wdth" 100;
+}
+
+.navigation-bar {
+    padding: 36px;
+}
+
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+}
+
+.logo {
+    font-weight: 100;
+}
+
+.nav-buttons-wrapper {
+    display: flex;
+    gap: 28px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.nav-link {
+    color: var(--brand-white);
+    font-weight: 300;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.nav-link:hover {
+    opacity: 0.7;
+}
+
+.main {
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.login-block {
+    display: block;
+    max-width: 520px;
+    margin-top: 90px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 0px;
+    float: none;
+    clear: none;
+    place-content: stretch;
+    grid-auto-columns: 1fr;
+    gap: 0px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    aspect-ratio: auto;
+    text-align: left;
+    object-fit: fill;
+    object-position: 50% 50%;
+}
+
+.login-links {
+    color: var(--brand-white);
+    text-decoration: none;
+}
+
+.login-heading {
+    margin: 0px;
+    font-size: 64px;
+    padding-bottom: 10px;
+}
+
+.login-details {
+    border-radius: 32px;
+    background: linear-gradient(rgb(18, 18, 18), rgb(44, 44, 44));
+}
+
+.form-block {
+    display: block;
+    margin-bottom: 0px;
+    padding: 8px 24px 24px;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+}
+
+.forms {
+    padding-left: 0px;
+}
+
+.login-label {
+    margin-top: 20px;
+    padding-top: 0px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.login-field {
+    color: var(--brand-white);
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-bottom-color: var(--brand-white);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-radius: 1px;
+    background-color: rgba(255, 255, 255, 0);
+    text-decoration: none;
+}
+
+.login-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.submit-block {
+    display: flex;
+    align-items: stretch;
+    gap: 0px;
+    background-color: rgba(56, 152, 236, 0);
+}
+
+.submit-button {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: 18px;
+    color: var(--brand-white);
+    border-style: hidden;
+    background-color: rgba(56, 152, 236, 0);
+    line-height: normal;
+    cursor: pointer;
+}
+
+.welcome-block {
+    margin-top: 250px;
+    align-items: center;
+    justify-items: center;
+}
+
+.welcome-heading {
+    font-size: 64px;
+}
+
+.logout-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
 }
 
 footer {
+    color: var(--brand-white);
     text-align: center;
 }
 
-header {
-    padding: 15px;
-    background: #1c2c26;
-
-}
-
-header ul {
-    list-style: none;
-    display: flex;
-    padding: 0px;
-    gap: 30px;
-    text-align: center;
-}
-
-header a,
-footer a {
-    text-decoration: none;
-    color: white;
-}
-
-header a:hover {
-    text-decoration: underline;
-}
-
-header a:active {
-    font-weight: bold;
-}
-
-h1,
-h2 {
-    text-align: center;
-}
-
-ul {
-    list-style: none;
-    margin: 0px;
-    padding: 0px 15px 25px;
-    align-items: center;
-}
 
 .else-main-content p {
     text-align: center;
