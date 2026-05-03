@@ -5,19 +5,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'global/css/styles.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
     <title> Common Grounds </title>
-    <style></style>
-    {% block head %}{% endblock %}
+    {% block app_style %}{% endblock %}
 </head>
 
 <body>
-    <div class="navigation-bar">
+    <header>
         <div class="nav-wrapper">
             <p class="logo">GCXVII</p>
             <div class="nav-buttons-wrapper">
@@ -35,15 +34,16 @@
                 {% endif %}
             </div>
         </div>
-    </div>
-    <div class="main">
+    </header>
+    <main>
         {% block body %}{% endblock %}
-    </div>
+    </main>
     {% block scripts %}{% endblock %}
     <footer>
         <p>&copy; Common Grounds 2026</p>
         {% block footer %}{% endblock %}
     </footer>
+    {% block background %}{% endblock %}
 </body>
 
 </html>
