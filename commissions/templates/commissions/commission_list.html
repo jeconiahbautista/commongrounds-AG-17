@@ -1,65 +1,97 @@
-{% extends 'base.html' %}
+{% extends 'commissions/base_commission.html' %}
 {% load static %}
 
 {% block body %}
 
-<h1>Commission Requests List</h1>
+<div class="heading-block">
+    <div class="header-title">
+        <h1>Commissions</h1>
+    </div>
+    {% if user.is_authenticated and user.profile.role == "Commission Maker" %}
+        <div>
+            <a class="nav-link" href="{% url 'commissions:request-add' %}"><u>Create Commission</u></a>
+        </div>
+    {% endif %}
+</div>
 
-{% if user.is_authenticated and user.profile.role == "Commission Maker" %}
-    <div>
-        <a href="{% url 'commissions:request-add' %}">+ Create Commission</a>
+{% if user.is_authenticated %}
+    <div class="commission-block">
+
+        <div class="commission-header">
+            <h2>Your Created Commissions</h2>
+        </div>
+
+        {% if created_commissions %}
+            <div class="commissions">
+                {% for commission in created_commissions %}
+                    <div class="commission-card commission-card-style">
+                        <div class="headline">{{ commission.title }}</div>
+                        <p><em>{{ commission.type.name }}</em></p>
+                        <p>Status: {{ commission.get_status_display }}</p>
+                        <p>{{ commission.description|truncatechars:150 }}</p>
+                        <div class="button-placement">
+                            <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data-container commission-card-style">
+                <p class="line-style">You have no created commissions.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="commission-block">
+        <div class="commission-header">
+            <h2>Commissions You Applied To</h2>
+        </div> 
+        {% if applied_commissions %}
+            <div class="commissions">
+                {% for commission in applied_commissions %}
+                    <div class="commission-card commission-card-style">
+                        <div class="headline">{{ commission.title }}</div>
+                        <p><em>{{ commission.type.name }}</em></p>
+                        <p>Status: {{ commission.get_status_display }}</p>
+                        <p>{{ commission.description|truncatechars:150 }}</p>
+                        <div class="button-placement">
+                            <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data-container commission-card-style">
+                <p class="line-style">You have not applied to any commission.</p>
+            </div>
+        {% endif %}
     </div>
 {% endif %}
 
-{% if user.is_authenticated %}
+<div class="commission-block">
+    <div class="commission-header">
+        <h2>All Commissions</h2>
+    </div>
 
-    {% if created_commissions %}
-        <h2>Your Created Commissions</h2>
-        <div class="main-content">
-            {% for commission in created_commissions %}
-                <div class="card">
-                    <h3>{{ commission.title }}</h3>
-                    <p><strong>Type:</strong> {{ commission.type.name }}</p>
-                    <p>{{ commission.description|truncatechars:30 }}</p>
-                    <a href="{{ commission.get_absolute_url }}">View Details</a>
+    {% if all_commissions %}
+    <div class="commissions">
+        {% for commission in all_commissions %}
+            <div class="commission-card commission-card-style">
+                <div class="headline">{{ commission.title }}</div>
+                <p><em>{{ commission.type.name }}</em></p>
+                <p>Status: {{ commission.get_status_display }}</p>
+                <p>{{ commission.description|truncatechars:150 }}</p>
+                <div class="button-placement">
+                    <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-data-container commission-card-style">
+        <p class="line-style">No other commissions available.</p>
+    </div>
     {% endif %}
-
-    {% if applied_commissions %}
-        <h2>Commissions You Applied To</h2>
-        <div class="main-content">
-            {% for commission in applied_commissions %}
-                <div class="card">
-                    <h3>{{ commission.title }}</h3>
-                    <p><strong>Type:</strong> {{ commission.type.name }}</p>
-                    <p>{{ commission.description|truncatechars:30 }}</p>
-                    <a href="{{ commission.get_absolute_url }}">View Details</a>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-{% endif %}
-
-<h2>All Commissions</h2>
-
-{% if all_commissions %}
-<div class="main-content">
-    {% for commission in all_commissions %}
-        <div class="card">
-            <h3>{{ commission.title }}</h3>
-            <p><strong>Type:</strong> {{ commission.type.name }}</p>
-            <p>{{ commission.description|truncatechars:30 }}</p>
-            <a href="{{ commission.get_absolute_url }}">View Details</a>
-        </div>
-    {% endfor %}
 </div>
-{% else %}
-<div class="else-main-content">
-    <p><em>No other commissions available.</em></p>
-</div>
-{% endif %}
 
 {% endblock %}

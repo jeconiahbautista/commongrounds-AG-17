@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'commissions/base_commission.html' %}
 {% load static %}
 
 {% block body %}
@@ -6,96 +6,129 @@
 {% if messages %}
 {% for message in messages %}
 {% if "commission_created" in message.tags %}
-<div class="alert success">
-    You have successfully created commission: {{ message }}
+<div class="no-data-container commission-card-style alert success">
+    <p class="line-style"> You have successfully created commission: {{ message }}</p>
 </div>
 {% elif "commission_updated" in message.tags %}
-<div class="alert success">
-    You have successfully updated commission: {{ message }}
+<div class="no-data-container commission-card-style alert success">
+    <p class="line-style"> You have successfully updated commission: {{ message }}</p>
 </div>
 {% elif "job_applied" in message.tags %}
-<div class="alert success">
-    You have succefully applied for the role {{ message }}
+<div class="no-data-container commission-card-style alert success">
+    <p class="line-style"> You have succefully applied for the role {{ message }}</p>
 </div>
 {% elif "application_accepted" in message.tags %}
-<div class="alert success">
-    You haev accepted {{ message }} for the role
+<div class="no-data-container commission-card-style alert success">
+    <p class="line-style"> You have accepted {{ message }} for the role</p>
 </div>
 {% elif "application_rejected" in message.tags %}
-<div class="alert success">
-    You have rejected {{ message }} for the role
+<div class="no-data-container commission-card-style alert success">
+    <p class="line-style"> You have rejected {{ message }} for the role</p>
 </div>
 {% endif %}
 {% endfor %}
 {% endif %}
 
-<div class="container">
-    <h1>{{ commission.title }}</h1>
-
-    <div class="box"><strong>Type:</strong> {{ commission.type.name|default:"No Type" }}</div>
-    <div class="box"><strong>Description:</strong> {{ commission.description }}</div>
-    <div class="box"><strong>People Required:</strong> {{ commission.people_required }}</div>
-    <div class="box"><strong>Status:</strong> {{ commission.get_status_display }}</div>
-    <div class="box"><strong>Created:</strong> {{ commission.created_on }}</div>
-    <div class="box"><strong>Updated:</strong> {{ commission.updated_on }}</div>
-
-    <div class="box"><strong>Total Manpower Required:</strong> {{ total_manpower }}</div>
-    <div class="box"><strong>Open Manpower:</strong> {{ total_open_manpower }}</div>
-
-    {% if is_owner %}
-    <div class="box">
-        <a href="{% url 'commissions:request-edit' commission.pk %}">Edit Commission</a>
+<div class="heading-block">
+    <div>
+        <a class="nav-link" href="{% url 'commissions:request-list' %}"><u>Return to Commissions</u></a>
     </div>
-    {% endif %}
+</div>
 
-    <h2>Jobs Needed</h2>
+<div class="commission-detail">
+    <div class="commission-detail-block">
+        <div class="light-commission-card light-style">
+            <div class="header-title"> <h1>{{ commission.title }}</h1> </div>
+            <h3><em>{{ commission.type.name|default:"No Type" }}</em></h3>
+        </div>
+        
+        <div class="no-data-container commission-card-style">
+                <p class="line-style">Status: {{ commission.get_status_display }}</p>
+        </div>
 
-    {% if job_data %}
-    {% for item in job_data %}
-    <div class="box">
-        <p><strong>Role:</strong> {{ item.job.role }}</p>
-        <p><strong>Manpower Required:</strong> {{ item.job.manpower_required }}</p>
-        <p><strong>Status:</strong> {{ item.job.get_status_display }}</p>
-        <p><strong>Accepted Applications:</strong> {{ item.accepted }}</p>
-        <p><strong>Open Slots:</strong> {{ item.open_slots }}</p>
+        <div class="no-data-container commission-card-style">
+                <p class="line-style">Created On: {{ commission.created_on }}</p>
+        </div>
 
-        {% if user.is_authenticated %}
-        {% if item.can_apply %}
-        <a href="{% url 'commissions:job-apply' item.job.pk %}">Apply to Job</a>
-        {% elif item.already_applied %}
-        <button disabled>Already Applied</button>
-        {% else %}
-        <button disabled>Apply to Job</button>
-        {% endif %}
-        {% endif %}
+        <div class="no-data-container commission-card-style">
+                <p class="line-style">Last Updated On: {{ commission.updated_on }}</p>
+        </div>
+
+        <div class="no-data-container commission-card-style">
+                <p class="line-style">Total Manpower Needed: {{ total_manpower }}</p>
+        </div>
+
+        <div class="no-data-container commission-card-style">
+                <p class="line-style">Open Manpower: {{ total_open_manpower }}</p>
+        </div>
 
         {% if is_owner %}
-        <h4>Applications</h4>
-        {% if item.applications %}
-        <ul>
-            {% for application in item.applications %}
-            <li>
-                {{ application.applicant.display_name }} - {{ application.get_status_display }}
+                <a class="nav-link" href="{% url 'commissions:request-edit' commission.pk %}"><u>Edit Commission</u></a>
+        {% endif %}
+    </div>
 
-                {% if application.status == "0" %}
-                <a href="{% url 'commissions:application-accept' application.pk %}">Accept</a>
-                <a href="{% url 'commissions:application-reject' application.pk %}">Reject</a>
+    <div class="detail-column2">
+        <div class="description commission-card-style">
+                    <p class="line-style">{{ commission.description }}</p>
+        </div>
+
+        <div class="job-block">
+            <div class="headline">Jobs Needed</div>
+
+            {% if job_data %}
+            <div class="jobs">
+                {% for item in job_data %}
+                    <div class="commission-card commission-card-style">
+                        <div class="headline">{{ item.job.role }}</div>
+                        <p>Status: {{ item.job.get_status_display }}</p>
+                        <p>Manpower Required: {{ item.job.manpower_required }}</p>
+                        <p>Accepted Applicants: {{ item.accepted }}</p>
+                        <p>Open Slots:{{ item.open_slots }}</p>{% if is_owner %}
+
+                        {% if item.applications %}
+                            <p>Applicants:</p>
+                            {% for application in item.applications %}
+                                <div class="applicant">
+                                    <p> {{ application.applicant.display_name }} </p>
+
+                                    {% if application.status == "0" %}
+                                    <div class="accept-reject">
+                                        <a class="nav-link" href="{% url 'commissions:application-accept' application.pk %}"><u>Accept</u></a>
+                                        <a class="nav-link" href="{% url 'commissions:application-reject' application.pk %}"><u>Reject</u></a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p><em> No applications yet.</em></p>
+                        {% endif %}
+
+                        {% if user.is_authenticated %}
+                            {% if item.can_apply %}
+                                <div class="button-placement">
+                                    <a class="nav-link button-border" href="{% url 'commissions:job-apply' item.job.pk %}">Apply to Job</a>
+                                </div>
+                            {% elif item.already_applied %}
+                                <div class="button-placement">
+                                    <button class="button-border" disabled>Already Applied</button>
+                                </div>
+                            {% else %}
+                                <div class="button-placement">
+                                    <button class="button-border" disabled>Apply to Job</button>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                {% else %}
+                    <div class="no-data-container commission-card-style">
+                        <p class="line-style"> No jobs listed for this commission yet. </p>
+                    </div>
                 {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No applications yet.</p>
-        {% endif %}
-        {% endif %}
+            </div>
+        </div>
     </div>
-    {% endfor %}
-    {% else %}
-    <div class="box">No jobs listed for this commission yet.</div>
-    {% endif %}
-
-    <div class="box">
-        <a href="{% url 'commissions:request-list' %}">Return to Commissions List</a>
-    </div>
+    
 </div>
 {% endblock %}
