@@ -9,7 +9,14 @@ class CommissionForm(forms.ModelForm):
         model = Commission
         fields = ["type", "title", "description", "people_required", "status"]
         widgets = {
-            "description": forms.Textarea(attrs={"rows": 4}),
+            
+            "title": forms.TextInput(attrs={
+                "placeholder": "Enter commission title"
+            }),
+            "description": forms.Textarea(attrs={
+                "rows": 4,
+                "placeholder": "Describe the commission..."
+            }),
         }
 
 

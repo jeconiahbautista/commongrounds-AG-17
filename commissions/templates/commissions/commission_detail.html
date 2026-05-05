@@ -39,7 +39,7 @@
     <div class="commission-detail-block">
         <div class="light-commission-card light-style">
             <div class="header-title"> <h1>{{ commission.title }}</h1> </div>
-            <h3><em>{{ commission.type.name|default:"No Type" }}</em></h3>
+            <h3>{{ commission.type.name|default:"No Type" }}</h3>
         </div>
         
         <div class="no-data-container commission-card-style">
@@ -91,12 +91,15 @@
                                 <div class="applicant">
                                     <p> {{ application.applicant.display_name }} </p>
 
-                                    {% if application.status == "0" %}
                                     <div class="accept-reject">
-                                        <a class="nav-link" href="{% url 'commissions:application-accept' application.pk %}"><u>Accept</u></a>
-                                        <a class="nav-link" href="{% url 'commissions:application-reject' application.pk %}"><u>Reject</u></a>
+                                        {% if application.status == "0" %}
+                                            <a class="nav-link" href="{% url 'commissions:application-accept' application.pk %}"><u>Accept</u></a>
+                                            <a class="nav-link" href="{% url 'commissions:application-reject' application.pk %}"><u>Reject</u></a>
+                                        {% else %}
+                                            <p><em>{{ application.get_status_display }} </em></p>
+                                        {% endif %}
                                     </div>
-                                    {% endif %}
+                                    
                                 </div>
                             {% endfor %}
                         {% else %}
