@@ -1,8 +1,50 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block app_style %}
+<link rel="stylesheet" href="{% static 'accounts/css/styles.css' %}">
+{% endblock %}
+
 {% block body %}
 <div class="welcome-block">
     <h1 class="welcome-heading">Welcome, {{ user.username }}!</h1>
+</div>
+{% endblock %}
+
+{% block background %}
+<div class="wave-container">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1071" height="491" viewBox="0 0 1071 491" fill="none">
+        <path class="wave3" d="M700.5 171C498 118 248 342.5 0 0H1071V491C1018.2 435.61 903 224 700.5 171Z"
+            fill="url(#paint0_linear_11_82)" />
+        <defs>
+            <linearGradient id="paint0_linear_11_82" x1="950.352" y1="120.122" x2="670.301" y2="574.148"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#121212" stop-opacity="0" />
+                <stop offset="1" stop-color="#2C2C2C" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1163" height="388" viewBox="0 0 1163 388" fill="none">
+        <path class="wave2" d="M613.863 161C372 161 86 284.5 0 388V0H1163C1135 115 855.725 161 613.863 161Z"
+            fill="url(#paint0_linear_11_81)" />
+        <defs>
+            <linearGradient id="paint0_linear_11_81" x1="396.057" y1="0" x2="396.057" y2="283.5"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#121212" stop-opacity="0" />
+                <stop offset="1" stop-color="#2C2C2C" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="605" viewBox="0 0 1920 605" fill="none">
+        <path class="wave1" d="M1069 229C708.006 147.441 227.5 289.5 0 605H1920V0C1844.76 230.946 1728.5 378 1069 229Z"
+            fill="url(#paint0_linear_11_80)" />
+        <defs>
+            <linearGradient id="paint0_linear_11_80" x1="925.333" y1="765.5" x2="1024.28" y2="9.78109"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#121212" />
+                <stop offset="1" stop-color="#2C2C2C" stop-opacity="0" />
+            </linearGradient>
+        </defs>
+    </svg>
 </div>
 {% endblock %}
