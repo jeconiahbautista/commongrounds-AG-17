@@ -1,6 +1,10 @@
 from django import forms
 from .models import Profile
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    UserCreationForm,
+    PasswordResetForm,
+)
 from django.contrib.auth.models import User
 
 
@@ -55,6 +59,17 @@ class CustomLoginForm(AuthenticationForm):
             attrs={
                 "class": "login-field",
                 "placeholder": "Enter your password",
+            }
+        )
+    )
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "class": "login-field",
+                "placeholder": "Enter your email",
             }
         )
     )

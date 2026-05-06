@@ -15,16 +15,16 @@
 </div>
 
 {% if user.is_authenticated %}
-    <div class="commission-block">
+    <div class="glass-block">
 
         <div class="commission-header">
             <h2>Your Created Commissions</h2>
         </div>
 
         {% if created_commissions %}
-            <div class="commissions">
+            <div class="glass-layout">
                 {% for commission in created_commissions %}
-                    <div class="commission-card commission-card-style">
+                    <div class="glass-card glass-style">
                         <div class="headline">{{ commission.title }}</div>
                         <p><em>{{ commission.type.name }}</em></p>
                         <p>Status: {{ commission.get_status_display }}</p>
@@ -36,20 +36,20 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="no-data-container commission-card-style">
-                <p class="line-style">You have no created commissions.</p>
+            <div class="no-data-container glass-style">
+                <p>You have no created commissions.</p>
             </div>
         {% endif %}
     </div>
 
-    <div class="commission-block">
+    <div class="glass-block">
         <div class="commission-header">
             <h2>Commissions You Applied To</h2>
         </div> 
         {% if applied_commissions %}
-            <div class="commissions">
+            <div class="glass-layout">
                 {% for commission in applied_commissions %}
-                    <div class="commission-card commission-card-style">
+                    <div class="glass-card glass-style">
                         <div class="headline">{{ commission.title }}</div>
                         <p><em>{{ commission.type.name }}</em></p>
                         <p>Status: {{ commission.get_status_display }}</p>
@@ -61,22 +61,22 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="no-data-container commission-card-style">
-                <p class="line-style">You have not applied to any commission.</p>
+            <div class="no-data-container glass-style">
+                <p>You have not applied to any commission.</p>
             </div>
         {% endif %}
     </div>
 {% endif %}
 
-<div class="commission-block">
+<div class="glass-block">
     <div class="commission-header">
         <h2>All Commissions</h2>
     </div>
 
     {% if all_commissions %}
-    <div class="commissions">
+    <div class="glass-layout">
         {% for commission in all_commissions %}
-            <div class="commission-card commission-card-style">
+            <div class="glass-card glass-style">
                 <div class="headline">{{ commission.title }}</div>
                 <p><em>{{ commission.type.name }}</em></p>
                 <p>Status: {{ commission.get_status_display }}</p>
@@ -88,8 +88,8 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="no-data-container commission-card-style">
-        <p class="line-style">No other commissions available.</p>
+    <div class="no-data-container glass-style">
+        <p>No other commissions available.</p>
     </div>
     {% endif %}
 </div>

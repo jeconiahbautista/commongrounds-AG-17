@@ -6,24 +6,24 @@
 {% if messages %}
 {% for message in messages %}
 {% if "commission_created" in message.tags %}
-<div class="no-data-container commission-card-style alert success">
-    <p class="line-style"> You have successfully created commission: {{ message }}</p>
+<div class="no-data-container glass-style alert success">
+    <p> You have successfully created commission: {{ message }}</p>
 </div>
 {% elif "commission_updated" in message.tags %}
-<div class="no-data-container commission-card-style alert success">
-    <p class="line-style"> You have successfully updated commission: {{ message }}</p>
+<div class="no-data-container glass-style alert success">
+    <p> You have successfully updated commission: {{ message }}</p>
 </div>
 {% elif "job_applied" in message.tags %}
-<div class="no-data-container commission-card-style alert success">
-    <p class="line-style"> You have succefully applied for the role {{ message }}</p>
+<div class="no-data-container glass-style alert success">
+    <p> You have succefully applied for the role {{ message }}</p>
 </div>
 {% elif "application_accepted" in message.tags %}
-<div class="no-data-container commission-card-style alert success">
-    <p class="line-style"> You have accepted {{ message }} for the role</p>
+<div class="no-data-container glass-style alert success">
+    <p> You have accepted {{ message }} for the role</p>
 </div>
 {% elif "application_rejected" in message.tags %}
-<div class="no-data-container commission-card-style alert success">
-    <p class="line-style"> You have rejected {{ message }} for the role</p>
+<div class="no-data-container glass-style alert success">
+    <p> You have rejected {{ message }} for the role</p>
 </div>
 {% endif %}
 {% endfor %}
@@ -37,29 +37,29 @@
 
 <div class="commission-detail">
     <div class="commission-detail-block">
-        <div class="light-commission-card light-style">
+        <div class="light-commission-card glass-style">
             <div class="header-title"> <h1>{{ commission.title }}</h1> </div>
             <h3>{{ commission.type.name|default:"No Type" }}</h3>
         </div>
         
-        <div class="no-data-container commission-card-style">
-                <p class="line-style">Status: {{ commission.get_status_display }}</p>
+        <div class="no-data-container glass-style">
+                <p>Status: {{ commission.get_status_display }}</p>
         </div>
 
-        <div class="no-data-container commission-card-style">
-                <p class="line-style">Created On: {{ commission.created_on }}</p>
+        <div class="no-data-container glass-style">
+                <p>Created On: {{ commission.created_on }}</p>
         </div>
 
-        <div class="no-data-container commission-card-style">
-                <p class="line-style">Last Updated On: {{ commission.updated_on }}</p>
+        <div class="no-data-container glass-style">
+                <p>Last Updated On: {{ commission.updated_on }}</p>
         </div>
 
-        <div class="no-data-container commission-card-style">
-                <p class="line-style">Total Manpower Needed: {{ total_manpower }}</p>
+        <div class="no-data-container glass-style">
+                <p>Total Manpower Needed: {{ total_manpower }}</p>
         </div>
 
-        <div class="no-data-container commission-card-style">
-                <p class="line-style">Open Manpower: {{ total_open_manpower }}</p>
+        <div class="no-data-container glass-style">
+                <p>Open Manpower: {{ total_open_manpower }}</p>
         </div>
 
         {% if is_owner %}
@@ -68,7 +68,7 @@
     </div>
 
     <div class="detail-column2">
-        <div class="description commission-card-style">
+        <div class="description glass-style">
                     <p class="line-style">{{ commission.description }}</p>
         </div>
 
@@ -78,7 +78,7 @@
             {% if job_data %}
             <div class="jobs">
                 {% for item in job_data %}
-                    <div class="commission-card commission-card-style">
+                    <div class="glass-card glass-style">
                         <div class="headline">{{ item.job.role }}</div>
                         <p>Status: {{ item.job.get_status_display }}</p>
                         <p>Manpower Required: {{ item.job.manpower_required }}</p>
@@ -125,8 +125,8 @@
                     </div>
                 {% endfor %}
                 {% else %}
-                    <div class="no-data-container commission-card-style">
-                        <p class="line-style"> No jobs listed for this commission yet. </p>
+                    <div class="no-data-container glass-style">
+                        <p> No jobs listed for this commission yet. </p>
                     </div>
                 {% endif %}
             </div>

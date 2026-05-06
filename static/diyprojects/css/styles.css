@@ -1,0 +1,30 @@
+:root {
+    --gradient-background: linear-gradient(rgb(26, 26, 26), rgb(2, 49, 0));
+}
+
+.navigation-bar {
+    padding: 36px 36px 0;
+}
+
+.main-container {
+    display: flex;
+}
+
+.app-header {
+    font-size: 64px;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.add-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.add-text {
+    text-decoration: none;
+    color: var(--brand-white);
+    font-size: 20px;
+}

@@ -13,7 +13,7 @@
     <form method="post">
         {% csrf_token %}
         <div class="commission-detail">
-            <div class="form-container form-style">
+            <div class="form-container glass-style">
 
                 {{ form.non_field_errors }}
 
@@ -48,7 +48,7 @@
                 {{ job_formset.management_form }}
 
                 {% for job_form in job_formset %}
-                    <div class="form-container form-style">
+                    <div class="form-container glass-style">
                         {{ job_form.non_field_errors }}
                         {{ job_form.id }}
 
