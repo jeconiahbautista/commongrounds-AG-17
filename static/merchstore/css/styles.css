@@ -4,8 +4,11 @@
     box-sizing: border-box;
 }
 
-body.merchstore-page .navigation-bar {
-    background: transparent;
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;       
+    width: 100%
 }
 
 .products-list {
@@ -37,6 +40,11 @@ body.merchstore-page .navigation-bar {
     min-height: 45px;
     gap: 8px;
     margin-left: 20px
+}
+
+a {
+    text-decoration: none;
+    color: white;
 }
 
 .products-list h2 {
@@ -94,8 +102,23 @@ body.merchstore-page .navigation-bar {
 }
 
 
+.product-detail {
+    background: transparent;
+    min-height: 100vh;
+    padding: 20px;
+    z-index: 4;
+}
 
+.product-detail .container {
+    margin: 20px;
+}
 
+.product-detail .box {
+    background-color: rgba(203, 147, 75, 0.20);
+    padding: 15px;
+    margin: 15px;
+    border-radius: 15px;
+}
 
 
 
@@ -121,7 +144,6 @@ body.merchstore-page .navigation-bar {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
     overflow: hidden;
     line-height: 0;
     z-index: 0;
@@ -133,13 +155,13 @@ body.merchstore-page .navigation-bar {
 }
 
 .wave-container svg:nth-child(1) {
-    z-index: 2;
+    z-index: 1;
     top: 0;
     right: 0;
 }
 
 .wave-container svg:nth-child(2) {
-    z-index: 1;
+    z-index: 2;
     top: 0;
     left: 0;
 }
@@ -150,16 +172,16 @@ body.merchstore-page .navigation-bar {
     left: 0;
 }
 
-.wave1 {
-    animation: morph1 30s ease-in-out infinite;
+.wave3 {
+    animation: morph3 30s ease-in-out infinite;
 }
 
 .wave2 {
     animation: morph2 30s ease-in-out infinite;
 }
 
-.wave3 {
-    animation: morph3 30s ease-in-out infinite;
+.wave1 {
+    animation: morph1 30s ease-in-out infinite;
 }
 
 @keyframes morph1 {
