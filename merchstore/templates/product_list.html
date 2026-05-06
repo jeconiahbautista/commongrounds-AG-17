@@ -2,88 +2,107 @@
 {% load static %}
 
 {% block app_style %}
-<link rel="stylesheet" href="{% static 'merchstore/css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'merchstore/css/merchstore.css' %}">
 {% endblock %}
 
 {% block body %}
-<div class="products-list">
-    <div class="header-row">
 
-        <h1>Merchandise Store</h1>
+    <div class="heading-block">
+        <div class="heading-title">
+            <h1>Merchandise Store</h1>
+        </div>
 
         {% if user.is_authenticated %}
-            <div class=subheader-row>
-                <a href="{% url 'merchstore:product_create' %}">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Create New Product</span>
-                <a href="{% url 'merchstore:cart' %}"> 
+            <div class="nav">
+                {% if user.profile.role == "Market Seller" %}
+                    <a class = "nav-link" href="{% url 'merchstore:product_create' %}">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Create New Product</span>
+                    
+                    <a class = "nav-link" href="{% url 'merchstore:transactions' %}">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>Transactions</span>
+                {% endif %}
+                
+                <a class = "nav-link" href="{% url 'merchstore:cart' %}"> 
                     <i class="fa-solid fa-cart-arrow-down"></i>
                     <span>Cart</span>
-                <a href="{% url 'merchstore:transactions' %}">
-                    <i class="fa-solid fa-receipt"></i>
-                    <span>Transactions</span>
-            <div>
+            </div>
         {% endif %}
     </div>
-    <div class="content">
-        {% if user.is_authenticated %}
-            <h2>Your Products</h2>
+
+
+    {% if user.is_authenticated %}
+        <div class="glass-block">
+
+            <div class="merchstore-header">
+                <h2>Your Products</h2>
+            </div>
+
             {% if user_products %}
-                <div class="main-content">
+                <div class="glass-layout">
                     {% for product in user_products %}
-                    <div class="card">
-                        <ul>
-                            <h3>{{ product.name }}</h3>
-                            <p><strong>Type:</strong> {{ product.product_type.name }}</p>
-                            <p>Php {{ product.price }}</p>
-                            <a href="{{ product.get_absolute_url }}">View Details</a>
-                        </ul>
+                    <div class="glass-card glass-style">
+                        <div class="headline">{{ product.name }}</div>
+                        <p><em>{{ product.product_type.name }}</em></p>
+                        <p>Php {{ product.price }}</p>
+                        <p>Status: {{ product.get_status_display }}</p>
+                        <div class="button-placement">
+                            <a class="nav-link-button-border" href="{{ product.get_absolute_url }}">View Details</a>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="else-main-content">
+                <div class="no-data-container glass-style">
                     <p><em>You have no products yet.</em></p>
                 </div>
             {% endif %}
-        {% endif %}
+        </div>
+    {% endif %}
 
-        <h2>All Products</h2>
+    <div class="glass-block">
+        <div class="merchstore-header">
+            <h2>All Products</h2>
+        </div>    
+    
         {% if products %}
-            <div class="main-content">
+            <div class="glass-layout">
                 {% for product in products %}
-                <div class="card">
-                    <ul>
-                        <h3>{{ product.name }}</h3>
-                        <p>Type: {{ product.product_type.name }}</p>
-                        <p>Price: Php {{ product.price }}</p>
-                        <a href="{{ product.get_absolute_url }}">View Details</a>
-                    </ul>
-                </div>
+                    <div class="glass-card glass-style">
+                        <div class="headline">{{ product.name }}</div>    
+                        <p><em>{{ product.product_type.name }}</em></p>
+                        <p>Php {{ product.price }}</p>
+                        <p>Status: {{ product.get_status_display }}</p>
+                        <div class="button-placement">
+                            <a class="nav-link-button-border" href="{{ product.get_absolute_url }}">View Details</a>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="else-main-content">
+            <div class="no-data-container glass-style">
                 <p><em>No products available.</em></p>
             </div>
         {% endif %}
     </div>
-</div>
 {% endblock %}
 
 {% block background %}
 <div class="wave-container">
     <svg xmlns="http://www.w3.org/2000/svg" width="1071" height="411" viewBox="0 0 1071 411" fill="none">
-        <path class="wave1" d="M687.5 158.5C485 57 365.5 365 0 0H1071V390C778 478.5 890 260 687.5 158.5Z" fill="url(#paint0_linear_160_60)"/>
+        <path class="wave3" d="M700.5 171C498 118 248 342.5 0 0H1071V491C1018.2 435.61 903 224 700.5 171Z" 
+            fill="url(#paint0_linear_204_490)"/>
         <defs>
-            <linearGradient id="paint0_linear_160_60" x1="950.352" y1="120.122" x2="670.301" y2="574.148" gradientUnits="userSpaceOnUse">
+            <linearGradient id="paint0_linear_204_490" x1="950.352" y1="120.122" x2="670.301" y2="574.148" gradientUnits="userSpaceOnUse">
                 <stop stop-color="#72350F" stop-opacity="0"/>
                 <stop offset="1" stop-color="#EC460D"/>
             </linearGradient>
         </defs>
     </svg>
     <svg xmlns="http://www.w3.org/2000/svg" width="1163" height="388" viewBox="0 0 1163 388" fill="none">
-        <path class="wave2" d="M613.863 161C327 327.5 192 62.5 0 388V0H1163C1024 29 900.725 -5.5 613.863 161Z" fill="url(#paint0_linear_160_59)"/>
+        <path class="wave2" d="M613.863 161C327 327.5 192 62.5 0 388V0H1163C1024 29 900.725 -5.5 613.863 161Z" 
+            fill="url(#paint0_linear_160_59)"/>
         <defs>
             <linearGradient id="paint0_linear_160_59" x1="396.057" y1="0" x2="396.057" y2="283.5" gradientUnits="userSpaceOnUse">
                 <stop stop-color="#FECB5F" stop-opacity="0"/>
@@ -91,8 +110,9 @@
             </linearGradient>
         </defs>
     </svg>
-    <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1493" viewBox="0 0 1920 1493" fill="none">
-        <path class="wave3" d="M1150.5 366.5C784.392 294.75 505 128 0 605V1725.5H1001.5H1920V605V0C1716 78.4999 1548.5 444.5 1150.5 366.5Z" fill="url(#paint0_linear_160_57)"/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="605" viewBox="0 0 1920 605" fill="none">
+        <path class="wave1" d="M1150.5 366.5C784.392 294.75 505 128 0 605V1725.5H1001.5H1920V605V0C1716 78.4999 1548.5 444.5 1150.5 366.5Z" 
+            fill="url(#paint0_linear_160_57)"/>
         <defs>
             <linearGradient id="paint0_linear_160_57" x1="925.333" y1="765.5" x2="1024.28" y2="9.78102" gradientUnits="userSpaceOnUse">
                 <stop stop-color="#A32121" stop-opacity="0"/>
