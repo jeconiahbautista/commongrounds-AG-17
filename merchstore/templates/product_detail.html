@@ -1,54 +1,77 @@
-{% extends 'base.html' %}
+{% extends 'base_merchstore.html' %}
 {% load static %}
 
 {% block body %}
-
-{% if messages %}
-{% for message in messages %}
-{% if "product_updated" in message.tags %}
-<div class="alert success">
-    You have successfully updated details of {{ message }}.
-</div>
-{% elif "product_created" in message.tags %}
-<div class="alert success">
-    You have successfully created the product: {{ message }}.
-</div>
-{% endif %}
-{% endfor %}
-{% endif %}
-
-<h1> {{ product.name }} </h1>
-
-<div class="container">
-    <div class="box"><strong>Price:</strong> Php {{ product.price }}</div>
-    <div class="box"><strong>Type:</strong> {{ product.product_type.name }}</div>
-    <div class="box"><strong>Description:</strong> {{ product.description }}</div>
-    <div class="box">
-        <a href="{% url 'merchstore:product_list' %}">Return to Product List</a>
-    </div>
-
-    {% if is_owner %}
-    <div class="box">
-        <a href="{% url 'merchstore:product_update' product.pk %}">Edit Product Details</a>
-    </div>
-    {% endif %}
-
-    <div class="box">
-        {% if can_buy %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p}}
-            <button type="submit">Buy</button>
-        </form>
-        {% else %}
-        <button disabled>
-            {% if product.stock == 0 %}
-            Product is out of stock. Sorry for the inconvenience.
-            {% else %}
-            Cannot Buy Your Own Product.
+    {% if messages %}
+        {% for message in messages %}
+            {% if "product_updated" in message.tags %}
+                <div class="no-data-container glass-style alert success">
+                    You have successfully updated details of {{ message }}.
+                </div>
+            {% elif "product_created" in message.tags %}
+                <div class="no-data-container glass-style alert success">
+                    You have successfully created the product: {{ message }}.
+                </div>
             {% endif %}
-        </button>
-        {% endif %}
+        {% endfor %}
+    {% endif %}
+    
+    <div class="heading-block">
+        <div>
+            <a class="nav-link" href="{% url 'merchstore:product_list' %}">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Return to Merchandise Store</span>
+            </a>
+        </div>
     </div>
-</div>
+
+    <div class="merchstore-detail">
+        <div class="merchstore-detail-block-left">
+            <div class="merchstore-detail-header">
+                <h1>{{ product.name }}</h1>
+                    {% if owner %}
+                    <div class="update">
+                        <a class="nav-link" href="{% url 'merchstore:product_update' product.pk %}">
+                            <i class="fa-solid fa-pencil"></i>
+                            <span>Edit Product Details</span>
+                        </a>
+                    </div>
+                    {% endif %}
+                
+            </div>
+            <h2><em>{{ product.product_type.name }}</em></h2>
+            PHP {{ product.price }}
+            <div class="description glass-style">
+                    <p class="line-style">{{ product.description }}</p>
+                    <p>Available Stock: {{ product.stock }}</p>
+                    <div class="merchstore-buy">
+                        {% if can_buy %}
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p}}
+                                <button type="submit">Buy</button>
+                            </form>
+                        {% else %}
+                            <button disabled>
+                                {% if product.stock == 0 %}
+                                Product is out of stock. Sorry for the inconvenience.
+                                {% else %}
+                                Cannot Buy Your Own Product.
+                                {% endif %}
+                            </button>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+
+        <div class="merchstore-detail-block-right">
+            {% if product.product_image %}
+                <img class= "product_image" src="{{ product.product_image.url }}" alt="Product Image" width="300">
+            {% else %}
+                <div class="no-data-container glass-style">
+                    <p><em>No available image.</em></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

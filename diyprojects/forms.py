@@ -8,6 +8,15 @@ class ProjectRatingForm(forms.ModelForm):
         fields = [
             "score",
         ]
+        widgets = {
+            "score": forms.NumberInput(
+                attrs={
+                    "class": "rating-field",
+                    "min": 1,
+                    "max": 5,
+                }
+            )
+        }
 
 
 class ProjectReviewForm(forms.ModelForm):
@@ -20,8 +29,9 @@ class ProjectReviewForm(forms.ModelForm):
         widgets = {
             "comment": forms.Textarea(
                 attrs={
+                    "class": "review-field",
                     "placeholder": "Share your experience with this project...",
-                    "rows": 3,
+                    "rows": 4,
                 }
             ),
         }
@@ -37,4 +47,38 @@ class ProjectForm(forms.ModelForm):
             "materials",
             "steps",
         ]
+        widgets = {
+            "title": forms.TextInput(
+                attrs={
+                    "class": "form-title-field",
+                    "placeholder": "Enter project title",
+                }
+            ),
+            "category": forms.Select(
+                attrs={
+                    "class": "form-category-select",
+                }
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-text-area",
+                    "rows": 7,
+                    "placeholder": "Describe your project",
+                }
+            ),
+            "materials": forms.Textarea(
+                attrs={
+                    "class": "form-text-area",
+                    "rows": 7,
+                    "placeholder": "List down the materials needed",
+                }
+            ),
+            "steps": forms.Textarea(
+                attrs={
+                    "class": "form-text-area",
+                    "rows": 7,
+                    "placeholder": "List the steps",
+                }
+            ),
+        }
         exclude = ["Project Creator"]

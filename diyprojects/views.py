@@ -73,8 +73,10 @@ def diyprojects_detail(request, pk):
     if ratings.exists():
         total = sum([r.score for r in ratings])
         average_rating = total / ratings.count()
+        percentage_rating = average_rating * 20
     else:
-        average_rating = None
+        average_rating = 0
+        percentage_rating = 0
 
     if request.user.is_authenticated:
         is_owner = project.creator == request.user.profile
@@ -161,6 +163,7 @@ def diyprojects_detail(request, pk):
     ctx = {
         "project": project,
         "average_rating": average_rating,
+        "percentage_rating": percentage_rating,
         "existing_rating": existing_rating,
         "rate_form": rate_form,
         "is_favorited": is_favorited,

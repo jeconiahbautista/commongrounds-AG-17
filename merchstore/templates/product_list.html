@@ -1,60 +1,87 @@
-{% extends 'base.html' %}
+{% extends 'base_merchstore.html' %}
 {% load static %}
 
 {% block body %}
-<h1>Product List</h1>
 
-<div class="content">
+    <div class="heading-block">
+        <div class="heading-title">
+            <h1>Merchandise Store</h1>
+        </div>
+        <div class="subhead-nav">
+        {% if user.is_authenticated %}
+                
+                    <a class = "nav-link" href="{% url 'merchstore:product_create' %}">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Create New Product</span>
+                    </a>
+                {% if user.profile.role == "Market Seller" %}
+                {% endif %}
+                
+                <a class = "nav-link" href="{% url 'merchstore:transactions' %}">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Transactions</span>
+                </a>
+                <a class = "nav-link" href="{% url 'merchstore:cart' %}"> 
+                    <i class="fa-solid fa-cart-arrow-down"></i>
+                    <span>Cart</span>
+                </a>
+        {% endif %}
+        </div>
+    </div>
+
 
     {% if user.is_authenticated %}
-    <div class="add">
-        <a href="{% url 'merchstore:product_create' %}">Add a product here</a>
-    </div>
+        <div class="glass-block">
 
-    <h2>Your Products</h2>
-    {% if user_products %}
-    <div class="main-content">
-        {% for product in user_products %}
-        <div class="card">
-            <ul>
-                <li>
-                    <h2>{{ product.name }}</h2>
-                    <p><strong>Type:</strong> {{ product.product_type.name }}</p>
-                    <p>Php {{ product.price }}</p>
-                    <a href="{{ product.get_absolute_url }}">View Details</a>
-                </li>
-            </ul>
+            <div class="merchstore-header">
+                <h2>Your Products</h2>
+            </div>
+
+            {% if user_products %}
+                <div class="glass-layout">
+                    {% for product in user_products %}
+                        <div class="glass-card glass-style">
+                            <div class="headline">{{ product.name }}</div>
+                            <p><em>{{ product.product_type.name }}</em></p>
+                            <p>Php {{ product.price }}</p>
+                            <p>Status: {{ product.get_status_display }}</p>
+                            <div class="button-placement">
+                                <a class="nav-link-button-border" href="{{ product.get_absolute_url }}">View Details</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-data-container glass-style">
+                    <p><em>You have no products yet.</em></p>
+                </div>
+            {% endif %}
         </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="else-main-content">
-        <p><em>You have no products yet.</em></p>
-    </div>
-    {% endif %}
     {% endif %}
 
-    <h2>All Products</h2>
-    {% if products %}
-    <div class="main-content">
-        {% for product in products %}
-        <div class="card">
-            <ul>
-                <li>
-                    <h2>{{ product.name }}</h2>
-                    <p><strong>Type:</strong> {{ product.product_type.name }}</p>
-                    <p>Php {{ product.price }}</p>
-                    <a href="{{ product.get_absolute_url }}">View Details</a>
-                </li>
-            </ul>
-        </div>
-        {% endfor %}
+    <div class="glass-block">
+        <div class="merchstore-header">
+            <h2>All Products</h2>
+        </div>    
+    
+        {% if products %}
+            <div class="glass-layout">
+                {% for product in products %}
+                    <div class="glass-card glass-style">
+                        <div class="headline">{{ product.name }}</div>    
+                        <p><em>{{ product.product_type.name }}</em></p>
+                        <p>Php {{ product.price }}</p>
+                        <p>Status: {{ product.get_status_display }}</p>
+                        <div class="button-placement">
+                            <a class="nav-link-button-border" href="{{ product.get_absolute_url }}">View Details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data-container glass-style">
+                <p><em>No products available.</em></p>
+            </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="else-main-content">
-        <p><em>No products available.</em></p>
-    </div>
-    {% endif %}
-
-</div>
 {% endblock %}
