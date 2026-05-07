@@ -3,69 +3,70 @@
 
 {% block body %}
 
-<div class="heading-block">
-    <div class="header-title">
-        <h1>Commissions</h1>
-    </div>
+<div class="app-header">
+    <h1 class="app-header-text">Commissions</h1>
     {% if user.is_authenticated and user.profile.role == "Commission Maker" %}
-        <div class="add-commission-block add-button glass-style">
-            <a class="add-text" href="{% url 'commissions:request-add' %}">+ Create Commission</a>
+    <a href="/commissions/request/add" class="glass add-project-block">
+        <div class="add-button glass-style">
+            <img src="/static/global/img/add-icon.png" alt="add-icon" width="12" height="12">
+            <p class="add-text">Create Projects</p>
         </div>
+    </a>
     {% endif %}
 </div>
 
 {% if user.is_authenticated %}
-    <div class="glass-block">
+<div class="glass-block">
 
-        <div class="commission-header">
-            <h2>Your Created Commissions</h2>
+    <div class="commission-header">
+        <h2>Your Created Commissions</h2>
+    </div>
+
+    {% if created_commissions %}
+    <div class="glass-layout">
+        {% for commission in created_commissions %}
+        <div class="glass-card glass-style">
+            <div class="headline">{{ commission.title }}</div>
+            <p><em>{{ commission.type.name }}</em></p>
+            <p>Status: {{ commission.get_status_display }}</p>
+            <p>{{ commission.description|truncatechars:150 }}</p>
+            <div class="button-placement">
+                <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
+            </div>
         </div>
-
-        {% if created_commissions %}
-            <div class="glass-layout">
-                {% for commission in created_commissions %}
-                    <div class="glass-card glass-style">
-                        <div class="headline">{{ commission.title }}</div>
-                        <p><em>{{ commission.type.name }}</em></p>
-                        <p>Status: {{ commission.get_status_display }}</p>
-                        <p>{{ commission.description|truncatechars:150 }}</p>
-                        <div class="button-placement">
-                            <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="no-data-container glass-style">
-                <p>You have no created commissions.</p>
-            </div>
-        {% endif %}
+        {% endfor %}
     </div>
-
-    <div class="glass-block">
-        <div class="commission-header">
-            <h2>Commissions You Applied To</h2>
-        </div> 
-        {% if applied_commissions %}
-            <div class="glass-layout">
-                {% for commission in applied_commissions %}
-                    <div class="glass-card glass-style">
-                        <div class="headline">{{ commission.title }}</div>
-                        <p><em>{{ commission.type.name }}</em></p>
-                        <p>Status: {{ commission.get_status_display }}</p>
-                        <p>{{ commission.description|truncatechars:150 }}</p>
-                        <div class="button-placement">
-                            <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="no-data-container glass-style">
-                <p>You have not applied to any commission.</p>
-            </div>
-        {% endif %}
+    {% else %}
+    <div class="no-data-container glass-style">
+        <p>You have no created commissions.</p>
     </div>
+    {% endif %}
+</div>
+
+<div class="glass-block">
+    <div class="commission-header">
+        <h2>Commissions You Applied To</h2>
+    </div>
+    {% if applied_commissions %}
+    <div class="glass-layout">
+        {% for commission in applied_commissions %}
+        <div class="glass-card glass-style">
+            <div class="headline">{{ commission.title }}</div>
+            <p><em>{{ commission.type.name }}</em></p>
+            <p>Status: {{ commission.get_status_display }}</p>
+            <p>{{ commission.description|truncatechars:150 }}</p>
+            <div class="button-placement">
+                <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-data-container glass-style">
+        <p>You have not applied to any commission.</p>
+    </div>
+    {% endif %}
+</div>
 {% endif %}
 
 <div class="glass-block">
@@ -76,15 +77,15 @@
     {% if all_commissions %}
     <div class="glass-layout">
         {% for commission in all_commissions %}
-            <div class="glass-card glass-style">
-                <div class="headline">{{ commission.title }}</div>
-                <p><em>{{ commission.type.name }}</em></p>
-                <p>Status: {{ commission.get_status_display }}</p>
-                <p>{{ commission.description|truncatechars:150 }}</p>
-                <div class="button-placement">
-                    <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
-                </div>
+        <div class="glass-card glass-style">
+            <div class="headline">{{ commission.title }}</div>
+            <p><em>{{ commission.type.name }}</em></p>
+            <p>Status: {{ commission.get_status_display }}</p>
+            <p>{{ commission.description|truncatechars:150 }}</p>
+            <div class="button-placement">
+                <a class="nav-link button-border" href="{{ commission.get_absolute_url }}">View Details</a>
             </div>
+        </div>
         {% endfor %}
     </div>
     {% else %}
@@ -95,4 +96,3 @@
 </div>
 
 {% endblock %}
-

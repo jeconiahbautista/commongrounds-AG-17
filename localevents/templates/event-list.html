@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_localevents.html' %}
 {% load static %}
 
 {% block app_style %}
@@ -27,8 +27,8 @@
 
 <div class="app-header">
     <h1 class="app-header-text">Event List</h1>
-    {% if user.is_authenticated %}
-    <a href="/localevents/event/add" class="glass add-project-block">
+    {% if user.is_authenticated and user.profile.role == "Event Organizer" %}
+    <a href="/localevents/event/add" class="glass add-event-block">
         <div class="add-button">
             <img src="/static/global/img/add-icon.png" alt="add-icon" width="12" height="12">
             <p class="add-text">Create event</p>
@@ -123,42 +123,4 @@
     {% endif %}
 </div>
 
-{% endblock %}
-
-{% block background %}
-<div class="wave-container">
-    <svg xmlns="http://www.w3.org/2000/svg" width="1163" height="557" viewBox="0 0 1163 557" fill="none">
-        <path class="wave1" d="M455 228.5C138 248 74 453 -12 556.5L0 0H1163C1034.5 161 772 209 455 228.5Z"
-            fill="url(#paint0_linear_212_527)" />
-        <defs>
-            <linearGradient id="paint0_linear_212_527" x1="396.057" y1="0" x2="396.057" y2="283.5"
-                gradientUnits="userSpaceOnUse">
-                <stop stop-color="#332F7E" />
-                <stop offset="1" stop-color="#15274F" />
-            </linearGradient>
-        </defs>
-    </svg>
-    <svg xmlns="http://www.w3.org/2000/svg" width="1071" height="491" viewBox="0 0 1071 491" fill="none">
-        <path class="wave2" d="M700.5 171C407.5 202.5 287.5 417.5 0 0H1071V491C1021.5 354.5 993.5 139.5 700.5 171Z"
-            fill="url(#paint0_linear_212_528)" />
-        <defs>
-            <linearGradient id="paint0_linear_212_528" x1="950.352" y1="120.122" x2="670.301" y2="574.148"
-                gradientUnits="userSpaceOnUse">
-                <stop stop-color="#332F7E" />
-                <stop offset="1" stop-color="#15274F" />
-            </linearGradient>
-        </defs>
-    </svg>
-    <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="605" viewBox="0 0 1920 605" fill="none">
-        <path class="wave3" d="M1060.5 389C389.575 54.368 118.5 95.5 0 605H1920V0C1825 254 1464.5 590.5 1060.5 389Z"
-            fill="url(#paint0_linear_212_526)" />
-        <defs>
-            <linearGradient id="paint0_linear_212_526" x1="925.333" y1="765.5" x2="1024.28" y2="9.78109"
-                gradientUnits="userSpaceOnUse">
-                <stop stop-color="#332F7E" />
-                <stop offset="1" stop-color="#15274F" />
-            </linearGradient>
-        </defs>
-    </svg>
-</div>
 {% endblock %}

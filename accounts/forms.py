@@ -15,15 +15,14 @@ class ProfileUpdateForm(forms.ModelForm):
 
 
 class CustomUserCreationForm(UserCreationForm):
-
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
                 "class": "login-field",
                 "placeholder": "Enter a valid username",
-                }
-            )
+            }
         )
+    )
     role = forms.ChoiceField(
         choices=Profile.ROLE_CHOICES,
         widget=forms.Select(
@@ -48,21 +47,22 @@ class CustomUserCreationForm(UserCreationForm):
             }
         )
     )
-    
+
     class Meta:
         model = User
         fields = ["username", "role", "password1", "password2"]
 
-        def save(self, commit=True):
-            user = super().save(commit=True)
+    def save(self, commit=True):
+        user = super().save(commit=commit)
 
-            profile = user.profile
-            profile.display_name = user.username
-            profile.email_address = user.email
-            profile.role = self.cleaned_data["role"]
-            profile.save()
+        Profile.objects.create(
+            user=user,
+            display_name=user.username,
+            email_address=user.email,
+            role=self.cleaned_data["role"],
+        )
 
-            return user
+        return user
 
 
 class CustomLoginForm(AuthenticationForm):
