@@ -105,9 +105,7 @@ class ProjectRating(models.Model):
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="project_ratings"
     )
-    score = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(10)]
-    )
+    score = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
     def __str__(self):
         stars = ""
