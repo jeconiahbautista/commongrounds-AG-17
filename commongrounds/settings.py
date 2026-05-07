@@ -85,8 +85,8 @@ WSGI_APPLICATION = "commongrounds.wsgi.application"
 
 os.environ.setdefault("PGDATABASE", "railway")
 os.environ.setdefault("PGUSER", "postgres")
-os.environ.setdefault("PGPASSWORD", "ByZzsVVnCmiOpKblpGRwHeLJmJrmITDI")
-os.environ.setdefault("PGHOST", "postgres.railway.internal")
+os.environ.setdefault("PGPASSWORD", "owlOYRiTXoBcUAhvuwIMkyzkucdoiRjZ")
+os.environ.setdefault("PGHOST", "postgres-dg9.railway.internal")
 os.environ.setdefault("PGPORT", "5432")
 
 DATABASES = {
