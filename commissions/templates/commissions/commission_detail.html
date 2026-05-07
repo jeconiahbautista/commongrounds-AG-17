@@ -86,7 +86,8 @@
                         <p>Status: {{ item.job.get_status_display }}</p>
                         <p>Manpower Required: {{ item.job.manpower_required }}</p>
                         <p>Accepted Applicants: {{ item.accepted }}</p>
-                        <p>Open Slots:{{ item.open_slots }}</p>{% if is_owner %}
+                        <p>Open Slots:{{ item.open_slots }}</p>
+                        {% if is_owner %}
 
                         {% if item.applications %}
                             <p>Applicants:</p>
@@ -108,6 +109,7 @@
                         {% else %}
                             <p><em> No applications yet.</em></p>
                         {% endif %}
+                        {% endif %}
 
                         {% if user.is_authenticated %}
                             {% if item.can_apply %}
@@ -124,7 +126,7 @@
                                 </div>
                             {% endif %}
                         {% endif %}
-                        {% endif %}
+            
                     </div>
                 {% endfor %}
                 {% else %}

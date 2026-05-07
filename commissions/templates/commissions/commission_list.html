@@ -6,8 +6,8 @@
 <div class="app-header">
     <h1 class="app-header-text">Commissions</h1>
     {% if user.is_authenticated and user.profile.role == "Commission Maker" %}
-    <a href="/diyprojects/project/add" class="glass add-project-block">
-        <div class="add-button">
+    <a href="/commissions/request/add" class="glass add-project-block">
+        <div class="add-button glass-style">
             <img src="/static/global/img/add-icon.png" alt="add-icon" width="12" height="12">
             <p class="add-text">Create Projects</p>
         </div>

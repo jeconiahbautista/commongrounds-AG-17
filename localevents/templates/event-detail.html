@@ -72,6 +72,9 @@
                     {% csrf_token %}
                     <button type="submit">Cancel Signup</button>
                 </form>
+                {% elif user.profile.role == "Event Organizer" %}
+                    <p> You cannot sign up for your own event. </p>
+
                 {% elif is_authenticated %}
                 <form method="post" action="{% url 'localevents:event-detail-signup' event.pk %}">
                     {% csrf_token %}
