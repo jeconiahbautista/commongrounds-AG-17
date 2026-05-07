@@ -38,8 +38,8 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 33px;
-    padding: 0px 40px;
+    gap: 15px;
+    padding: 0px 17px;
     max-width: 600px;
     width: 100%;
 }
@@ -54,12 +54,38 @@ h3 {
     text-align: center;
 }
 
+.add-commission-block {
+    display: inline-block;
+    width: 180px;
+    height: 46px;
+    padding: 6px;
+    text-decoration: none;
+}
+.add-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background: var(--dark-pink)
+}
+.add-text {
+    margin: 0;
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--brand-white);
+}
+
 .commission-header {
     font-size: 24px;
     text-align: center;
 }
 
 .glass-layout .glass-style{
+    background: var(--dark-pink);
+}
+
+.jobs .glass-style {
     background: var(--dark-pink);
 }
 
@@ -102,6 +128,7 @@ h3 {
 
 .description {
     display: flex;
+    background: var(--dark-pink);
     width: 100%;
     padding: 43px 26px;
     flex-direction: column;
@@ -135,6 +162,10 @@ h3 {
     align-items: center;
     gap: 25px;
     align-self: stretch;
+}
+
+.no-data-container {
+    background: var(--dark-pink)
 }
 
 .applicant {

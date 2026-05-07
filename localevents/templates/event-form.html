@@ -7,6 +7,12 @@
 
 
 {% block body %}
+
+<div class="back-block">
+    <img src="/static/global/img/left-arrow.png" alt="arrow icon" width="24">
+    <a href="/localevents/events" class="back-link">Back</a>
+</div>
+
 <div class="create-header">
     {% if event %}
         <h1>Edit Event</h1>
@@ -24,7 +30,7 @@
             {{ form.title }}
 
             <div class="headline">{{ form.category.label }} </div> 
-            {{ form.category }}
+            <div class="dropdown container dropdown-status">{{ form.category }}</div>
 
             <div class="headline">{{ form.organizer.label }} </div> 
             {{ form.organizer }}
@@ -35,24 +41,24 @@
         </div>
         <div class="jobs-needed-block">
             <div class="form-container glass-style">
-                <div class="headline">{{ form.location.label }} </div> 
+                <div class="headline">{{ form.location.label }}</div> 
                 {{ form.location }}
 
-                <div class="headline">{{ form.start_time.label }} </div> 
+                <div class="headline">{{ form.start_time.label }}</div> 
                 {{ form.start_time }}
 
-                <div class="headline">{{ form.end_time.label }} </div> 
+                <div class="headline">{{ form.end_time.label }}</div> 
                 {{ form.end_time }}
 
-                <div class="headline">{{ form.event_capacity.label }} </div> 
+                <div class="headline">{{ form.event_capacity.label }}</div> 
                 {{ form.event_capacity }}
 
-                <div class="headline">{{ form.status.label }} </div> 
+                <div class="headline">{{ form.status.label }}</div> 
                 <div class="dropdown-status">{{ form.status }}</div>
             </div>
             <div class="form-container glass-style">
-                <div class="headline">{{ form.event_image.label }} </div> 
-                {{ form.event_image }}
+                <div class="headline">{{ form.event_image.label }}</div> 
+                <div class="event-image">{{ form.event_image }}</div>
             </div>
         </div>
     </div>
@@ -64,7 +70,6 @@
                 <u>Create Event</u>
              {% endif%}
         </button>
-        <a class="nav-link" href="{% url 'localevents:event-list' %}"><u>Back to Events</u></a>
     </div>
 </form>
 

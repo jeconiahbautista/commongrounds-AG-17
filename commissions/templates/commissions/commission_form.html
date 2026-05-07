@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block body %}
+    <div class="back-block">
+    <img src="/static/global/img/left-arrow.png" alt="arrow icon" width="24">
+    <a href="/commissions/requests" class="back-link">Back</a>
+    </div>
+
     <div class="create-header">
         {% if commission %}
             <h1>Edit Commission</h1>
@@ -82,7 +87,6 @@
         </div>
         <div class="save-back">
             <button type="submit" class="nav-link"><u>Save Commission</u></button>
-            <a class="nav-link" href="{% url 'commissions:request-list' %}"><u>Back to Commissions</u></a>
         </div>
     </form>
         
