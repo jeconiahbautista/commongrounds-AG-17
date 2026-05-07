@@ -17,15 +17,34 @@
     object-fit: cover;
 }
 
-.image-container.glass-style {
-    margin: 20px 115px 0 100px;
+.image-container {
+    max-width: 600px;          
+    width: 100%;               
+    margin: 0 auto;            
+    display: flex;             
+    justify-content: center;   
+    align-items: center;       
+    overflow: hidden;          
+    border-radius: 15px;       
+    padding: 10px;             
 }
 
+
 .image-container img.event_image {
+    width: 100%;               
+    max-width: 100%;          
+    height: auto;              
+    display: block;            
+    border-radius: 15px;       
+}
+
+.no-data-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 15px;
+    min-height: 200px;
+    text-align: center;
 }
 
 .localevents-detail {

@@ -15,7 +15,7 @@
                     You successfully edited {{ message }}.
                 </div>
             {% elif "event_cancelled" in message.tags %}
-                <div class="class="no-data-container glass-stylealert success">
+                <div class="class=no-data-container glass-style alert success">
                     You cancelled your signup for "{{ message }}".
                 </div>
             {% endif %}
@@ -29,7 +29,7 @@
         </a>
     </div>
 
-    <div class="image-container glass-style">
+    <div class="no-data-container glass-style">
         {% if event.event_image %}
             <img class= "event_image" src="{{ event.event_image.url }}" alt="Product Image" width="300">
         {% else %}  
