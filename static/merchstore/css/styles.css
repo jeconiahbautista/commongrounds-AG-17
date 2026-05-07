@@ -1,19 +1,7 @@
-/*Merchandise-General*/
 :root {
     --gradient-background: linear-gradient(180deg, #381C10 0%, #933A25 100%);
     --light-orange: rgba(203, 147, 75, 0.20);
     --gradient-table-background: linear-gradient(180deg, #933A25 0%, #D26613 100%);
-}
-
-
-html, body {
-    min-height: 100%;
-    margin: 0;
-    background: var(--gradient-background)
-}
-
-p {
-    margin: 5px 5px 0 0;
 }
 
 a {
@@ -51,18 +39,85 @@ h3 {
     align-items: flex-start;
     gap: 33px;
     padding: 0px 40px;
-    max-width: 600px;
     width: 100%;
 }
 
-.heading-block h1 {
-    margin: 0;
+.nav {
+    padding: 12px 24px;
 }
 
-.header-title {
+.app-header {
+    display: block;
+}
+
+.app-header-text {
+    margin: 0;
+    font-size: 80px;
+    font-weight: 600;
+}
+
+.subhead-nav {
+    display: flex;
+    gap: 16px;
+}
+
+.glass {
+    align-content: center;
+    background: rgba(255, 255, 255, .1);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, .1);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, .5);
+    border-right: 1px solid rgba(255, 255, 255, .2);
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+    backdrop-filter: blur(5px);
+}
+
+.section-header {
     font-size: 32px;
-    font-weight: 400;
+    font-weight: 300;
+}
+
+.project-list {
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.glass.card {
+    width: 335px;
+    height: 250px;
+}
+
+.card-wrap {
+    display: block;
+    padding: 0 24px;
+}
+
+.view-block {
+    display: flex;
+    justify-content: right;
+}
+
+p.else {
+    margin: 8px 0;
     text-align: center;
+    font-style: italic;
+    font-weight: 200;
+}
+
+.project-detail {
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--brand-white);
+    border: 1px var(--brand-white) solid;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
 }
 
 .merchstore-header {
@@ -119,11 +174,7 @@ h3 {
     justify-content: flex-end;
     width: 100%;
 }
- 
 
-
-
-/*Product Detail*/
 .merchstore-detail {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -135,7 +186,7 @@ h3 {
     display: flex;
     flex-direction: column;
     gap: 0;
-    padding-left: 100px; 
+    padding-left: 100px;
 }
 
 .merchstore-detail-header {
@@ -148,7 +199,7 @@ h3 {
     margin: 15px 0 10px 0;
 }
 
-.merchstore-detail-block-left h2{
+.merchstore-detail-block-left h2 {
     margin: 0 0 10px 0;
 }
 
@@ -157,30 +208,29 @@ h3 {
 }
 
 .merchstore-detail-block-right {
-    margin-top: 15px 100px 0 0;  
+    margin-top: 15px 100px 0 0;
 }
 
 .merchstore-detail-block-right {
-    display: flex;               
-    justify-content: center;    
-    align-items: center;       
-    width: 100%;                 
-    min-height: 200px;           
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 200px;
 }
 
-/* Image styling */
 .merchstore-detail-block-right img.product_image {
-    max-width: 100%;            
-    height: auto;                
-    display: block;    
-    border-radius: px;         
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: px;
 }
 
 
 .img.product_image {
     width: 90%;
     height: 90%;
-    object-fit: cover;       
+    object-fit: cover;
     border-radius: 15px;
 }
 
@@ -203,7 +253,7 @@ h3 {
     padding: 10px;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255,255,255,0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     color: white;
     outline: none;
 }
@@ -239,16 +289,13 @@ h3 {
 }
 
 .product-image {
-    width: 100%;          
-    max-width: 500px;     
+    width: 100%;
+    max-width: 500px;
     height: auto;
     border-radius: 16px;
     object-fit: cover;
 }
 
-
-
-/*Create/Update*/
 .create-update-header {
     font-size: 32px;
     font-weight: 400;
@@ -364,8 +411,6 @@ h3 {
     background-color: #e05500;
 }
 
-/*Cart*/
-
 .heading-block-section {
     display: flex;
     flex-direction: column;
@@ -410,13 +455,13 @@ h3 {
 
 /* Each buyer section */
 .buyer-group {
-    padding: 20px;             
+    padding: 20px;
     border-radius: 12px;
     box-sizing: border-box;
 
     background: var(--gradient-table-background);
     backdrop-filter: blur(10px);
-    margin:0 80px 0 80px;
+    margin: 0 80px 0 80px;
 }
 
 .buyer-name h2 {
@@ -464,16 +509,6 @@ tbody tr:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
-
-
-
-
-
-
-
-
-
-/*Background*/
 .wave-container {
     position: fixed;
     bottom: 0;

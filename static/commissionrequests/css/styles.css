@@ -4,7 +4,8 @@
     --light-pink: rgba(255, 116, 197, 0.20);
 }
 
-html, body {
+html,
+body {
     min-height: 100%;
     margin: 0;
     background: var(--gradient-background)
@@ -61,12 +62,14 @@ h3 {
     padding: 6px;
     text-decoration: none;
 }
+
 .add-button {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     background: var(--dark-pink)
 }
+
 .add-text {
     margin: 0;
     font-style: italic;
@@ -78,11 +81,16 @@ h3 {
 
 .commission-header {
     font-size: 24px;
-    text-align: center;
+    text-align: left;
 }
 
-.glass-layout .glass-style{
+.glass-layout .glass-style {
     background: var(--dark-pink);
+}
+
+.glass-layout p,
+.no-data-container p {
+    margin: 6px;
 }
 
 .jobs .glass-style {
@@ -216,7 +224,7 @@ h3 {
     width: 100%;
     font-family: Inter;
     font-size: 18px;
-    border-bottom: 2px solid var(--brand-white) 
+    border-bottom: 2px solid var(--brand-white)
 }
 
 .form-container input::placeholder,
@@ -240,7 +248,7 @@ h3 {
 }
 
 .form-container select option {
-    background:#752756;
+    background: #752756;
     color: var(--brand-white);
 }
 

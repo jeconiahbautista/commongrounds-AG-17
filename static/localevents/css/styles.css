@@ -74,7 +74,7 @@ h3 {
     gap: 10px;
 }
 
-.glass-layout .glass-style{
+.glass-layout .glass-style {
     background: var(--dark-blue);
 }
 
@@ -99,7 +99,7 @@ h3 {
     gap: 10px;
 }
 
-.no-data-container{
+.no-data-container {
     padding: 10px;
 }
 
@@ -152,33 +152,34 @@ h3 {
     background: var(--bluish-gray);
     border-radius: 30px;
 }
+
 .event_image {
-    width: 100%;          
-    max-width: 500px;     
+    width: 100%;
+    max-width: 500px;
     height: auto;
     border-radius: 16px;
     object-fit: cover;
 }
 
 .image-container {
-    max-width: 600px;          
-    width: 100%;               
-    margin: 0 auto;            
-    display: flex;             
-    justify-content: center;   
-    align-items: center;       
-    overflow: hidden;          
-    border-radius: 15px;       
-    padding: 10px;             
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 15px;
+    padding: 10px;
 }
 
 
 .image-container img.event_image {
-    width: 100%;               
-    max-width: 100%;          
-    height: auto;              
-    display: block;            
-    border-radius: 15px;       
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 15px;
 }
 
 .no-data-container {
@@ -202,16 +203,17 @@ h3 {
     flex-direction: column;
     gap: 0;
     padding: 20px 20px 20px 20px;
-    margin: 15px 15px 0 100px; 
+    margin: 15px 15px 0 100px;
 }
 
 .localevents-detail-header {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* left is 2x bigger */
+    grid-template-columns: 2fr 1fr;
+    /* left is 2x bigger */
     align-items: center;
 }
 
-.localevents-detail-header h1{
+.localevents-detail-header h1 {
     margin: 0;
 }
 
@@ -220,27 +222,27 @@ h3 {
 }
 
 .localevents-detail-block-right {
-    margin-top: 15px;  
+    margin-top: 15px;
     padding-right: 100px;
     text-align: center;
 }
 
-.stack-up p{
+.stack-up p {
     margin: 0 0 20px 0;
     padding: 10px;
-    width:500px;
+    width: 500px;
     flex-direction: column;
 }
 
 .stack-up {
-    display: flex;            
-    flex-direction: column;  
-    align-items: center;     
-    justify-content: center;  
-    gap: 0;                
-    text-align: center;                 
-    width: fit-content;       
-    margin: 0;           
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    text-align: center;
+    width: fit-content;
+    margin: 0;
 }
 
 .localevents-button {
@@ -258,7 +260,7 @@ h3 {
     padding: 10px;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255,255,255,0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     color: white;
     outline: none;
 }
@@ -301,7 +303,7 @@ h3 {
     width: 100%;
     font-family: Inter;
     font-size: 18px;
-    border-bottom: 2px solid var(--brand-white) 
+    border-bottom: 2px solid var(--brand-white)
 }
 
 .form-container input::placeholder,
@@ -501,6 +503,14 @@ button {
 .card-wrap {
     display: block;
     padding: 0 24px;
+}
+
+.add-event-block {
+    display: inline-block;
+    width: 150px;
+    height: 46px;
+    padding: 6px;
+    text-decoration: none;
 }
 
 .events-title {
