@@ -9,6 +9,12 @@ class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = ['amount']
+        widgets = {
+            'amount': forms.NumberInput(attrs={
+                'placeholder': 'Enter amount',
+                'class': 'buy-input'
+            })
+        }
     
 
 class ProductCreateUpdateForm(forms.ModelForm):
@@ -18,6 +24,7 @@ class ProductCreateUpdateForm(forms.ModelForm):
         widget=forms.Select(),
         required=True
     )
+
     class Meta:
         model = Product
         fields = [
@@ -30,6 +37,20 @@ class ProductCreateUpdateForm(forms.ModelForm):
             'product_image'
         ]
         widgets = {
-            'product_type': forms.Select(),
-            'status': forms.Select()
+            'name': forms.TextInput(attrs={
+                'placeholder':'Enter Product Name'
+            }),
+            'description': forms.TextInput(attrs={
+                'placeholder':'Enter Product Description'
+            }),
+            'price': forms.NumberInput(attrs={
+                'placeholder':'Enter Price'
+            }),
+            'stock': forms.NumberInput(attrs={
+                'placeholder': 'Enter amount',
+                'class': 'buy-input'
+            }),
+            'status': forms.Select(),
+            'product_type': forms.Select()
         }
+ 
