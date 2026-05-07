@@ -1,23 +1,53 @@
-{% extends 'base.html' %}
+{% extends 'base_bookclub.html' %}
 {% load static %}
 
 {% block body %}
-<div class="container">
-    {% if book %}
-        <h1>Edit Book</h1>
-    {% else %}
-        <h1>Add a Book</h1>
-    {% endif %}
-
-    <div class="box">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">
-                {% if action == "Add" %}Add Book{% else %}Save Changes{% endif %}
-            </button>
-            <a href="{% url 'bookclub:book-list' %}">Cancel</a>
-        </form>
+    <div class="create-header">
+        {% if book %}
+            <h1>Edit Book</h1>
+        {% else %}
+            <h1>Add a Book</h1>
+        {% endif %}
     </div>
-</div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="bookclub-detail">
+            
+            <div class="form-container glass-style">
+                {{ form.non_field_errors }}
+
+                <div class="headline">{{ form.title.label }}</div> 
+                {{ form.title }}
+
+                <div class="headline">{{ form.genre.label }}</div> 
+                {{ form.genre }}
+
+                <div class="headline">{{ form.author.label }}</div> 
+                {{ form.author }}
+            </div>
+
+            <div class="form-container glass-style">
+                <div class="headline">{{ form.synopsis.label }}</div> 
+                {{ form.synopsis }}
+            </div>
+
+            <div class="form-container glass-style">
+                <div class="headline">{{ form.publication_year.label }}</div> 
+                {{ form.publication_year }}
+
+                <div class="headline">{{ form.available_to_borrow.label }}</div> 
+                {{ form.available_to_borrow }}
+            </div>
+
+        </div>
+
+        <div class="save-back">
+            <button type="submit" class="nav-link">
+                <u>{% if action == "Add" %}Add Book{% else %}Save Changes{% endif %}</u>
+            </button>
+            <a class="nav-link" href="{% url 'bookclub:book-list' %}"><u>Cancel</u></a>
+        </div>
+    </form>
+        
 {% endblock %}
