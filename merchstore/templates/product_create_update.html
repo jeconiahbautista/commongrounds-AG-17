@@ -1,58 +1,56 @@
-{% extends 'base.html' %}
+{% extends 'base_merchstore.html' %}
 {% load static %}
 
-
 {% block body %}
-<div class="container">
-    <h1>
-        {% if object %}
-            Update Product
-        {% else %}
-            Create New Product
-        {% endif %}
-    </h1>
-    
+    <div class="create-update-header">
+        <h1>
+            {% if object %}
+                Update Product
+            {% else %}
+                Create Product
+            {% endif %}
+        </h1>
+    </div>
+
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        <div class="merchstore-create-update">
+            <div class="form-container">
 
-        <p>
-            {{ form.name.label_tag }}<br>
-            {{ form.name }}
-        </p>
-        <p>
-            {{ form.product_type.label_tag }}<br>
-            {{ form.product_type }}
-        </p>
-        <p>
-            {{ form.description.label_tag }}<br>
-            {{ form.description }}
-        </p>
-        <p>
-            {{ form.price.label_tag }}<br>
-            {{ form.price }}
-        </p>
-        <p>
-            {{ form.stock.label_tag }}<br>
-            {{ form.stock }}
-        </p>
-            <p>
-            {{ form.status.label_tag }}<br>
-            {{ form.status }}
-        </p>
-            <p>
-            {{ form.product_image.label_tag }}<br>
-            {{ form.product_image }}
-        </p>
-        
-        <p>
+                {{ form.non_field_errors }}
+            
+                <div class="headline">{{ form.name.label_tag }}</div>
+                {{ form.name }}
+
+                <div class="headline">{{ Type }}</div>
+                {{ form.product_type }}
+
+                <div class="headline">Price (Php):</div>
+                {{ form.price }}
+
+                <div class="headline">{{ form.description.label_tag }}</div>
+                {{ form.description }}
+
+                <div class="headline">{{ form.stock.label_tag }}</div>
+                {{ form.stock }}
+
+                <div class="headline">{{ form.status.label_tag }}</div>
+                {{ form.status }}
+
+                <div class="headline">Image:</div>
+                <div class="merchstore-image" >{{ form.product_image }}</div>
+            </div>
+        </div>
+
+        <div class="create-update-button">
             {% if object %}
-            <button type="submit">Update Product</button>
-            <a href="{% url 'merchstore:product_detail' object.pk %}" class="cancel-button">Cancel</a>
+                <button type="submit" class="glass-button-create-update">Update Product</button>
+                <a href="{% url 'merchstore:product_detail' object.pk %}" class="glass-button-create-update">Cancel</a>
             {% else %}
-            <button type="submit">Create New Product</button>
-            <a href="{% url 'merchstore:product_list' %}" class="cancel-button">Cancel</a>
+                <button type="submit" class="glass-button-create-update">Create Product</button>
+                <a href="{% url 'merchstore:product_list' %}" class="glass-button-create-update">Cancel</a>
             {% endif %}
-        </p>
+        </div>
     </form>
 </div>
 {% endblock %}

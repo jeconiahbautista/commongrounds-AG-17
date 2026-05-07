@@ -1,21 +1,41 @@
-{% extends 'base.html' %}
+{% extends 'base_bookclub.html' %}
 {% load static %}
 
 {% block body %}
-<div class="container">
+
+<div class="create-header">
     <h1>Borrow: {{ book.title }}</h1>
-
-    <div class="box">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <p><em>Return date is set to 2 weeks.</em></p>
-            <button type="submit">Confirm Borrow</button>
-        </form>
-    </div>
-
-    <div class="box">
-        <a href="{% url 'bookclub:book-detail' book.pk %}">Cancel</a>
-    </div>
 </div>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="borrow-detail">
+        
+        <div class="form-container glass-style">
+            {{ form.non_field_errors }}
+
+            <div class="headline">{{ form.name.label }}</div>
+            {{ form.name }}
+
+            <div class="headline">{{ form.date_borrowed.label }}</div>
+            {{ form.date_borrowed }}
+
+            <p class="note">Return date is set to 2 weeks from the borrowed date.</p>
+
+            <div class="confirm-borrow">
+            <button type="submit" class="nav-link button-border">
+                    Confirm Borrow
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="save-back">
+        <a class="nav-link" href="{% url 'bookclub:book-detail' book.pk %}">
+            <u>Cancel</u>
+        </a>
+    </div>
+</form>
+
 {% endblock %}

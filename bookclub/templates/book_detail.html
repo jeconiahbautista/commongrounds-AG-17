@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_bookclub.html' %}
 {% load static %}
 
 {% block body %}
@@ -6,119 +6,180 @@
 {% if messages %}
 {% for message in messages %}
 {% if "book_reviewed" in message.tags %}
-<div class="alert success">
-    You added a review for {{ message }}
+<div class="no-data-container glass-style alert success">
+    <p> You added a review for {{ message }} </p>
 </div>
 {% elif "book_updated" in message.tags %}
-<div class="alert success">
-    You have succesfully updated book: {{ message }}
+<div class="no-data-container glass-style alert success">
+    <p>You have succesfully updated book: {{ message }} </p>
 </div>
 {% elif "book_bookmarked" in message.tags %}
-<div class="alert success">
-    You have bookmarked: {{ message }}
+<div class="no-data-container glass-style alert success">
+    <p> You have bookmarked: {{ message }} </p>
 </div>
 {% elif "book_unbookmarked" in message.tags %}
-<div class="alert success">
-    You have unbookmarked: {{ message }}
+<div class="no-data-container glass-style alert success">
+    <p> You have unbookmarked: {{ message }} </p>
 </div>
 {% elif "book_rated" in message.tags %}
-<div class="alert success">
-    You rated this book: {{ message }}
+<div class="no-data-container glass-style alert success">
+    <p>You rated this book: {{ message }} </p>
 </div>
 {% endif %}
 {% endfor %}
 {% endif %}
 
-<div class="container">
-    <h1>{{book.title}}</h1>
-    <div class="box"><strong>Genre:</strong> {{book.genre}}</div>
-    <div class="box"><strong>Author:</strong> {{book.author}}</div>
-    <div class="box"><strong>Publication year:</strong> {{book.publication_year}}</div>
-    <div class="box"><strong>Synopis: </strong> {{book.synopsis}}</div>
-    <div class="box"><strong>Created On:</strong> {{book.created_on}}</div>
-    <div class="box"><strong>Updated On:</strong> {{book.updated_on}}</div>
+<div class="heading-block">
+    <div>
+        <a class="nav-link" href="{% url 'bookclub:book-list' %}"><u>Return to BookClub</u></a>
+    </div>
+</div>
 
-    <div class="box">
-        <strong>Status: </strong>
-        {% if book.available_to_borrow %}
-        Available to Borrow
-        {% else %}
-        Not Available
-        {% endif %}
+<div class="bookclub-detail">
+
+    <div class="left-column">
+        <div class="light-bookclub-card glass-style">
+            <h1>{{ book.title }}</h1>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Genre: {{ book.genre }}</p>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Author: {{ book.author }}</p>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Publication year: {{ book.publication_year }}</p>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Created On: {{ book.created_on }}</p>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Updated On: {{ book.updated_on }}</p>
+        </div>
     </div>
 
-    {% if book.available_to_borrow %}
-    <div class="box">
-        {% if user.is_authenticated %}
-        <form method="POST" action="{% url 'bookclub:book-borrow' book.pk %}">
-            {% csrf_token %}
-            <button type="submit">Borrow this Book</button>
-        </form>
-        {% else %}
-        <a href="{% url 'bookclub:book-borrow' book.pk %}">Borrow this Book</a>
-        {% endif %}
+    <div class="middle-column">
+        <div class="no-data-container glass-style">
+            
+            <div class="synopsis-box">
+                <div class="headline">Synopsis</div>
+                <p>{{ book.synopsis }}</p>
+            </div>
+
+            <hr class="divider">
+
+            <div class="button-group">
+                {% if book.available_to_borrow %}
+                    {% if user.is_authenticated %}
+                        <form method="POST" action="{% url 'bookclub:book-borrow' book.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link button-border">Borrow this Book</button>
+                        </form>
+                    {% else %}
+                        <a class="nav-link button-border" href="{% url 'bookclub:book-borrow' book.pk %}">Borrow this Book</a>
+                    {% endif %}
+                {% else %}
+
+                {% if user_has_borrowed %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="return" class="nav-link button-border">Return this Book</button>
+                        </form>
+                    {% else %}
+                        <p>This book is currently unavailable.</p>
+                    {% endif %}
+                {% endif %}
+
+                {% if is_contributor %}
+                    <a class="nav-link button-border" href="{% url 'bookclub:book-update' book.pk %}">Edit this Book</a>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name="bookmark" class="nav-link button-border">
+                            {% if is_bookmarked %}Unbookmark{% else %}Bookmark{% endif %}
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+
+            <hr class="divider">
+
+            <div class="bookmark-count">
+                <span>{{ bookmark_count }} bookmark{{ bookmark_count|pluralize }}</span>
+            </div>
+
+            <hr class="divider">
+
+            <div class="no-data-container glass-style">
+                <strong>Average Rating:</strong>
+                <p>{{ average_rating|default:"No ratings yet"}}</p>
+            </div>
+
+            {% if user.is_authenticated %}
+                {% if existing_rating %}
+                    <div class="no-data-container glass-style">
+                        <p>You rated this: {{ existing_rating.score }}/5</p>
+                    </div>
+                {% else %}
+                   <div class="no-data-container glass-style">
+                        <form method="POST" class="rating-inline">
+                            {% csrf_token %}
+                             <label for="id_score"><em>Rate 1–5:</em></label>
+                            {{ rating_form.score }}
+
+                            <button type="submit" name="rate" class="nav-link button-border">
+                                Submit
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+            {% endif %}  
+        </div>
     </div>
-    {% endif %}
 
-    {% if is_contributor %}
-    <div class="box">
-        <a href="{% url 'bookclub:book-update' book.pk %}">Edit Book</a>
-    </div>
-    {% endif %}
-
-    <div class="box">
-        {% if user.is_authenticated %}
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit" name="bookmark">
-                {% if is_bookmarked %} Unbookmark {% else %} Bookmark {% endif %}
-            </button>
-        </form>
-        {% endif %}
-        <span>{{ bookmark_count }} bookmark{{bookmark_count|pluralize}}</span>
-    </div>
-
-    <div class="box">
-        <strong>Average Rating:</strong>
-        {{ average_rating|default:"No ratings yet"|floatformat:1 }}
-    </div>
-
-    {% if user.is_authenticated %}
-    {% if existing_rating %}
-    <p>You rated this: {{ existing_rating.score }}/5</p>
-    {% else %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ rating_form.score }}
-        {{ rating_form.score.errors }}
-        <button type="submit" name="rate">Submit Rating</button>
-    </form>
-    {% endif %}
-    {% endif %}
-
-    <div class="box">
+<div class="right-column">
+    <div class="form-container glass-style">
         <h2>Leave a Review</h2>
         <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Submit Review</button>
+            {% for field in form %}
+                <div>
+                    <div class="headline">{{ field.label }}</div>
+                     {{ field }}
+                </div>
+            {% endfor %}
+            <div class="button-placement">
+                <button type="submit">Submit Review</button>
+                {{ field }}
+            </div>
         </form>
     </div>
 
-    <div class="box">
+    <div class="form-container glass-style">
         <h2>Reviews</h2>
-        {% for review in reviews %}
-        <div>
-            <strong>{{ review.title }}</strong>
-            <p>{{ review.comment }}</p>
-            <p>{{ review.user_reviewer.display_name |default:review.anon_reviewer }}</p>
-        </div>
-        {% empty %}
-        <p>No reviews yet.</p>
-        {% endfor %}
-    </div>
-    <div class="box">
-        <a href="{% url 'bookclub:book-list' %}">Return to Book List</a>
+        {% if reviews %}
+            <div class="glass-layout">
+                {% for review in reviews %}
+                <div>
+                    <div class="headline">{{ review.title }}</div>
+                        <p>{{ review.comment }}</p>
+                        <p><em>{{ review.user_reviewer.display_name|default:review.anon_reviewer }}</em></p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+                <p><em>No reviews yet.</em></p>
+            </div>
+        {% endif %}
     </div>
 </div>
+
 {% endblock %}

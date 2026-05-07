@@ -1,113 +1,143 @@
-{% extends 'base.html' %}
+{% extends 'base_bookclub.html' %}
+{% load static %}
+
+{% block app_style %}
+<link rel="stylesheet" href="{% static 'bookclub/css/styles.css' %}">
+{% endblock %}
 
 {% block body %}
 
 {% if messages %}
-{% for message in messages %}
-{% if "book_created" in message.tags %}
-<div class="alert success">
-    You successfully created book: {{ message }}
-</div>
-{% elif "book_borrowed" in message.tags %}
-<div class="alert success">
-    You successfully borrowed the book: {{ message }}
-</div>
+    {% for message in messages %}
+        {% if "book_created" in message.tags %}
+            <div class="no-data-container glass-style alert success">
+                <p>You successfully created book: {{ message }} </p>
+            </div>
+        {% elif "book_borrowed" in message.tags %}
+            <div class="no-data-container glass-style alert success">
+                <p>You successfully borrowed the book: {{ message }} </p>
+            </div>
+        {% elif "book_returned" in message.tags %}
+            <div class="no-data-container glass-style alert success">
+                <p>You successfully returned the book: {{ message }} </p>
+            </div>
+        {% endif %}
+    {% endfor %}
 {% endif %}
-{% endfor %}
+
+<div class="heading-block">
+    <div class="header-title">
+        <h1>Book Club</h1>
+    </div>
+    {% if user.is_authenticated and user.profile.role == "Book Contributor" %}
+        <div>
+            <a class="nav-link" href="{% url 'bookclub:book-create' %}"><u>Add Book</u></a>
+        </div>
+    {% endif %}
+</div>
+
+{% if user.is_authenticated %}
+
+    <div class="glass-block">
+        <div class="bookclub-header">
+            <h2>Created Books</h2>
+        </div>
+        {% if contributed_books %}
+            <div class="glass-layout">
+                {% for book in contributed_books %}
+                    <div class="glass-card glass-style">
+                        <div class="headline">{{ book.title }}</div>
+                        <p><em>{{ book.genre }}</em></p>
+                        <p>{{ book.author }}</p>
+                        <p>{{ book.synopsis|truncatechars:150 }}</p>
+                        <div class="button-placement">
+                            <a class="nav-link button-border" href="{{ book.get_absolute_url }}">View Details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data-container glass-style">
+                <p>No created books.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="glass-block">
+        <div class="bookclub-header">
+            <h2>Bookmarked Books</h2>
+        </div>
+        {% if bookmarked_books %}
+            <div class="glass-layout">
+                {% for book in bookmarked_books %}
+                    <div class="glass-card glass-style">
+                        <div class="headline">{{ book.title }}</div>
+                        <p><em>{{ book.genre }}</em></p>
+                        <p>{{ book.author }}</p>
+                        <p>{{ book.synopsis|truncatechars:150 }}</p>
+                        <div class="button-placement">
+                            <a class="nav-link button-border" href="{{ book.get_absolute_url }}">View Details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data-container glass-style">
+                <p>No bookmarks yet.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="glass-block">
+        <div class="bookclub-header">
+            <h2>Reviewed Books</h2>
+        </div>
+        {% if reviewed_books %}
+            <div class="glass-layout">
+                {% for book in reviewed_books %}
+                    <div class="glass-card glass-style">
+                        <div class="headline">{{ book.title }}</div>
+                        <p><em>{{ book.genre }}</em></p>
+                        <p>{{ book.author }}</p>
+                        <p>{{ book.synopsis|truncatechars:150 }}</p>
+                        <div class="button-placement">
+                            <a class="nav-link button-border" href="{{ book.get_absolute_url }}">View Details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data-container glass-style">
+                <p>No reviewed books yet.</p>
+            </div>
+        {% endif %}
+    </div>
+
 {% endif %}
 
-<h1>Book List</h1>
-<div class="content">
-    <div class="add">
-        <a href="{% url 'bookclub:book-create' %}">Add a book here</a>
+<div class="glass-block">
+    <div class="bookclub-header">
+        <h2>All Books</h2>
     </div>
-    <h2> Books Created</h2>
-    {% if contributed_books %}
-    <div class="main-content">
-        {% for book in contributed_books %}
-        <div class="card">
-            <ul>
-                <li>
-                    <h2>{{book.title}}</h2>
-                    <p><strong> Genre:</strong> {{ book.genre }}</p>
-                    <p>{{ book.author }} </p>
-                    <a href='{{ book.get_absolute_url }}'> View Details </a>
-                </li>
-            </ul>
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="else-main-content">
-        <p><em>No created books.</em></p>
-    </div>
-    {% endif %}
-
-    <h2> Bookmarked Books </h2>
-    {% if bookmarked_books %}
-    <div class="main-content">
-        {% for book in bookmarked_books %}
-        <div class="card">
-            <ul>
-                <li>
-                    <h2>{{book.title}}</h2>
-                    <p><strong> Genre:</strong> {{ book.genre }}</p>
-                    <p>{{ book.author }} </p>
-                    <a href='{{ book.get_absolute_url }}'> View Details </a>
-                </li>
-            </ul>
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="else-main-content">
-        <p><em>No bookmarks.</em></p>
-    </div>
-    {% endif %}
-
-
-    <h2> Reviewed Books </h2>
-    {% if reviewed_books %}
-    <div class="main-content">
-        {% for book in reviewed_books %}
-        <div class="card">
-            <ul>
-                <li>
-                    <h2>{{book.title}}</h2>
-                    <p><strong> Genre:</strong> {{ book.genre }}</p>
-                    <p>{{ book.author }} </p>
-                    <a href='{{ book.get_absolute_url }}'> View Details </a>
-                </li>
-            </ul>
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="else-main-content">
-        <p><em>No reviewed books.</em></p>
-    </div>
-    {% endif %}
-
-    <h2>All Books</h2>
     {% if all_books %}
-    <div class="main-content">
-        {% for book in all_books %}
-        <div class="card">
-            <ul>
-                <li>
-                    <h2>{{ book.title }}</h2>
-                    <p><strong>Genre:</strong> {{ book.genre }}</p>
+        <div class="glass-layout">
+            {% for book in all_books %}
+                <div class="glass-card glass-style">
+                    <div class="headline">{{ book.title }}</div>
+                    <p><em>{{ book.genre }}</em></p>
                     <p>{{ book.author }}</p>
-                    <a href="{% url 'bookclub:book-detail' book.pk %}">View Details</a>
-                </li>
-            </ul>
+                    <p>{{ book.synopsis|truncatechars:150 }}</p>
+                    <div class="button-placement">
+                        <a class="nav-link button-border" href="{{ book.get_absolute_url }}">View Details</a>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     {% else %}
-    <div class="else-main-content">
-        <p><em>No books available.</em></p>
-    </div>
+        <div class="no-data-container glass-style">
+            <p>No books available.</p>
+        </div>
     {% endif %}
 </div>
+
 {% endblock %}
