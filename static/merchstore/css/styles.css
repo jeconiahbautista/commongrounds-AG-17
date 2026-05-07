@@ -71,56 +71,28 @@ h3 {
 }
 
 .glass-style {
-    border-radius: 38px;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow:
-        0 10px 20px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    position: relative;
-    overflow: hidden;
+    background: var(--light-orange);
 }
 
-.glass-card {
-    display: flex;
-    width: 404px;
-    padding: 17px 25px;
-    flex-direction: column;
-    gap: 15px;
-    flex-shrink: 0;
-}
-
-.glass-layout {
+.no-data-container.glass-style.alert-success {
     display: flex;
     width: 100%;
     max-width: 1758px;
+    margin: 0 auto;
+    flex-direction: column;
     align-items: center;
-    gap: 47px;
+    flex-shrink: 0;
 }
 
-.glass-card p {
-    margin: 0px;
+.no-data-container.glass-style.alert-success p {
     color: var(--brand-white);
+    text-align: center;
     font-family: Inter;
     font-size: 20px;
     font-style: normal;
     font-weight: 200;
     line-height: normal;
     letter-spacing: -1px;
-}
-
-.glass-block {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-    gap: 29px;
-}
-
-.glass-block h2 {
-    margin-top: 30px;
-    margin-bottom: 0;
 }
 
 .headline {

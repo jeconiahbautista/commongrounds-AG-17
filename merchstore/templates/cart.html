@@ -7,8 +7,8 @@
     {% if messages %}
         {% for message in messages %}
             {% if "product_added_to_cart" in message.tags %}
-                <div class="alert success">
-                    You successfully added {{ message }} to your cart
+                <div class="no-data-container glass-style alert-success">
+                    You successfully bought {{ message }}.
                 </div>
             {% endif %}
         {% endfor %}
