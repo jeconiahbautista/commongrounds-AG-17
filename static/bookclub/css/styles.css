@@ -40,6 +40,11 @@ h3 {
     letter-spacing: -2px;
 }
 
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .heading-block {
     display: flex;
     flex-direction: column;
@@ -67,6 +72,10 @@ h3 {
 
 .glass-layout .glass-style{
     background: var(--dark-brown);
+}
+
+.glass-layout {
+    flex-wrap: wrap;
 }
 
 .light-bookclub-card {
@@ -283,6 +292,13 @@ button {
 
 .rating-form {
     margin-top: 10px;
+}
+
+.field-block input,
+.field-block select {
+    width: 100%;
+    padding: 30px;
+    border-radius: 8px;
 }
 
 .wave-container {

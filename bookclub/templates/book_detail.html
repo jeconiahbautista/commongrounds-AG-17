@@ -152,10 +152,12 @@
             {% for field in form %}
                 <div>
                     <div class="headline">{{ field.label }}</div>
+                     {{ field }}
                 </div>
             {% endfor %}
             <div class="button-placement">
                 <button type="submit">Submit Review</button>
+                {{ field }}
             </div>
         </form>
     </div>
