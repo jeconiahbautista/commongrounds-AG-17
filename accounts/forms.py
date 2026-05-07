@@ -53,13 +53,14 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ["username", "role", "password1", "password2"]
 
     def save(self, commit=True):
-        user = super().save(commit=True)
+        user = super().save(commit=commit)
 
-        profile = user.profile
-        profile.display_name = user.username
-        profile.email_address = user.email
-        profile.role = self.cleaned_data["role"]
-        profile.save()
+        Profile.objects.create(
+            user=user,
+            display_name=user.username,
+            email_address=user.email,
+            role=self.cleaned_data["role"],
+        )
 
         return user
 
