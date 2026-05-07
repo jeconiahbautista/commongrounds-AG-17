@@ -8,8 +8,8 @@
         <h1>Commissions</h1>
     </div>
     {% if user.is_authenticated and user.profile.role == "Commission Maker" %}
-        <div>
-            <a class="nav-link" href="{% url 'commissions:request-add' %}"><u>Create Commission</u></a>
+        <div class="add-commission-block add-button glass-style">
+            <a class="add-text" href="{% url 'commissions:request-add' %}">+ Create Commission</a>
         </div>
     {% endif %}
 </div>
@@ -95,3 +95,4 @@
 </div>
 
 {% endblock %}
+

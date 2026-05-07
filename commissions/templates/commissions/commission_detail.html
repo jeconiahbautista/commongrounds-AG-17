@@ -3,6 +3,8 @@
 
 {% block body %}
 
+
+
 {% if messages %}
 {% for message in messages %}
 {% if "commission_created" in message.tags %}
@@ -30,8 +32,9 @@
 {% endif %}
 
 <div class="heading-block">
-    <div>
-        <a class="nav-link" href="{% url 'commissions:request-list' %}"><u>Return to Commissions</u></a>
+    <div class="back-block">
+    <img src="/static/global/img/left-arrow.png" alt="arrow icon" width="24">
+    <a href="/commissions/requests" class="back-link">Back</a>
     </div>
 </div>
 

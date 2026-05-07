@@ -11,11 +11,14 @@ class CommissionForm(forms.ModelForm):
         widgets = {
             
             "title": forms.TextInput(attrs={
-                "placeholder": "Enter commission title"
+                "placeholder": "Enter commission title..."
             }),
             "description": forms.Textarea(attrs={
                 "rows": 4,
                 "placeholder": "Describe the commission..."
+            }),
+            "people_required": forms.TextInput(attrs={
+                "placeholder": "Enter people required..."
             }),
         }
 
@@ -24,6 +27,17 @@ class JobForm(forms.ModelForm):
     class Meta:
         model = Job
         fields = ["role", "manpower_required", "status"]
+        widgets = {
+            
+            "role": forms.TextInput(attrs={
+                "placeholder": "Enter role..."
+            }),
+            "manpower_required": forms.TextInput(attrs={
+                "placeholder": "Enter manpower required..."
+            }),
+        }
+
+
 
 
 JobFormSet = inlineformset_factory(
