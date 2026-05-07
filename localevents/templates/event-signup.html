@@ -1,40 +1,92 @@
-{% extends "base.html" %}
+{% extends 'base_localevents.html' %}
+{% load static %}
 
 {% block body %}
 
-<h2>Sign up for {{ event.title }}</h2>
+<div class="heading-block">
+    <div>
+        <a class="nav-link" href="{% url 'localevents:event-list' %}"><u>Return to Local Events</u></a>
+    </div>
+</div>
 
-{% if event.event_image %}
-<img src="{{ event.event_image.url }}" alt="Event Image" width="300">
-{% endif %}
+<div class="heading-block">
+    <div class="header-title">
+        <h2>Sign Up for {{ event.title }}</h2>
+    </div>
+</div>
 
-<p><strong>Category:</strong> {{ event.category }}</p>
-<p><strong>Organizer:</strong>
-    {% for org in event.organizer.all %}
-    {{ org }}{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-</p>
+<div class="localevents-detail">
 
-<p><strong>Location:</strong> {{ event.location }}</p>
-<p><strong>Start:</strong> {{ event.start_time }}</p>
-<p><strong>End:</strong> {{ event.end_time }}</p>
-<p><strong>Description:</strong> {{ event.description }}</p>
+    <div class="left-column">
+        <div class="no-data-container glass-style">
+            {% if event.event_image %}
+                <img src="{{ event.event_image.url }}" alt="Event Image" width="300">
+            {% endif %}
+        </div>
 
-<p><strong>Capacity:</strong> {{ event.event_capacity }}</p>
-<p><strong>Status:</strong> {{ event.status }}</p>
+        <div class="no-data-container glass-style">
+            <p>Category: {{ event.category }}</p>
+        </div>
 
-<p><strong>Created:</strong> {{ event.created_on }}</p>
-<p><strong>Updated:</strong> {{ event.updated_on }}</p>
+        <div class="no-data-container glass-style">
+            <p>Organizer:
+                {% for org in event.organizer.all %}
+                {{ org }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        </div>
 
-<hr>
+        <div class="no-data-container glass-style">
+            <p>Location: {{ event.location }}</p>
+        </div>
 
-<form method="post">
-    {% csrf_token %}
+        <div class="no-data-container glass-style">
+            <p>Start: {{ event.start_time }}</p>
+        </div>
 
-    <label for="name">Your Name:</label>
-    <input type="text" name="name" id="name" required>
+        <div class="no-data-container glass-style">
+            <p>End: {{ event.end_time }}</p>
+        </div>
+    </div>
 
-    <button type="submit">Sign Up</button>
-</form>
+    <div class="right-column">
+        <div class="no-data-container glass-style">
+            <p>Description: {{ event.description }}</p>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Capacity: {{ event.event_capacity }}</p>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Status: {{ event.status }}</p>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Created: {{ event.created_on }}</p>
+        </div>
+
+        <div class="no-data-container glass-style">
+            <p>Updated: {{ event.updated_on }}</p>
+        </div>
+
+    <div class="no-data-container glass-style">
+        <h2>Sign Up</h2>
+        <form method="POST" class="signup-inline">
+            {% csrf_token %}
+
+            <div class="name-row">
+                <label for="name">
+                    <em>Your Name:</em>
+                </label>
+
+                <input type="text" name="name" id="name" required>
+            </div>
+
+            <button type="submit" class="nav-link button-border">
+                Sign Up
+            </button>
+        </form>
+    </div>
 
 {% endblock %}

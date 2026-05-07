@@ -1,0 +1,108 @@
+.heading-block {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 30px;
+    margin: 20px auto;
+    padding: 0 40px;
+}
+
+.header-title {
+    font-size: 32px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.image {
+    max-width: 200px;
+    height: auto;
+    width: auto;
+    display: block;
+    margin-top: 10px;
+}
+
+.form-container {
+    display: flex;
+    width: 50%;
+    max-width: 716px;
+    padding: 24px 52px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.glass-layout .glass-style{
+    background: var(--dark-blue);
+}
+
+.glass-layout {
+    flex-wrap: wrap;
+}
+
+.localevents-detail {
+    display: flex;
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.left-column,
+.right-column {
+    flex: 0 1 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.no-data-container{
+    padding: 10px;
+}
+
+.headline {
+    margin-bottom: 15px;
+}
+
+.signup-inline {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.signup-inline input {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    border-bottom: 2px solid var(--brand-white);
+    color: white;
+    font-family: Inter, sans-serif;
+    font-size: 15px;
+    width: 200px;
+    text-align: center
+}
+
+.signup-inline button {
+    align-self: center;
+}
+
+.button {
+    background: transparent;
+    color: inherit;
+}
+
+.button-border {
+    background-color: transparent;
+    color: white;
+    font-family: Inter, sans-serif;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
