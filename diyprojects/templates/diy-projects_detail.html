@@ -1,95 +1,268 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block app_style %}
+<link rel="stylesheet" href="{% static 'diyprojects/css/styles.css' %}">
+{% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>{{ project.title }}</h1>
-    <div class="boxes">
-        <div class="box"><strong>Average Rating:</strong> {{ average_rating|floatformat:1 }}/10.0</div>
-        {% if user.is_authenticated %}
-        {% if existing_rating %}
-        <div class="box">
-            <p><em>You rated this project:</em> {{ existing_rating.score }}/10.0</p>
+<div class="detail-wrapper">
+    <div class="back-block">
+        <img src="/static/global/img/left-arrow.png" alt="arrow icon" width="24">
+        <a href="/diyprojects/projects/" class="back-link">Back</a>
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    {% if "project_rated" in message.tags %}
+    <div class="alert success">
+        You have submitted a rating for {{ message }}
+    </div>
+    {% elif "project_unfavorited" in message.tags %}
+    <div class="alert success">
+        You removed {{ message }} from your favorites
+    </div>
+    {% elif "project_favorited" in message.tags %}
+    <div class="alert success">
+        You added {{ message }} to your favorites
+    </div>
+    {% elif "project_reviewed" in message.tags %}
+    <div class="alert success">
+        You added a review for {{ message }}
+    </div>
+    {% elif "project_created" in message.tags %}
+    <div class="alert success">
+        You have succesfully created the project: {{ message }}
+    </div>
+    {% elif "project_edited" in message.tags %}
+    <div class="alert success">
+        You have succesfully edited the project: {{ message }}
+    </div>
+    {% elif "review_replied" in message.tags %}
+    <div class="alert success">
+        You have succesfully replied to a review: {{ message }}
+    </div>
+    {% elif "review_voted" in message.tags %}
+    <div class="alert success">
+        You have succesfully voted a review: {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <div class="top-detail-section">
+        <div class="dates-edit-block">
+            <div class="dates-block">
+                <p class="date">Created: {{ project.created_on }}</p>
+                <p class="date">Last Updated: {{ project.updated_on }}</p>
+            </div>
+            {% if is_owner %}
+            <a class="glass edit-button" href="{% url 'diyprojects:diyprojects_edit' project.pk %}">
+                Edit Project
+            </a>
+            {% endif %}
         </div>
-        {% else %}
-        <div class="box">
-            <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST">
+        <div class="subject-block">
+            <div class="title-fav-block">
+                <h1 class="project-detail-title">{{ project.title }}</h1>
+                <div class="favorite-block">
+                    <div class="glass heart-block">
+                        <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="action" value="favorite" class="heart-icon">
+                                {% if is_favorited %}
+                                <img src="/static/diyprojects/img/full-heart.png" alt="arrow icon" width="24">
+                                {% else %}
+                                <img src="/static/diyprojects/img/hollow-heart.png" alt="arrow icon" width="24">
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                    <div class="glass favorites-block">
+                        <p class="detail-text">{{ favorite_count }} people favorited this project</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cat-rating-block">
+                <div class="cat-rat-block">
+                    <p class="category-name">{{ project.category.name }}</p>
+                    <div class="rating-block">
+                        <div class="rating-score">
+                            <p class="average-rating">{{ average_rating|floatformat:1 }}</p>
+                            <div class="star-outer">
+                                <div class="star-inner" style="--rating: {{ percentage_rating }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if user.is_authenticated %}
+                <div class="glass user-rating-block">
+                    {% if existing_rating %}
+                    <span class="detail-text">You rated this project: {{ existing_rating.score }}/5</span>
+                    {% else %}
+                    <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST"
+                        class="rating-form">
+                        {% csrf_token %}
+                        <label for="score">
+                            <span class="detail-text">Rate the Project:</span>
+                            {{ rate_form.score }}
+                        </label>
+                        {{ rate_form.score.errors }}
+                        <button type="submit" name="action" value="rate" class="submit-rating">
+                            <img src="/static/global/img/right-arrow.png" alt="arrow icon" width="24">
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="body-detail-section">
+        <div class="glass box">
+            <p class="detail-label">Description</p>
+            <p>{{ project.description }}</p>
+        </div>
+        <div class="glass box">
+            <p class="detail-label">Materials</p>
+            <p>{{ project.materials }}</p>
+        </div>
+        <div class="glass box">
+            <p class="detail-label">Steps</p>
+            <p>{{ project.steps }}</p>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="review-section">
+        <h2 class="review-heading">Submit a review</h2>
+        <div class="glass review-form">
+            <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST"
+                enctype="multipart/form-data">
                 {% csrf_token %}
-                <label for="score">
-                    <span><strong>Rate the Project: </strong></span>
-                    {{ rate_form.score }}
-                </label>
-                <button type="submit" name="action" value="rate">Submit Rating</button>
+                {{ review_form.comment }}
+                <label for="image">Submit a photo:</label>
+                {{ review_form.image }}
+                <div class="submit-block">
+                    <img src="/static/global/img/right-arrow.png" alt="arrow icon" width="24">
+                    <button type="submit" name="action" value="review" class="submit-review">Submit Review</button>
+                </div>
             </form>
         </div>
-        {% endif %}
-        {% endif %}
-        <div class="box">
-            <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST">
+    </div>
+    {% endif %}
+
+    {% if reviews %}
+    {% for review in reviews %}
+    <div class="glass reviews">
+        <div class="reviews-top">
+            <div class="writer">
+                <p class="reviewer">{{ review.reviewer }}</p>
+                <p class="comment">{{ review.comment }}</p>
+                {% if review.image %}
+                <img src="{{ review.image.url }}" class="image">
+                {% endif %}
+            </div>
+            {% if user.is_authenticated %}
+            <div class="upvotes">
+                <p class="upvote-score">
+                    {{ review.score|default:0 }}
+                </p>
+                <div class="upvote-buttons">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="review_id" value="{{ review.id }}">
+                        <input type="hidden" name="value" value="1">
+
+                        <button name="action" value="vote" class="upvote-button">
+                            {% if review.user_vote == 1 %}
+                            <img src="/static/diyprojects/img/up-solid.png" width="16">
+                            {% else %}
+                            <img src="/static/diyprojects/img/hollow-up.png" width="16">
+                            {% endif %}
+                        </button>
+                    </form>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="review_id" value="{{ review.id }}">
+                        <input type="hidden" name="value" value="-1">
+                        <button name="action" value="vote" class="upvote-button">
+                            {% if review.user_vote == -1 %}
+                            <img src="/static/diyprojects/img/down-solid.png" width="16">
+                            {% else %}
+                            <img src="/static/diyprojects/img/hollow-down.png" width="16">
+                            {% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+        <div class="replies">
+            <form method="POST" class="reply-form">
                 {% csrf_token %}
-                <button type="submit" name="action" value="favorite">
-                    {% if is_favorited %}
-                    Unfavorite
-                    {% else %}
-                    Favorite
-                    {% endif %}
+                <input type="hidden" name="parent_id" value="{{ review.id }}">
+                <input type="text" name="comment" placeholder="Reply..." class="reply-field">
+                <button name="action" value="reply" class="send-button">
+                    <img src="/static/diyprojects/img/send-icon.png" width="24">
                 </button>
             </form>
         </div>
-        <div class="box">
-            <p>{{ favorite_count }} people favorited this project</p>
-        </div>
-        {% if is_owner %}
-        <div class="box">
-            <a href="{% url 'diyprojects:diyprojects_edit' project.pk %}">
-                Edit Project
-            </a>
-        </div>
         {% endif %}
-    </div>
-    <div class="box"><strong>Category:</strong> {{ project.category.name }}</div>
-    <div class="box"><strong>Description:</strong> {{ project.description }}</div>
-    <div class="box">
-        <p><strong>Materials:</strong></p>
-        <p>{{ project.materials }}</p>
-    </div>
-    <div class="box">
-        <p><strong>Steps:</strong></p>
-        <p>{{ project.steps }}</p>
-    </div>
-    <div class="boxes">
-        <div class="box"><strong>Created:</strong> {{ project.created_on }}</div>
-        <div class="box"><strong>Updated:</strong> {{ project.updated_on }}</div>
-    </div>
-    <div class="box"><a href="/diyprojects/projects">Return to Projects List</a></div>
-    <div class="box">
-        <form action="{% url 'diyprojects:diyprojects_detail' project.pk %}" method="POST"
-            enctype="multipart/form-data">
-            {% csrf_token %}
-            <label for="comment">
-                <p><strong>Reviews: </strong></p>
-                <p>{{ review_form.comment }}</p>
-            </label>
-            <label for="image">
-                <strong>Submit a photo: </strong>
-                {{ review_form.image }}
-            </label>
-            <p><button type="submit" name="action" value="review">Submit Review</button></p>
-        </form>
-    </div>
-    {% if reviews %}
-    {% for review in reviews %}
-    <div class="box">
-        <p><em>Reviewed by: {{ review.reviewer }}</em></p>
-        <p>{{ review.comment }}</p>
-        {% if review.image %}
-        <img src="{{ review.image.url }}" width="300">
-        {% endif %}
+        {% for reply in review.replies.all %}
+        <div class="reply-block">
+            <strong>{{ reply.reviewer }}</strong>
+            <p class="reply">
+                {{ reply.comment }}
+            </p>
+        </div>
+        {% endfor %}
     </div>
     {% endfor %}
     {% else %}
     <div class="box">
-        <p><em>No reviews yet.</em></p>
+        <p class="else">No reviews yet.</p>
     </div>
     {% endif %}
+    {% endblock %}
+</div>
+
+{% block background %}
+<div class="wave-container">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1163" height="557" viewBox="0 0 1163 557" fill="none">
+        <path class="wave1" d="M455 228.5C138 248 74 453 -12 556.5L0 0H1163C1034.5 161 772 209 455 228.5Z"
+            fill="url(#paint0_linear_212_527)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_527" x1="396.057" y1="0" x2="396.057" y2="283.5"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#011700" stop-opacity="0" />
+                <stop offset="1" stop-color="#003203" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1071" height="491" viewBox="0 0 1071 491" fill="none">
+        <path class="wave2" d="M700.5 171C407.5 202.5 287.5 417.5 0 0H1071V491C1021.5 354.5 993.5 139.5 700.5 171Z"
+            fill="url(#paint0_linear_212_528)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_528" x1="950.352" y1="120.122" x2="670.301" y2="574.148"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#011700" stop-opacity="0" />
+                <stop offset="1" stop-color="#004104" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="605" viewBox="0 0 1920 605" fill="none">
+        <path class="wave3" d="M1060.5 389C389.575 54.368 118.5 95.5 0 605H1920V0C1825 254 1464.5 590.5 1060.5 389Z"
+            fill="url(#paint0_linear_212_526)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_526" x1="925.333" y1="765.5" x2="1024.28" y2="9.78109"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#011700" />
+                <stop offset="1" stop-color="#004104" stop-opacity="0.2" />
+            </linearGradient>
+        </defs>
+    </svg>
 </div>
 {% endblock %}

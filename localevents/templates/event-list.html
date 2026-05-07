@@ -1,27 +1,164 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block app_style %}
+<link rel="stylesheet" href="{% static 'localevents/css/styles.css' %}">
+{% endblock %}
+
 {% block body %}
-<h1> Events List </h1>
-{% if events %}
-<div class="main-content">
-    {% for event in events %}
-    <div class="card">
-        <ul>
-            <li>
-                <h2> {{ event.title }}</h2>
-                <p><strong>Category:</strong> {{ event.category }}</p>
-                <p>{{ event.description|truncatechars:30 }} </p>
-                <a href='{{ event.get_absolute_url }}'> View Details </a>
-            </li>
-        </ul>
-    </div>
-    {% endfor %}
+
+{% if messages %}
+{% for message in messages %}
+
+{% if "event_signed" in message.tags %}
+<div class="alert success">
+    You have succesfully signed up for {{ message }}
 </div>
-{% else %}
-<div class="else-main-content">
-    <p><em>No events available.</em></p>
+
+{% elif "event_created" in message.tags %}
+<div class="alert success">
+    You have successfully created the event: {{ message }}
+</div>
+
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+<div class="app-header">
+    <h1 class="app-header-text">Event List</h1>
+    {% if user.is_authenticated %}
+    <a href="/localevents/event/add" class="glass add-project-block">
+        <div class="add-button">
+            <img src="/static/global/img/add-icon.png" alt="add-icon" width="12" height="12">
+            <p class="add-text">Create event</p>
+        </div>
+    </a>
+    {% endif %}
+</div>
+
+{% if user.is_authenticated %}
+<div class="events-section created">
+    <h2 class="section-header">Created events</h2>
+    {% if created_events %}
+    <div class="content">
+        {% for event in created_events %}
+        <div class="glass card">
+            <div class="card-wrap">
+                <h2 class="events-title">{{ event.title }}</h2>
+                <p class="events-category">{{ event.category }}</p>
+                <p class="events-description">{{ event.description|truncatechars:150 }}</p>
+                <div class="more-block">
+                    <a href="{{ event.get_absolute_url }}" class="events-more">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="else-content">
+        <div class="glass">
+            <p class="else">No created events.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="events-section signed">
+    <h2 class="section-header">Signed Events</h2>
+    {% if signed_events %}
+    <div class="content">
+        {% for event in signed_events %}
+        <div class="glass card">
+            <div class="card-wrap">
+                <h2 class="events-title">{{ event.title }}</h2>
+                <p class="events-category">{{ event.category }}</p>
+                <p class="events-description">{{ event.description|truncatechars:150 }}</p>
+                <div class="more-block">
+                    <a href="{{ event.get_absolute_url }}" class="events-more">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="else-content">
+        <div class="glass">
+            <p class="else">No signed events.</p>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endif %}
 
+<div class="events-section all">
+    <h2 class="section-header">All events</h2>
+    {% if events %}
+    <div class="content">
+        {% for event in events %}
+        <div class="glass card">
+            <div class="card-wrap">
+                <h2 class="events-title">{{ event.title }}</h2>
+                <p class="events-category">{{ event.category }}</p>
+                <p class="events-description">{{ event.description|truncatechars:150 }}</p>
+                <div class="more-block">
+                    <a href="{{ event.get_absolute_url }}" class="events-more">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="else-content">
+        <div class="glass">
+            <p class="else">No events available.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block background %}
+<div class="wave-container">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1163" height="557" viewBox="0 0 1163 557" fill="none">
+        <path class="wave1" d="M455 228.5C138 248 74 453 -12 556.5L0 0H1163C1034.5 161 772 209 455 228.5Z"
+            fill="url(#paint0_linear_212_527)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_527" x1="396.057" y1="0" x2="396.057" y2="283.5"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#332F7E" />
+                <stop offset="1" stop-color="#15274F" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1071" height="491" viewBox="0 0 1071 491" fill="none">
+        <path class="wave2" d="M700.5 171C407.5 202.5 287.5 417.5 0 0H1071V491C1021.5 354.5 993.5 139.5 700.5 171Z"
+            fill="url(#paint0_linear_212_528)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_528" x1="950.352" y1="120.122" x2="670.301" y2="574.148"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#332F7E" />
+                <stop offset="1" stop-color="#15274F" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="605" viewBox="0 0 1920 605" fill="none">
+        <path class="wave3" d="M1060.5 389C389.575 54.368 118.5 95.5 0 605H1920V0C1825 254 1464.5 590.5 1060.5 389Z"
+            fill="url(#paint0_linear_212_526)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_526" x1="925.333" y1="765.5" x2="1024.28" y2="9.78109"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#332F7E" />
+                <stop offset="1" stop-color="#15274F" />
+            </linearGradient>
+        </defs>
+    </svg>
+</div>
 {% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block app_style %}
+<link rel="stylesheet" href="{% static 'localevents/css/styles.css' %}">
+{% endblock %}
+
+
+{% block body %}
+
+<div class="back-block">
+    <img src="/static/global/img/left-arrow.png" alt="arrow icon" width="24">
+    <a href="/localevents/events" class="back-link">Back</a>
+</div>
+
+<div class="create-header">
+    {% if event %}
+        <h1>Edit Event</h1>
+    {% else %}
+        <h1>Create Event</h1>
+    {% endif%}
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="commission-detail">
+        <div class="form-container glass-style">
+
+            <div class="headline">{{ form.title.label }} </div> 
+            {{ form.title }}
+
+            <div class="headline">{{ form.category.label }} </div> 
+            <div class="dropdown container dropdown-status">{{ form.category }}</div>
+
+            <div class="headline">{{ form.organizer.label }} </div> 
+            {{ form.organizer }}
+
+            <div class="headline">{{ form.description.label }} </div> 
+            {{ form.description }}
+
+        </div>
+        <div class="jobs-needed-block">
+            <div class="form-container glass-style">
+                <div class="headline">{{ form.location.label }}</div> 
+                {{ form.location }}
+
+                <div class="headline">{{ form.start_time.label }}</div> 
+                {{ form.start_time }}
+
+                <div class="headline">{{ form.end_time.label }}</div> 
+                {{ form.end_time }}
+
+                <div class="headline">{{ form.event_capacity.label }}</div> 
+                {{ form.event_capacity }}
+
+                <div class="headline">{{ form.status.label }}</div> 
+                <div class="dropdown-status">{{ form.status }}</div>
+            </div>
+            <div class="form-container glass-style">
+                <div class="headline">{{ form.event_image.label }}</div> 
+                <div class="event-image">{{ form.event_image }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="save-back">
+        <button type="submit" class="nav-link">
+            {% if event %}
+                <u>Update Event</u>
+            {% else %}
+                <u>Create Event</u>
+             {% endif%}
+        </button>
+    </div>
+</form>
+
+{% endblock %}

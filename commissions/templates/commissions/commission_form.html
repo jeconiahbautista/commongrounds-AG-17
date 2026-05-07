@@ -1,46 +1,93 @@
-{% extends 'base.html' %}
+{% extends 'commissions/base_commission.html' %}
 {% load static %}
 
 {% block body %}
-<div class="container">
-    {% if commission %}
-        <h1>Edit Commission</h1>
-    {% else %}
-        <h1>Create Commission</h1>
-    {% endif %}
+    <div class="back-block">
+    <img src="/static/global/img/left-arrow.png" alt="arrow icon" width="24">
+    <a href="/commissions/requests" class="back-link">Back</a>
+    </div>
+
+    <div class="create-header">
+        {% if commission %}
+            <h1>Edit Commission</h1>
+        {% else %}
+            <h1>Create Commission</h1>
+        {% endif %}
+    </div>
 
     <form method="post">
         {% csrf_token %}
+        <div class="commission-detail">
+            <div class="form-container glass-style">
 
-        <fieldset>
-            <legend>Commission Information</legend>
-            {{ form.non_field_errors }}
-            {{ form.as_p }}
-        </fieldset>
+                {{ form.non_field_errors }}
 
-        <fieldset>
-            <legend>Jobs</legend>
-            {{ job_formset.management_form }}
+                <div class="headline">{{ form.title.label }} </div> 
+                {{ form.title }}
 
-            {% for job_form in job_formset %}
-                <div class="box">
-                    {{ job_form.non_field_errors }}
-                    {{ job_form.id }}
-                    <p>{{ job_form.role.label_tag }} {{ job_form.role }}</p>
-                    <p>{{ job_form.manpower_required.label_tag }} {{ job_form.manpower_required }}</p>
-                    <p>{{ job_form.status.label_tag }} {{ job_form.status }}</p>
-                    {% if job_formset.can_delete %}
-                        <p>{{ job_form.DELETE.label_tag }} {{ job_form.DELETE }}</p>
-                    {% endif %}
+                {% if commission %}
+                    <div class="headline">Maker: {{ commission.maker.display_name }}</div>
+                {% else %}
+                    <div class="headline">Maker: {{ request.user.profile.display_name }}</div>
+                {% endif %}
+
+                <div class="headline">{{ form.type.label }} </div> 
+                {{ form.type }}
+
+                <div class="headline">{{ form.description.label }} </div> 
+                {{ form.description }}
+
+                <div class="headline">{{ form.status.label }} </div> 
+                {{ form.status }}
+
+                <div class="headline">{{ form.people_required.label }} </div> 
+                {{ form.people_required }}
+            </div>
+
+            <div class="jobs-needed-block">
+                <div class="job-header">
+                    <h2>Jobs Needed</h2>
                 </div>
-            {% endfor %}
-        </fieldset>
 
-        <button type="submit">Save</button>
+
+                {{ job_formset.management_form }}
+
+                {% for job_form in job_formset %}
+                    <div class="form-container glass-style">
+                        {{ job_form.non_field_errors }}
+                        {{ job_form.id }}
+
+                        <div class="headline">{{ job_form.role.label_tag }} </div> 
+                        {{ job_form.role }}
+
+                        <div class="manpower-status">
+                            <div class="linebreak">
+                                <div class="headline">{{ job_form.manpower_required.label_tag }}</div> 
+                                {{ job_form.manpower_required }}
+                            </div>
+                            
+                            <div class="linebreak">
+                                <div class="headline">{{ job_form.status.label_tag }}</div> 
+                                {{ job_form.status }}
+                            </div>
+                        </div>
+                        
+                        
+                        {% if job_formset.can_delete %}
+                            <div class="button-placement">
+                                <div class="delete-row">
+                                    <u>{{ job_form.DELETE.label_tag }}</u>
+                                    {{ job_form.DELETE }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="save-back">
+            <button type="submit" class="nav-link"><u>Save Commission</u></button>
+        </div>
     </form>
-
-    <div class="box">
-        <a href="{% url 'commissions:request-list' %}">Back to Commissions</a>
-    </div>
-</div>
+        
 {% endblock %}

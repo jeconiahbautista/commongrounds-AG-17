@@ -1,63 +1,110 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block app_style %}
+<link rel="stylesheet" href="{% static 'diyprojects/css/styles.css' %}">
+{% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>
-        {% if project %}
-        Edit Project
-        {% else %}
-        Add Project
-        {% endif %}
-    </h1>
-    <form action="{% if project %}
+<div class="create-wrapper">
+    <div class="back-block">
+        <img src="/static/global/img/left-arrow.png" alt="arrow icon" width="24">
+        <a href="/diyprojects/projects/" class="back-link">Back</a>
+    </div>
+    <div class="app-header">
+        <h1 class="app-header-text">
+            {% if project %}
+            Edit Project
+            {% else %}
+            Add Project
+            {% endif %}
+        </h1>
+    </div>
+    <div class="form-wrapper">
+        <form action="{% if project %}
                     {% url 'diyprojects:diyprojects_edit' project.pk %}
                 {% else %}
                     {% url 'diyprojects:diyprojects_create' %}
                 {% endif %}" method="POST">
-        {% csrf_token %}
-        <ul>
-            <li>
-                <label for="title">
-                    <span><strong>Title: </strong></span>
-                    {{ project_form.title }}
-                </label>
-            </li>
-            <li>
-                <p>
-                    <span><strong>Category: </strong></span>
-                    {{ project_form.category }}
-                </p>
-            </li>
-            <li>
-                <label for="description">
-                    <p><strong>Description: </strong></p>
-                    {{ project_form.description }}
-                </label>
-            </li>
-            <li>
-                <label for="materials">
-                    <p><strong>Materials: </strong></p>
-                    {{ project_form.materials }}
-                </label>
-            </li>
-            <li>
-                <label for="steps">
-                    <p><strong>Steps: </strong></p>
-                    {{ project_form.steps }}
-                </label>
-            </li>
-            <li>
-                <p>
-                    <button type="submit" name="action" value="project">
-                        {% if project %}
-                        Update Project
-                        {% else %}
-                        Add Project
-                        {% endif %}
-                    </button>
-                </p>
-            </li>
-        </ul>
-    </form>
+            {% csrf_token %}
+            <div class="form-fields">
+                <div class="glass form-description-container">
+                    <div class="form-description-wrap">
+                        <div class="title-section">
+                            <p class="form-label">Project name: </p>
+                            {{ project_form.title }}
+                        </div>
+                        <div class="category-section">
+                            <p class="form-label">Category: </p>
+                            {{ project_form.category }}
+                        </div>
+                        <div class="description-section">
+                            <p class="form-label">Description: </p>
+                            {{ project_form.description }}
+                        </div>
+                    </div>
+                </div>
+                <div class="glass form-detail-container">
+                    <div class="form-detail-wrap">
+                        <div class="material-section">
+                            <p class="form-label">Materials: </p>
+                            {{ project_form.materials }}
+                        </div>
+                        <div class="steps-section">
+                            <p class="form-label">Steps: </p>
+                            {{ project_form.steps }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="submit-block">
+                <button type="submit" name="action" value="project" class="glass submit-button">
+                    {% if project %}
+                    Update project
+                    {% else %}
+                    Add project
+                    {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block background %}
+<div class="wave-container">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1163" height="557" viewBox="0 0 1163 557" fill="none">
+        <path class="wave1" d="M455 228.5C138 248 74 453 -12 556.5L0 0H1163C1034.5 161 772 209 455 228.5Z"
+            fill="url(#paint0_linear_212_527)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_527" x1="396.057" y1="0" x2="396.057" y2="283.5"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#011700" stop-opacity="0" />
+                <stop offset="1" stop-color="#003203" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1071" height="491" viewBox="0 0 1071 491" fill="none">
+        <path class="wave2" d="M700.5 171C407.5 202.5 287.5 417.5 0 0H1071V491C1021.5 354.5 993.5 139.5 700.5 171Z"
+            fill="url(#paint0_linear_212_528)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_528" x1="950.352" y1="120.122" x2="670.301" y2="574.148"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#011700" stop-opacity="0" />
+                <stop offset="1" stop-color="#004104" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="605" viewBox="0 0 1920 605" fill="none">
+        <path class="wave3" d="M1060.5 389C389.575 54.368 118.5 95.5 0 605H1920V0C1825 254 1464.5 590.5 1060.5 389Z"
+            fill="url(#paint0_linear_212_526)" />
+        <defs>
+            <linearGradient id="paint0_linear_212_526" x1="925.333" y1="765.5" x2="1024.28" y2="9.78109"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#011700" />
+                <stop offset="1" stop-color="#004104" stop-opacity="0.2" />
+            </linearGradient>
+        </defs>
+    </svg>
 </div>
 {% endblock %}

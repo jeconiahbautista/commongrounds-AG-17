@@ -1,0 +1,442 @@
+:root {
+    --gradient-background: linear-gradient(180deg, #473340 0%, #752756 100%);
+    --dark-pink: rgba(210, 19, 130, 0.18);
+    --light-pink: rgba(255, 116, 197, 0.20);
+}
+
+html, body {
+    min-height: 100%;
+    margin: 0;
+    background: var(--gradient-background)
+}
+
+h1 {
+    color: var(--brand-white);
+    font-family: Inter;
+    font-style: normal;
+    line-height: normal;
+}
+
+h2 {
+    color: var(--brand-white);
+    font-weight: 200;
+    font-family: Inter;
+    font-style: normal;
+    line-height: normal;
+}
+
+h3 {
+    color: var(--brand-white);
+    font-family: Inter;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -2px;
+}
+
+.heading-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 0px 17px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.heading-block h1 {
+    margin: 0;
+}
+
+.header-title {
+    font-size: 32px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.add-commission-block {
+    display: inline-block;
+    width: 180px;
+    height: 46px;
+    padding: 6px;
+    text-decoration: none;
+}
+.add-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background: var(--dark-pink)
+}
+.add-text {
+    margin: 0;
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--brand-white);
+}
+
+.commission-header {
+    font-size: 24px;
+    text-align: center;
+}
+
+.glass-layout .glass-style{
+    background: var(--dark-pink);
+}
+
+.jobs .glass-style {
+    background: var(--dark-pink);
+}
+
+.light-commission-card {
+    display: flex;
+    background: var(--light-pink);
+    width: 482px;
+    padding: 17px 25px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.light-commission-card h1 {
+    margin: 0;
+}
+
+.light-commission-card h3 {
+    margin: 0;
+    text-align: center;
+    font-size: 40px;
+}
+
+.commission-detail-block {
+    display: flex;
+    width: 484px;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px;
+}
+
+.commission-detail {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px auto;
+}
+
+.description {
+    display: flex;
+    background: var(--dark-pink);
+    width: 100%;
+    padding: 43px 26px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.description p {
+    color: #FFF;
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -1px;
+}
+
+.job-block {
+    display: flex;
+    width: 100%;
+    max-width: 1262px;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.jobs {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    align-self: stretch;
+}
+
+.no-data-container {
+    background: var(--dark-pink)
+}
+
+.applicant {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
+
+.accept-reject {
+    display: flex;
+    width: 155px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+.detail-column2 {
+    display: flex;
+    width: 100%;
+    max-width: 1262px;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.form-container {
+    display: flex;
+    width: 100%;
+    max-width: 716px;
+    padding: 24px 52px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.form-container input,
+.form-container textarea,
+.form-container select {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    color: white;
+}
+
+.form-container input {
+    width: 100%;
+    font-family: Inter;
+    font-size: 18px;
+    border-bottom: 2px solid var(--brand-white) 
+}
+
+.form-container input::placeholder,
+.form-container textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: Inter;
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 200;
+    line-height: normal;
+    letter-spacing: -1px;
+}
+
+.form-container select {
+    width: 100%;
+    border: 2px solid var(--brand-white);
+    border-radius: 12px;
+    background: transparent;
+    font-family: Inter;
+    font-size: 18px;
+}
+
+.form-container select option {
+    background:#752756;
+    color: var(--brand-white);
+}
+
+.form-container textarea {
+    width: 100%;
+    border: 2px solid var(--brand-white);
+    border-radius: 12px;
+    background: transparent;
+    font-family: Inter;
+    font-size: 18px;
+}
+
+.form-container textarea {
+    font-family: Inter;
+    font-size: 18px;
+}
+
+.people {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px auto;
+}
+
+.delete-row {
+    font-family: Inter;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.linebreak {
+    display: flex;
+    width: 307px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 19px;
+}
+
+.manpower-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 56px;
+    align-self: stretch;
+}
+
+.job-header {
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    font-size: 24px;
+}
+
+.jobs-needed-block {
+    display: flex;
+    width: 753px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.create-header {
+    font-size: 32px;
+    font-weight: 400;
+    text-align: center;
+    width: 100%
+}
+
+.create-header h1 {
+    margin: 0;
+}
+
+button {
+    font-family: Inter;
+    font-size: 16px;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.save-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%
+}
+
+.wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    line-height: 0;
+    z-index: 0;
+}
+
+.wave-container svg {
+    position: absolute;
+}
+
+.wave-container svg:nth-child(1) {
+    z-index: 2;
+    top: 0;
+    right: 0;
+}
+
+.wave-container svg:nth-child(2) {
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+.wave-container svg:nth-child(3) {
+    z-index: 3;
+    bottom: 0;
+    left: 0;
+}
+
+.wave1 {
+    animation: morph1 30s ease-in-out infinite;
+}
+
+.wave2 {
+    animation: morph2 30s ease-in-out infinite;
+}
+
+.wave3 {
+    animation: morph3 30s ease-in-out infinite;
+}
+
+@keyframes morph1 {
+
+    0%,
+    100% {
+        d: path("M1069 229C708.006 147.441 227.5 289.5 0 605H1920V0C1844.76 230.946 1728.5 378 1069 229Z");
+    }
+
+    25% {
+        d: path("M1069 229C699 140.5 464 9 0 605H1920V0C1844.76 230.946 1446.71 319.344 1069 229Z");
+    }
+
+    50% {
+        d: path("M1150.5 395.112C881.5 653.612 505 156.612 0 633.612H1920V28.6122C1723 -72.3878 1452.99 104.432 1150.5 395.112Z");
+    }
+
+    75% {
+        d: path("M1150.5 366.5C784.392 294.75 505 128 0 605H1920V0C1716 78.4999 1548.5 444.5 1150.5 366.5Z");
+    }
+}
+
+@keyframes morph2 {
+
+    0%,
+    100% {
+        d: path("M613.863 161C372 161 86 284.5 0 388V0H1163C1135 115 855.725 161 613.863 161Z");
+    }
+
+    25% {
+        d: path("M613.863 161C393 231.5 222.5 418.5 0 388V0H1163C1135 115 834.725 90.5 613.863 161Z");
+    }
+
+    50% {
+        d: path("M613.863 161C352.725 76 197.5 221 0 388V0H1163C1135 115 875 246 613.863 161Z");
+    }
+
+    75% {
+        d: path("M613.863 161C327 327.5 192 62.5 0 388V0H1163C1024 29 900.725 -5.5 613.863 161Z");
+    }
+}
+
+@keyframes morph3 {
+
+    0%,
+    100% {
+        d: path("M700.5 171C498 118 248 342.5 0 0H1071V491C1018.2 435.61 903 224 700.5 171Z");
+    }
+
+    25% {
+        d: path("M739 183.5C580.5 203 339 409.5 0 0H1071V491C1018.2 435.61 897.5 164 739 183.5Z");
+    }
+
+    50% {
+        d: path("M662.5 217.5C463.5 182 52.5 217.5 0 0H1071V390C851 377.5 861.5 253 662.5 217.5Z");
+    }
+
+    75% {
+        d: path("M687.5 158.5C485 57 365.5 365 0 0H1071V390C778 478.5 890 260 687.5 158.5Z");
+    }
+}

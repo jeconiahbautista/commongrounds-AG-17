@@ -1,0 +1,53 @@
+{% extends 'base_merchstore.html' %}
+{% load static %}
+
+
+{% block body %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if "product_added_to_cart" in message.tags %}
+                <div class="no-data-container glass-style alert-success">
+                    You successfully bought {{ message }}.
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="heading-block">
+        <div>
+            <a class="nav-link" href="{% url 'merchstore:product_list' %}">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Return to Merchandise Store</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="heading-block-section">
+        <div class="heading-title"><h1>Your Cart</h1></div>
+    </div>
+
+    {% if cart_by_owner %}
+        <div class="merchstore-layout">
+            {% for owner, transactions in cart_by_owner.items %}
+                <div class="seller-group">    
+                    <div class="seller-name"><h2>Seller: {{ owner.display_name }}</h2></div>
+                    
+                    {% for transaction in transactions %}
+                        <div class="glass-card glass-style">  
+                            <p>Product: {{ transaction.product.name }}<br></p>
+                            <p>Price: Php{{ transaction.product.price }}<br></p>
+                            <p>Amount: {{ transaction.amount }}<br></p>
+                            <p>Status: {{ transaction.product.get_status_display }}</p>
+                        </div>
+                    {% endfor %}
+                            
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-data-container glass-style">
+            <p><em>Your cart is empty.</em></p>
+        </div>
+    {% endif %}
+{% endblock %}

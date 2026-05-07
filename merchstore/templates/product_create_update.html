@@ -1,0 +1,56 @@
+{% extends 'base_merchstore.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="create-update-header">
+        <h1>
+            {% if object %}
+                Update Product
+            {% else %}
+                Create Product
+            {% endif %}
+        </h1>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="merchstore-create-update">
+            <div class="form-container">
+
+                {{ form.non_field_errors }}
+            
+                <div class="headline">{{ form.name.label_tag }}</div>
+                {{ form.name }}
+
+                <div class="headline">Type</div>
+                {{ form.product_type }}
+
+                <div class="headline">Price (Php):</div>
+                {{ form.price }}
+
+                <div class="headline">{{ form.description.label_tag }}</div>
+                {{ form.description }}
+
+                <div class="headline">{{ form.stock.label_tag }}</div>
+                {{ form.stock }}
+
+                <div class="headline">{{ form.status.label_tag }}</div>
+                {{ form.status }}
+
+                <div class="headline">Image:</div>
+                <div class="merchstore-image" >{{ form.product_image }}</div>
+            </div>
+        </div>
+
+        <div class="create-update-button">
+            {% if object %}
+                <button type="submit" class="glass-button-create-update">Update Product</button>
+                <a href="{% url 'merchstore:product_detail' object.pk %}" class="glass-button-create-update">Cancel</a>
+            {% else %}
+                <button type="submit" class="glass-button-create-update">Create Product</button>
+                <a href="{% url 'merchstore:product_list' %}" class="glass-button-create-update">Cancel</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

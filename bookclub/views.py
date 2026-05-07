@@ -1,15 +1,254 @@
-from django.shortcuts import render
-
-from .models import Book
+from django.shortcuts import redirect, render
+from .models import Book, BookReview, Bookmark, Borrow, BookRating
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
+from accounts.decorators import role_required
+from .forms import (
+    BorrowForm,
+    BookFormFactory,
+    BookRatingForm,
+)
 
 
 def book_list(request):
-    books = Book.objects.all()
-    ctx = {"books": books}
+    all_books = Book.objects.all()
+
+    ctx = {
+        "all_books": all_books,
+    }
+
+    if request.user.is_authenticated:
+        profile = request.user.profile
+        contributed_books = Book.objects.filter(contributor=profile)
+        bookmarked_books = Book.objects.filter(bookmarks__profile=profile).distinct()
+        reviewed_books = Book.objects.filter(
+            bookreviews__user_reviewer=profile
+        ).distinct()
+
+        excluded_ids = Book.objects.filter(
+            Q(contributor=profile)
+            | Q(bookmarks__profile=profile)
+            | Q(bookreviews__user_reviewer=profile)
+        ).distinct()
+
+        all_books = Book.objects.exclude(
+            id__in=excluded_ids.values_list("id", flat=True)
+        )
+
+        ctx.update(
+            {
+                "contributed_books": contributed_books,
+                "bookmarked_books": bookmarked_books,
+                "reviewed_books": reviewed_books,
+                "all_books": all_books,
+            }
+        )
+
     return render(request, "book_list.html", ctx)
 
 
 def book_detail(request, pk):
     book = Book.objects.get(pk=pk)
-    ctx = {"book": book}
+    ratings = BookRating.objects.filter(book=book)
+
+    average_rating = None
+    if ratings.exists():
+        average_rating = sum(r.score for r in ratings) / ratings.count()
+
+    bookmark_count = Bookmark.objects.filter(book=book).count()
+    reviews = BookReview.objects.filter(book=book)
+    form_class = BookFormFactory.get_form("review")
+
+    is_contributor = (
+        request.user.is_authenticated and book.contributor == request.user.profile
+    )
+
+    is_bookmarked = False
+    existing_rating = None
+    user_has_borrowed = False
+
+    if request.user.is_authenticated:
+        is_bookmarked = Bookmark.objects.filter(
+            book=book, profile=request.user.profile
+        ).exists()
+        existing_rating = BookRating.objects.filter(
+            book=book, profile=request.user.profile
+        ).first()
+        user_has_borrowed = Borrow.objects.filter(
+            book=book,
+            borrower=request.user.profile,
+            date_to_return__gte=timezone.now().date()  # Still has time to return
+        ).exists()
+
+
+    rating_form = BookRatingForm()
+
+    form =form_class(user=request.user)
+
+    if request.method == "POST":
+        if "bookmark" in request.POST and request.user.is_authenticated:
+            bookmark = Bookmark.objects.filter(
+                profile=request.user.profile, book=book
+            ).first()
+
+            if bookmark:
+                bookmark.delete()
+                messages.success(request, book.title, extra_tags="book_unbookmarked")
+            else:
+                Bookmark.objects.create(profile=request.user.profile, book=book)
+                messages.success(request, book.title, extra_tags="book_bookmarked")
+
+            return redirect("bookclub:book-detail", pk=pk)
+
+        if "return" in request.POST and request.user.is_authenticated:
+            borrow = Borrow.objects.filter(
+                book=book,
+                borrower=request.user.profile
+            ).first()
+            if borrow:
+                borrow.delete()
+                book.available_to_borrow = True
+                book.save()
+            messages.success(request, book.title, extra_tags="book_returned")
+            return redirect("bookclub:book-list")
+
+        if "rate" in request.POST and request.user.is_authenticated:
+            rating_form = BookRatingForm(request.POST)
+            if rating_form.is_valid():
+                BookRating.objects.update_or_create(
+                    book=book,
+                    profile=request.user.profile,
+                    defaults={"score": rating_form.cleaned_data["score"]},
+                )
+
+                messages.success(request, book.title, extra_tags="book_rated")
+                return redirect("bookclub:book-detail", pk=pk)
+
+        form = form_class(request.POST, user=request.user)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.book = book
+
+            if request.user.is_authenticated:
+                review.user_reviewer = request.user.profile
+            else:
+                review.anon_reviewer = "Anonymous"
+
+            review.save()
+
+            messages.success(request, book.title, extra_tags="book_reviewed")
+            return redirect("bookclub:book-detail", pk=pk)
+        
+    ctx = {
+        "book": book,
+        "bookmark_count": bookmark_count,
+        "reviews": reviews,
+        "form": form,
+        "is_contributor": is_contributor,
+        "is_bookmarked": is_bookmarked,
+        "average_rating": average_rating,
+        "existing_rating": existing_rating,
+        "rating_form": rating_form,
+        "user_has_borrowed": user_has_borrowed,
+    }
     return render(request, "book_detail.html", ctx)
+
+
+@login_required
+def book_create(request):
+    if request.user.profile.role != "Book Contributor":
+        return redirect("bookclub:book-list")
+
+    form_class = BookFormFactory.get_form("contribute")
+
+    if request.method == "POST":
+        form = form_class(request.POST or None, user=request.user)
+
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.contributor = request.user.profile
+            book.save()
+
+            messages.success(request, book.title, extra_tags="book_created")
+
+            return redirect("bookclub:book-detail", pk=book.pk)
+    else:
+        form = form_class(user=request.user)
+
+    ctx = {
+        "form": form,
+    }
+
+    return render(request, "book_form.html", ctx)
+
+
+@login_required
+def book_update(request, pk):
+    book = Book.objects.get(pk=pk)
+
+    if request.user.profile.role != "Book Contributor":
+        return redirect("bookclub:book-list")
+
+    form_class = BookFormFactory.get_form("update")
+
+    if request.method == "POST":
+        form = form_class(request.POST, instance=book)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, book.title, extra_tags="book_updated")
+            return redirect("bookclub:book-detail", pk=pk)
+        
+    else:
+        form = form_class(instance=book)
+
+    ctx = {
+        "form": form,
+        "book": book,
+    }
+
+    return render(request, "book_form.html", ctx)
+
+
+def book_borrow(request, pk):
+    book = Book.objects.get(pk=pk)
+
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            Borrow.objects.create(
+                book=book,
+                borrower=request.user.profile,
+                name=request.user.profile.display_name,
+                date_borrowed=timezone.now().date(),
+                date_to_return=timezone.now().date() + timedelta(days=14),
+            )
+            book.available_to_borrow = False
+            book.save()
+
+            messages.success(request, book.title, extra_tags="book_borrowed")
+            return redirect("bookclub:book-list")
+        
+        else:
+            form = BorrowForm(request.POST)
+            if form.is_valid():
+                borrow = form.save(commit=False)
+                borrow.book = book
+                borrow.save()
+                book.available_to_borrow = False
+                borrow.save()
+
+                messages.success(request, book.title, extra_tags="book_borrowed")
+                return redirect("bookclub:book-list")
+    else:
+        form = BorrowForm()
+
+    ctx = {
+        "form": form,
+        "book": book,
+    }
+
+    return render(request, "book_borrow.html", ctx)
