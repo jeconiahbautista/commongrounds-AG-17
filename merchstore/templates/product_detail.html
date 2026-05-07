@@ -29,7 +29,7 @@
         <div class="merchstore-detail-block-left">
             <div class="merchstore-detail-header">
                 <h1>{{ product.name }}</h1>
-                    {% if owner %}
+                    {% if is_owner %}
                     <div class="update">
                         <a class="nav-link" href="{% url 'merchstore:product_update' product.pk %}">
                             <i class="fa-solid fa-pencil"></i>
@@ -65,13 +65,13 @@
         </div>
 
         <div class="merchstore-detail-block-right">
-            {% if product.product_image %}
-                <img class= "product_image" src="{{ product.product_image.url }}" alt="Product Image" width="300">
-            {% else %}
-                <div class="no-data-container glass-style">
-                    <p><em>No available image.</em></p>
-                </div>
-            {% endif %}
+                {% if product.product_image %}
+                    <img class= "product_image" src="{{ product.product_image.url }}" alt="Product Image" width="300">
+                {% else %}
+                    <div class="no-data-container glass-style">
+                        <p><em>No available image.</em></p>
+                    </div>
+                {% endif %}
         </div>
     </div>
 {% endblock %}
