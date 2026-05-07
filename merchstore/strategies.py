@@ -26,6 +26,7 @@ class GuestPurchaseStrategy(BaseTransactionStrategy):
             "product_id": product.id,
             "amount": form.cleaned_data["amount"],
         }
+        request.session.modified = True
 
         messages.info(
             request,

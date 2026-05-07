@@ -1,49 +1,66 @@
-{% extends "base.html" %}
+{% extends 'base_merchstore.html' %}
+{% load static %}
 
-{% block content %}
-<h1>{{ request.user.profile.display_name}}'s Sales Transactions</h1>
-
-{% if grouped_transactions %}
-
-    {% for buyer, transactions in grouped_transactions.items %}
+{% block body %}
+     <div class="heading-block">
         <div>
-
-            <h2>
-                Buyer:
-                {% if buyer %}
-                    {{ buyer.display_name }}
-                {% else %}
-                    Anonymous Buyer
-                {% endif %}
-            </h2>
-
-            <table>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in transactions %}
-                            <tr>
-                                <td>{{ transaction.product.name }}</td>
-                                <td>{{ transaction.amount }}</td>
-                                <td>{{ transaction.status }}</td>
-                                <td>{{ transaction.created_on|date:"M d, Y H:i" }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-            </table>
-
+            <a class="nav-link" href="{% url 'merchstore:product_list' %}">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Return to Merchandise Store</span>
+            </a>
         </div>
-    {% endfor %}
+    </div>
 
-{% else %}
-    <p>No transactions found.</p>
-{% endif %}
+    <div class="heading-block-section">
+        <div class="heading-title"><h1>'s Sales Transactions</h1></div>
+    </div>
 
-{% endblock}
+    {% if grouped_transactions %}
+        <div class="merchstore-layout-transactions"></div>
+            {% for buyer, transactions in grouped_transactions.items %}
+            <div  class="buyer-group">
+                <div class="buyer-name">
+                    <h2>
+                        <em>
+                        Buyer:
+                        {% if buyer %}
+                            {{ buyer.display_name }}
+                        {% else %}
+                            Anonymous Buyer
+                        {% endif %}
+                        </em>
+                    </h2>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaction in transactions %}
+                                    <tr>
+                                        <td>{{ transaction.product.name }}</td>
+                                        <td>{{ transaction.amount }}</td>
+                                        <td>{{ transaction.status }}</td>
+                                        <td>{{ transaction.created_on|date:"M d, Y H:i" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                    </table>
+                </div>
 
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <div class="no-data-container glass-style">
+            <p><em>No Transactions Made.</em></p>
+        </div>
+    {% endif %}
+
+{% endblock %}
