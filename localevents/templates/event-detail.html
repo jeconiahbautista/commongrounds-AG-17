@@ -15,7 +15,7 @@
                     You successfully edited {{ message }}.
                 </div>
             {% elif "event_cancelled" in message.tags %}
-                <div class="class=no-data-container glass-style alert success">
+                <div class="class="no-data-container glass-style alert success">
                     You cancelled your signup for "{{ message }}".
                 </div>
             {% endif %}
@@ -23,13 +23,13 @@
     {% endif %}
 
     <div class="heading-block">
-        <a class="nav-link" href="{% url 'merchstore:product_list' %}">
+        <a class="nav-link" href="{% url 'localevents:event-list' %}">
                 <i class="fa-solid fa-arrow-left"></i>
                 <span>Return to Local Events List</span>
         </a>
     </div>
 
-    <div class="no-data-container glass-style">
+    <div class="image-container glass-style">
         {% if event.event_image %}
             <img class= "event_image" src="{{ event.event_image.url }}" alt="Product Image" width="300">
         {% else %}  
