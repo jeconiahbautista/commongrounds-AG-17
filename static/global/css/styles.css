@@ -109,6 +109,29 @@ main {
     font-size: 16px;
 }
 
+.add-project-block {
+    display: inline-block;
+    width: 180px;
+    height: 46px;
+    padding: 6px;
+    text-decoration: none;
+}
+
+.add-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.add-text {
+    margin: 0;
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--brand-white);
+}
+
 footer {
     color: var(--brand-white);
     text-align: center;

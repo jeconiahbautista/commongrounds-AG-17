@@ -4,7 +4,8 @@
 
 .detail-wrapper,
 .create-wrapper {
-    padding: 0 400px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .app-header {
@@ -28,29 +29,6 @@
     backdrop-filter: blur(5px);
 }
 
-.add-project-block {
-    display: inline-block;
-    width: 180px;
-    height: 46px;
-    padding: 6px;
-    text-decoration: none;
-}
-
-.add-button {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-}
-
-.add-text {
-    margin: 0;
-    font-style: italic;
-    font-size: 16px;
-    font-weight: 500;
-    text-decoration: none;
-    color: var(--brand-white);
-}
-
 .section-header {
     font-size: 32px;
     font-weight: 300;
@@ -72,7 +50,8 @@
 }
 
 .card-wrap {
-    padding: 12px;
+    display: block;
+    padding: 0 24px;
 }
 
 .app-header-text {
@@ -98,10 +77,20 @@
     font-weight: 300;
 }
 
+.view-block {
+    display: flex;
+    justify-content: right;
+}
+
 .project-detail {
+    text-decoration: none;
     font-size: 12px;
     font-weight: 300;
     color: var(--brand-white);
+    border: 1px var(--brand-white) solid;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
 }
 
 p.else {
@@ -169,11 +158,20 @@ p.else {
     padding-bottom: 16px;
 }
 
-.form-category-select {
-    appearance: base-select;
+.category-section select {
     width: 100%;
+    color: var(--brand-white);
+    border: 1px solid var(--brand-white);
+    border-radius: 12px;
+    padding: 8px;
+    background-color: transparent;
+    font-family: Inter;
     font-size: 16px;
-    font-weight: 300;
+}
+
+.category-section select option {
+    background: #004214;
+    color: var(--brand-white);
 }
 
 .form-text-area {
@@ -224,7 +222,7 @@ p.else {
     align-items: center;
     justify-content: space-between;
     margin-top: 18px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .glass.edit-button {
